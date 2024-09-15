@@ -54,6 +54,7 @@ public class UnderGroundGrid : MonoBehaviour
 
     public void SetNode(BaseMapNode node, int posx, int posy)
     {
+        Debug.Log(posx + " | " + posy);
         grid[posx, posy] = node;
     }
     public Vector2 GetStartPoint()
@@ -65,6 +66,7 @@ public class UnderGroundGrid : MonoBehaviour
         gridStartPoint = pos;
     }
     #endregion
+    #region Function
     public GameObject[] GetTiles()
     {
         GameObject[] tiles = new GameObject[map.transform.childCount];
@@ -76,12 +78,12 @@ public class UnderGroundGrid : MonoBehaviour
     }
     public int CalcXaxis(float xpos)
     {
-        int pos = (int)((gridStartPoint.x - xpos) / tileSize);
+        int pos = (int)((xpos - gridStartPoint.x) / tileSize);
         return pos;
     }
     public int CalcYaxis(float ypos)
     {
-        int pos = (int)((gridStartPoint.y - ypos) / tileSize);
+        int pos = (int)((ypos - gridStartPoint.y) / tileSize);
         return pos;
     }
     public void MakeGrid()
@@ -113,9 +115,9 @@ public class UnderGroundGrid : MonoBehaviour
         int idxY = CalcYaxis(posy);
         List<BaseMapNode> neighbor = new List<BaseMapNode>();
 
-        for(int i = idxX - radius; i < idxX + radius; i++)
+        for(int i = idxX - radius; i <= idxX + radius; i++)
         {
-            for (int j = idxY - radius; j < idxY + radius; j++)
+            for (int j = idxY - radius; j <= idxY + radius; j++)
             {
                 if(IsTileExist(i, j))
                 {
@@ -124,5 +126,21 @@ public class UnderGroundGrid : MonoBehaviour
             }
         }
         return neighbor;
+    }
+    #endregion
+
+    private void Start()
+    {
+        SetStartPoint(this.gameObject.transform.position);
+        SetTileSize(1);
+        SetMapSize(2, 1);
+        SetMap();
+        MakeGrid();
+
+        List<BaseMapNode> Neighbor = GetNeighbor(0,0,1);
+        foreach (BaseMapNode neighbor in Neighbor)
+        {
+            Debug.Log(neighbor.GetTileInfo().TileName);
+        }
     }
 }

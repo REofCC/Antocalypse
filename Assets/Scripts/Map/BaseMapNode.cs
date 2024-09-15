@@ -40,6 +40,11 @@ public class BaseMapNode : MonoBehaviour
     {
         return yPos;
     }
+
+    public MapTileInfo GetTileInfo()
+    {
+        return this.tileinfo;
+    }
     #endregion
 
     #region ChangeRenderer
