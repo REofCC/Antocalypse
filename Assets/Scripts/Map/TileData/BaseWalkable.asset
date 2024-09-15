@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: BaseWalkable
   m_EditorClassIdentifier: 
   walkable: 1
+  tileName: Walkable
+  sprite: {fileID: 0}
+  layer: 0

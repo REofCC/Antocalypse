@@ -1,19 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class BaseMapNode : MonoBehaviour
 {
+    #region attribute
     [SerializeField]
     MapTileInfo tileinfo;
-    private int xPos;
-    private int yPos;
+    private float xPos;
+    private float yPos;
     private SpriteRenderer spriteRenderer;
-
+    #endregion
     void Start()
     {
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        xPos = this.gameObject.transform.position.x;
+        yPos = this.gameObject.transform.position.y;
     }
 
     #region Getter & Setter
@@ -32,16 +32,17 @@ public class BaseMapNode : MonoBehaviour
         this.yPos = yPos;
     }
 
-    public int GetXpos() {
+    public float GetXpos() {
         return xPos;
     }
 
-    public int GetYpos()
+    public float GetYpos()
     {
         return yPos;
     }
     #endregion
 
+    #region ChangeRenderer
     public void ChangeSprite()
     {
         if (tileinfo == null)
@@ -63,4 +64,5 @@ public class BaseMapNode : MonoBehaviour
         ChangeSprite();
         ChangeLayer();
     }
+    #endregion
 }

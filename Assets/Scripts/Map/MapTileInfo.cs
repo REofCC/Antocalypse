@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "MapTileInfo", menuName ="Scriptable Object/ MapTileInfo")]
@@ -15,7 +13,6 @@ public class MapTileInfo : ScriptableObject
     [SerializeField]
     private int layer;
     #endregion
-
 
     #region Getter & Setter
     public bool Walkable { get { return walkable; }}
