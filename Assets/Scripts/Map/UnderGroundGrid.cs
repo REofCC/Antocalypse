@@ -54,7 +54,7 @@ public class UnderGroundGrid : MonoBehaviour
 
     public void SetNode(BaseMapNode node, int posx, int posy)
     {
-        Debug.Log(posx + " | " + posy);
+        Debug.Log(posx + " | " + posy + " | " + node.GetTileInfo().TileName);
         grid[posx, posy] = node;
     }
     public Vector2 GetStartPoint()
@@ -66,6 +66,7 @@ public class UnderGroundGrid : MonoBehaviour
         gridStartPoint = pos;
     }
     #endregion
+
     #region Function
     public GameObject[] GetTiles()
     {
@@ -78,18 +79,17 @@ public class UnderGroundGrid : MonoBehaviour
     }
     public int CalcXaxis(float xpos)
     {
-        int pos = (int)((xpos - gridStartPoint.x) / tileSize);
+        int pos = Mathf.RoundToInt((xpos - gridStartPoint.x) / tileSize);
         return pos;
     }
     public int CalcYaxis(float ypos)
     {
-        int pos = (int)((ypos - gridStartPoint.y) / tileSize);
+        int pos = Mathf.RoundToInt((ypos - gridStartPoint.y) / tileSize);
         return pos;
     }
     public void MakeGrid()
     {
         grid = new BaseMapNode[xSize, ySize];
-        int lengthPerTile = tileSize;
         GameObject[] tiles = GetTiles();
         GameObject tile;
         int xpos, ypos;
@@ -103,7 +103,7 @@ public class UnderGroundGrid : MonoBehaviour
     }
     public bool IsTileExist(int idxX, int idxY)
     {
-        if(idxX < 0 || idxY < 0 || idxX >= xSize || idxY >= ySize)
+        if(idxX < 0 || idxY < 0 || idxX > xSize || idxY > ySize)
         {
             return false;
         }
@@ -133,11 +133,11 @@ public class UnderGroundGrid : MonoBehaviour
     {
         SetStartPoint(this.gameObject.transform.position);
         SetTileSize(1);
-        SetMapSize(2, 1);
+        SetMapSize(2, 2);
         SetMap();
         MakeGrid();
-
         List<BaseMapNode> Neighbor = GetNeighbor(0,0,1);
+
         foreach (BaseMapNode neighbor in Neighbor)
         {
             Debug.Log(neighbor.GetTileInfo().TileName);
