@@ -12,6 +12,8 @@ public class MapTileInfo : ScriptableObject
     private Sprite sprite;
     [SerializeField]
     private int layer;
+    [SerializeField]
+    private MapDropInfo dropTable;
     #endregion
 
     #region Getter & Setter
@@ -19,5 +21,6 @@ public class MapTileInfo : ScriptableObject
     public string TileName { get { return tileName; } }
     public Sprite Sprite { get { return sprite; }}
     public int Layer { get { return layer; }}
+    public MapDropInfo DropTable { get { return dropTable; }}
     #endregion
 }

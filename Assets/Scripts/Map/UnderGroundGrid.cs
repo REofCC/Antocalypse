@@ -8,6 +8,7 @@ public class UnderGroundGrid : MonoBehaviour
     private int ySize;
     private int tileSize;
     private BaseMapNode[,] grid;
+    private bool[,] walkables;
     private Vector2 gridStartPoint;
     private GameObject map;
     #endregion
@@ -56,6 +57,7 @@ public class UnderGroundGrid : MonoBehaviour
     {
         Debug.Log(posx + " | " + posy + " | " + node.GetTileInfo().TileName);
         grid[posx, posy] = node;
+        walkables[posx, posy] = node.GetWalkable();
     }
     public Vector2 GetStartPoint()
     {
@@ -64,6 +66,11 @@ public class UnderGroundGrid : MonoBehaviour
     public void SetStartPoint(Vector2 pos)
     {
         gridStartPoint = pos;
+    }
+
+    public bool[,] GetWalkables()
+    {
+        return walkables;
     }
     #endregion
 
@@ -90,6 +97,7 @@ public class UnderGroundGrid : MonoBehaviour
     public void MakeGrid()
     {
         grid = new BaseMapNode[xSize, ySize];
+        walkables = new bool[xSize, ySize];
         GameObject[] tiles = GetTiles();
         GameObject tile;
         int xpos, ypos;
@@ -126,6 +134,15 @@ public class UnderGroundGrid : MonoBehaviour
             }
         }
         return neighbor;
+    }
+    #endregion
+
+    #region ChangeNode
+    public void ChangeNode(BaseMapNode node, float posx, float posy) 
+    { 
+        int idxX = CalcXaxis(posx);
+        int idxY = CalcYaxis(posy);
+        SetNode(node, idxX, idxY);
     }
     #endregion
 

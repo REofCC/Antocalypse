@@ -4,16 +4,21 @@ public class BaseMapNode : MonoBehaviour
 {
     #region attribute
     [SerializeField]
-    MapTileInfo tileinfo;
+    private MapTileInfo tileinfo;
+    [SerializeField]
+    private string nextMapTile;
     private float xPos;
     private float yPos;
-    private SpriteRenderer spriteRenderer;
     #endregion
     void Start()
     {
-        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         xPos = this.gameObject.transform.position.x;
         yPos = this.gameObject.transform.position.y;
+    }
+
+    private void OnDestroy()
+    {
+        DropResource();
     }
 
     #region Getter & Setter
@@ -32,7 +37,8 @@ public class BaseMapNode : MonoBehaviour
         this.yPos = yPos;
     }
 
-    public float GetXpos() {
+    public float GetXpos()
+    {
         return xPos;
     }
 
@@ -47,27 +53,15 @@ public class BaseMapNode : MonoBehaviour
     }
     #endregion
 
-    #region ChangeRenderer
-    public void ChangeSprite()
+    public void DropResource()
     {
-        if (tileinfo == null)
-            return;
-        spriteRenderer.sprite = tileinfo.Sprite;
+        //TODO Drop When Tile Change
     }
 
-    public void ChangeLayer()
+    public GameObject InstantiateNode()
     {
-        if (tileinfo == null)
-            return;
-        spriteRenderer.sortingOrder = tileinfo.Layer;
+        GameObject nextNode = null;
+        // TODO  Make Next Tile GameObject
+        return nextNode;
     }
-    public void ChangeTile(MapTileInfo info)
-    {
-        if (info == null) return;
-
-        tileinfo = info;
-        ChangeSprite();
-        ChangeLayer();
-    }
-    #endregion
 }
