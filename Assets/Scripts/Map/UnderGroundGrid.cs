@@ -135,6 +135,27 @@ public class UnderGroundGrid : MonoBehaviour
         }
         return neighbor;
     }
+
+    public List<BaseMapNode> GetNeighborForAgrid(float posx, float posy)
+    {
+        int radius = 1;
+        int idxX = CalcXaxis(posx);
+        int idxY = CalcYaxis(posy);
+        List<BaseMapNode> neighbor = new List<BaseMapNode>();
+
+        for (int i = idxX - radius; i <= idxX + radius; i++)
+        {
+            for (int j = idxY - radius; j <= idxY + radius; j++)
+            {
+                if (IsTileExist(i, j))
+                {
+                    if(GetNode(i, j).GetWalkable())
+                        neighbor.Add(GetNode(i, j));
+                }
+            }
+        }
+        return neighbor;
+    }
     #endregion
 
     #region ChangeNode
