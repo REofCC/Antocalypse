@@ -5,19 +5,17 @@ public class TileSpawner : MonoBehaviour
     #region attribute
 
     private GameObject undergroundMap;
-    private GameObject grid;
 
     private UnderGroundGrid underGroundGrid;
 
-    private int Xsize;
-    private int Ysize;
+    //private int Xsize;
+    //private int Ysize;
     #endregion
     public void Start()
     {
         undergroundMap = GameObject.Find("UnderGroundMap");
-        grid = GameObject.Find("Grid");
 
-        underGroundGrid = grid.GetComponent<UnderGroundGrid>();
+        underGroundGrid = GameObject.Find("Grid").GetComponent<UnderGroundGrid>();
 
     }
     #region Prefab Instantiate & Destroy
@@ -77,4 +75,5 @@ public class TileSpawner : MonoBehaviour
 
     #endregion
     */
+    #endregion
 }

@@ -111,7 +111,7 @@ public class UnderGroundGrid : MonoBehaviour
     }
     public bool IsTileExist(int idxX, int idxY)
     {
-        if (idxX < 0 || idxY < 0 || idxX > xSize || idxY > ySize)
+        if (idxX < 0 || idxY < 0 || idxX >= xSize || idxY >= ySize)
         {
             return false;
         }
@@ -166,11 +166,5 @@ public class UnderGroundGrid : MonoBehaviour
         SetMapSize(2, 2);
         SetMap();
         MakeGrid();
-        List<BaseMapNode> Neighbor = GetNeighbor(0, 0, 1);
-
-        foreach (BaseMapNode neighbor in Neighbor)
-        {
-            Debug.Log(neighbor.GetTileInfo().TileName);
-        }
     }
 }

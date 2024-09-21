@@ -35,6 +35,11 @@ public class PathFinder : MonoBehaviour
     }
 
     #region Function
+    private void ClearNodesList()
+    {
+        waitingNodes.Clear();
+        finishedNodes.Clear();
+    }
     private int SortHcost(BaseMapNode anode, BaseMapNode bnode)
     {
         return anode.GethCost().CompareTo(bnode.GethCost());
@@ -52,7 +57,7 @@ public class PathFinder : MonoBehaviour
             cost = 10;
         }
 
-        if (cost + currentNode.GethCost() < node.GethCost())
+        if (cost + currentNode.GethCost() < node.GethCost() || node.GetParentNode() == null)
         {
             node.SetgCost(cost);
             node.SetParentNode(currentNode);
@@ -64,9 +69,13 @@ public class PathFinder : MonoBehaviour
     private void AddWaitingNodes()
     {
         List<BaseMapNode> candidateNodes = grid.GetNeighborForAgrid(currentNode.GetXpos(), currentNode.GetYpos());
+        if (candidateNodes.Count <= 0)
+        {
+            return;
+        }
         for (int i = 0; i < candidateNodes.Count; i++)
         {
-            if (finishedNodes.Contains(candidateNodes[i]))
+            if (finishedNodes.Contains(candidateNodes[i]) || waitingNodes.Contains(candidateNodes[i]))
                 continue;
             else
             {
@@ -90,9 +99,9 @@ public class PathFinder : MonoBehaviour
         while (cur != startNode)
         {
             route.Add(cur.GetParentNode());
-            Debug.Log(cur);
             cur = cur.GetParentNode();
         }
+        ClearNodesList();
         return route;
     }
     public List<BaseMapNode> FindingPath(BaseMapNode start, BaseMapNode end)
@@ -101,7 +110,7 @@ public class PathFinder : MonoBehaviour
         SetEndNode(end);
         SetStartNode(start);
         currentNode = waitingNodes[0];
-        while(currentNode == endNode)
+        while(currentNode != endNode)
         {
             AddWaitingNodes();
             SelectNextNode();
