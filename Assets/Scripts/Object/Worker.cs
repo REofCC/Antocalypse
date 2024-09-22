@@ -15,7 +15,7 @@ public class Worker : MonoBehaviour
 
     bool isHolding; //자원 보유 중
 
-    enum State { Idle, Move, Gather, Build};
+    
     State state;
     State nextState;
     Vector2 targetPos;
@@ -106,5 +106,10 @@ public class Worker : MonoBehaviour
         Debug.Log("Returning to Cargo");
         nextState = State.Idle;
         ChangeState(State.Move);
+    }
+
+    public State GetCurrentState()
+    {
+        return state;
     }
 }
