@@ -9,12 +9,14 @@ public class CameraController : MonoBehaviour
     public float zoomSpeed = 2f;
     public float minZoom = 5f;
     public float maxZoom = 20f;
-
-    private Camera cam;
+    float targetZoom;
+    float zoomVelocity;
+    Camera cam;
 
     void Start()
     {
         cam = Camera.main;
+        targetZoom = cam.orthographicSize;
     }
 
     void Update()
@@ -51,7 +53,9 @@ public class CameraController : MonoBehaviour
     void HandleZoom()
     {
         float scroll = Input.GetAxis("Mouse ScrollWheel");
-        cam.orthographicSize -= scroll * zoomSpeed;
-        cam.orthographicSize = Mathf.Clamp(cam.orthographicSize, minZoom, maxZoom);
+        targetZoom -= scroll * zoomSpeed;
+        targetZoom = Mathf.Clamp(targetZoom, minZoom, maxZoom);
+
+        cam.orthographicSize = Mathf.SmoothDamp(cam.orthographicSize, targetZoom, ref zoomVelocity, 0.1f);
     }
 }
