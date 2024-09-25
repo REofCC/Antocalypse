@@ -2,20 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ResourceNode : MonoBehaviour
+public class Cargo : MonoBehaviour
 {
-    [SerializeField]
-    protected NodeData nodeData;
     CircleCollider2D circleCollider;
+
+    ColonyManager colony;
+
+    private void Awake()
+    {
+        colony = GameObject.Find("Manager").GetComponent<ColonyManager>();
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Worker"))
         {
-            if (collision.gameObject.GetComponent<Worker>().GetState() == State.Gather) //자원 수집 개미와 충돌 시
+            if (collision.gameObject.GetComponent<Worker>().IsHolding()) //자원 보유 개미와 충돌 시
             {
                 Debug.Log("Gather Resource");
-                nodeData.value -= 3;
+                colony.GetResoruce(3);
             }
         }
     }

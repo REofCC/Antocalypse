@@ -15,7 +15,6 @@ public class Worker : MonoBehaviour
 
     bool isHolding; //자원 보유 중
 
-    
     State state;
     State nextState;
     Vector2 targetPos;
@@ -111,5 +110,25 @@ public class Worker : MonoBehaviour
     public State GetCurrentState()
     {
         return state;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Cargo"))
+        {
+            Debug.Log("arrived at Cargo");
+        }
+        else if(collision.CompareTag("ResourceNode"))
+        {
+            Debug.Log("arrived at ResourceNode");
+        }
+    }
+    public State GetState()
+    {
+        return state;
+    }
+    public bool IsHolding()
+    {
+        return isHolding;
     }
 }
