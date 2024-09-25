@@ -23,6 +23,8 @@ public class Test : MonoBehaviour
 
             // 3. 타일 좌표 출력
             Debug.Log("Tilemap 타일 좌표: " + tilePos);
+
+            Debug.Log(tilemap.GetTile(tilePos).name);
         }
     }
 }

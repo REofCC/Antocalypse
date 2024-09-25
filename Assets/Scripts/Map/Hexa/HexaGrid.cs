@@ -67,9 +67,14 @@ public class HexaGrid : MonoBehaviour
         {
             for (int y = tilemap.cellBounds.yMin; y <= tilemap.cellBounds.yMax; y++)
             {
-                string name = tilemap.GetTile(new Vector3Int(x, y,-10)).name;
-                HexaMapNode node = tileDict.GetNode(name);
-                SetNode(x + offset.x, y + offset.y, node);
+                Vector3Int pos = new Vector3Int(x, y, 0);
+                if(tilemap.GetTile(pos)!= null)
+                {
+                    string name = tilemap.GetTile(pos).name;
+                    HexaMapNode node = tileDict.GetNode(name);
+                    Debug.Log(name);
+                    SetNode(x + offset.x, y + offset.y, node);
+                }
             }
         }
     }
@@ -79,6 +84,7 @@ public class HexaGrid : MonoBehaviour
     private void Start()
     {
         cellPositionCalc = new CellPositionCalc();
+        tileDict = new HexaTileDict();
         tilemap = GameObject.Find("Grid").transform.GetChild(0).GetComponent<Tilemap>();
 
         MakeGrid();
