@@ -3,40 +3,21 @@ using UnityEngine;
 public class HexaMapNode
 {
     #region Attribute
-    Sprite sprites;
-
-    HexaMapTileInfo tileInfo;
-
     bool buildable;
+    bool walkable;
 
-    Vector2 cellPos;
+    Vector2Int cellPos;
 
     int fcost;
     int hcost;
     #endregion
 
     #region Getter & Setter
-    public void SetSprites(Sprite sprite)
-    {
-        this.sprites = sprite; 
-    }
-    public Sprite GetSprites()
-    {
-        return sprites;
-    }
-    public void SetTileInfo(HexaMapTileInfo tileInfo)
-    {
-        this.tileInfo = tileInfo;   
-    }
-    public bool GetTileInfo()
-    {
-        return tileInfo;
-    }
-    public void SetCellPos(Vector2 cellPos)
+    public void SetCellPos(Vector2Int cellPos)
     {
         this.cellPos = cellPos;
     }
-    public Vector2 GetCellPos()
+    public Vector2Int GetCellPos()
     {
         return cellPos;
     }
@@ -63,6 +44,14 @@ public class HexaMapNode
     public bool GetBuildable()
     {
         return buildable;
+    }
+    public void SetWalkable(bool walkable)
+    {
+        this.walkable = walkable;
+    }
+    public bool GetWalkable()
+    {
+        return walkable;
     }
     #endregion
 

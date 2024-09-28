@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
@@ -9,8 +10,7 @@ public class HexaGrid : MonoBehaviour
     CellPositionCalc cellPositionCalc;
     [SerializeField]
     Tilemap tilemap;
-    [SerializeField]
-    HexaTileDict tileDict;
+    NodeFactory tileDict;
 
     HexaMapNode[,] hexgrid;
     bool[,] walkables;
@@ -21,7 +21,7 @@ public class HexaGrid : MonoBehaviour
     #region Direction
     int[] oddDirX = {0,1,1,1,0,-1 };
     int[] evenDirX = {-1,0,1,0,-1,-1 };
-    int[] ypos = {-1,-1,0,1,1,0 };
+    int[] DirY = {-1,-1,0,1,1,0 };
     #endregion
     #region Getter & Setter
     public void SetMapSizeX(int mapSizeX)
@@ -48,6 +48,18 @@ public class HexaGrid : MonoBehaviour
     {
         return hexgrid[x, y];
     }
+    public void SetWalkable(int x, int y, bool walkable)
+    {
+        walkables[x,y] = walkable;
+    }
+    public bool[,] GetWalkable()
+    {
+        return walkables;
+    }
+    public bool GetWalkable(int x, int y)
+    {
+        return walkables[x,y];
+    }
     #endregion
 
     #region Function
@@ -62,6 +74,7 @@ public class HexaGrid : MonoBehaviour
     {
         CalcMapSize();
         hexgrid = new HexaMapNode[GetMapSizeX(), GetMapSizeY()];
+        walkables = new bool[GetMapSizeX(), GetMapSizeY()];
         Vector2Int offset = cellPositionCalc.CalcOffset(tilemap);
         for (int x = tilemap.cellBounds.xMin; x <= tilemap.cellBounds.xMax; x++)
         {
@@ -72,11 +85,85 @@ public class HexaGrid : MonoBehaviour
                 {
                     string name = tilemap.GetTile(pos).name;
                     HexaMapNode node = tileDict.GetNode(name);
+                    node.SetCellPos(new Vector2Int(x, y));
+                    SetWalkable(x, y, node.GetWalkable());
                     Debug.Log(name);
                     SetNode(x + offset.x, y + offset.y, node);
                 }
             }
         }
+    }
+    private bool IsNodeExist(int x, int y)
+    {
+        if(x<0 || y<0 || x> GetMapSizeX() || y > GetMapSizeY())
+        {
+            return false;
+        }
+        if(GetNode(x,y)!= null)
+        {
+            return true;
+        }
+        return false;
+    }
+    public List<HexaMapNode> GetNeighborNode(int x, int y)
+    {
+        int idxX, idxY;
+        List<HexaMapNode> neighbors = new();
+        if(x%2 == 0)
+        {
+            for(int i = 0; i < 6; i++)
+            {
+                idxX = x + evenDirX[i];
+                idxY = y+ DirY[i];
+                if(IsNodeExist(idxX, idxY))
+                {
+                    neighbors.Add(GetNode(idxX, idxY));
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                idxX = x + oddDirX[i];
+                idxY = y + DirY[i];
+                if (IsNodeExist(idxX, idxY))
+                {
+                    neighbors.Add(GetNode(idxX, idxY));
+                }
+            }
+        }
+        return neighbors;
+    }
+    public List<HexaMapNode> GetNeighborWalkableNode(int x, int y)
+    {
+        int idxX, idxY;
+        List<HexaMapNode> neighbors = new();
+        if (x % 2 == 0)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                idxX = x + evenDirX[i];
+                idxY = y + DirY[i];
+                if (IsNodeExist(idxX, idxY) && GetNode(idxX,idxY).GetWalkable())
+                {
+                    neighbors.Add(GetNode(idxX, idxY));
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                idxX = x + oddDirX[i];
+                idxY = y + DirY[i];
+                if (IsNodeExist(idxX, idxY) && GetNode(idxX, idxY).GetWalkable())
+                {
+                    neighbors.Add(GetNode(idxX, idxY));
+                }
+            }
+        }
+        return neighbors;
     }
     #endregion
 
@@ -84,7 +171,7 @@ public class HexaGrid : MonoBehaviour
     private void Start()
     {
         cellPositionCalc = new CellPositionCalc();
-        tileDict = new HexaTileDict();
+        tileDict = new NodeFactory();
         tilemap = GameObject.Find("Grid").transform.GetChild(0).GetComponent<Tilemap>();
 
         MakeGrid();

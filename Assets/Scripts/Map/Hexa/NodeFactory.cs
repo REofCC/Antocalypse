@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HexaTileDict
+public class NodeFactory
 {
     #region Attribute
     Dictionary<string, Func<HexaMapNode>> tileDict = new()
