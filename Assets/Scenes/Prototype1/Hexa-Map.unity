@@ -944,6 +944,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1621850668}
   - component: {fileID: 1621850667}
+  - component: {fileID: 1621850670}
+  - component: {fileID: 1621850669}
   m_Layer: 0
   m_Name: MapTool
   m_TagString: Untagged
@@ -979,6 +981,31 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1621850669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1621850666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9121cfa6043308b439c7fdb10375813e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1621850670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1621850666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0403eb37ae145f46bcaec3ce80991f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tilemap: {fileID: 0}
 --- !u!1 &1857497505
 GameObject:
   m_ObjectHideFlags: 0

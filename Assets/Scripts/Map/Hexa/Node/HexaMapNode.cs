@@ -7,7 +7,9 @@ public class HexaMapNode
     bool walkable;
 
     Vector2Int cellPos;
+    Vector2 worldPos;
 
+    HexaMapNode parent;
     int fcost;
     int hcost;
     #endregion
@@ -33,7 +35,7 @@ public class HexaMapNode
     {
         this.hcost = hcost;
     }
-    public int Gethcost()
+    public int GetHcost()
     {
         return hcost;
     }
@@ -53,6 +55,14 @@ public class HexaMapNode
     {
         return walkable;
     }
+    public void SetParent(HexaMapNode parent)
+    {
+        this.parent = parent;
+    }
+    public HexaMapNode GetParent()
+    {
+        return parent;
+    }
     #endregion
 
     #region Fuction
@@ -60,6 +70,10 @@ public class HexaMapNode
     #endregion
 
     #region Unity Function
-
+    void Start()
+    {
+        walkable = true;
+        buildable = true;
+    }
     #endregion
 }

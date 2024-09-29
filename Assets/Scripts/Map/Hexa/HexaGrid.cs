@@ -60,6 +60,10 @@ public class HexaGrid : MonoBehaviour
     {
         return walkables[x,y];
     }
+    public CellPositionCalc GetCellPosCalc()
+    {
+        return cellPositionCalc;
+    }
     #endregion
 
     #region Function
@@ -85,8 +89,8 @@ public class HexaGrid : MonoBehaviour
                 {
                     string name = tilemap.GetTile(pos).name;
                     HexaMapNode node = tileDict.GetNode(name);
-                    node.SetCellPos(new Vector2Int(x, y));
-                    SetWalkable(x, y, node.GetWalkable());
+                    node.SetCellPos(new Vector2Int(x+ offset.x, y+offset.y));
+                    SetWalkable(x + offset.x, y + offset.y, node.GetWalkable());
                     Debug.Log(name);
                     SetNode(x + offset.x, y + offset.y, node);
                 }

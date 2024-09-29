@@ -17,8 +17,6 @@ public class BaseMapNode : MonoBehaviour
     #endregion
     void Start()
     {
-        SetXpos(this.transform.position.x);
-        SetYpos(this.transform.position.y);
         SethCost(1000000);
     }
 
