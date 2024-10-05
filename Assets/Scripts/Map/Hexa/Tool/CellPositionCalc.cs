@@ -34,13 +34,14 @@ public class CellPositionCalc
         SetOffset(new Vector2Int(Mathf.Abs(bound.xMin), Mathf.Abs(bound.yMin)));
         return GetOffset();
     }
-    public Vector2 CalcWorldPos(HexaMapNode mapNode)
+    public Vector3 CalcWorldPos(HexaMapNode mapNode)
     {
-        return tilemap.CellToWorld(new Vector3Int(mapNode.GetCellPos().x - offset.x, mapNode.GetCellPos().y - offset.y, 0));
+        return tilemap.CellToWorld(new Vector3Int(mapNode.GetCellPos().x, mapNode.GetCellPos().y, 0));
     }
-    public Vector3Int CalcCellPos(Vector2 pos)
+    public Vector2Int CalcGridPos(Vector3 pos)
     {
-        return tilemap.WorldToCell(pos);
+        Vector3Int cellPos = tilemap.WorldToCell(pos);
+        return new Vector2Int(cellPos.x + offset.x, cellPos.y + offset.y);
     }
     #endregion
 }

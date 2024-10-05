@@ -5,9 +5,12 @@ public class HexaMapNode
     #region Attribute
     bool buildable;
     bool walkable;
+    bool breakable;
+    TileType type;
 
-    Vector2Int cellPos;
-    Vector2 worldPos;
+    Vector2Int gridPos;
+    Vector3 worldPos;
+    Vector3Int cellPos;
 
     HexaMapNode parent;
     int fcost;
@@ -15,11 +18,27 @@ public class HexaMapNode
     #endregion
 
     #region Getter & Setter
-    public void SetCellPos(Vector2Int cellPos)
+    public void SetGridPos(Vector2Int gridPos)
+    {
+        this.gridPos = gridPos;
+    }
+    public Vector2Int GetGridPos()
+    {
+        return gridPos;
+    }
+    public void SetWorldPos(Vector3 worldPos)
+    {
+        this.worldPos = worldPos;
+    }
+    public Vector3 GetWorldPos()
+    {
+        return worldPos;
+    }
+    public void SetCellPos(Vector3Int cellPos)
     {
         this.cellPos = cellPos;
     }
-    public Vector2Int GetCellPos()
+    public Vector3Int GetCellPos()
     {
         return cellPos;
     }
@@ -47,6 +66,14 @@ public class HexaMapNode
     {
         return buildable;
     }
+    public void SetBreakable(bool breakable)
+    {
+        this.breakable = breakable;
+    }
+    public bool GetBreakable()
+    {
+        return breakable;
+    }
     public void SetWalkable(bool walkable)
     {
         this.walkable = walkable;
@@ -63,17 +90,28 @@ public class HexaMapNode
     {
         return parent;
     }
+    public void SetTileType(TileType tileType)
+    {
+        type = tileType;
+    }
+    public TileType GetTileType()
+    {
+        return type;
+    }
     #endregion
 
     #region Fuction
-
-    #endregion
-
-    #region Unity Function
-    void Start()
+    public void SetNodePosition(HexaMapNode node)
     {
-        walkable = true;
-        buildable = true;
+        SetGridPos(node.GetGridPos());
+        SetWorldPos(node.GetWorldPos());
+        SetCellPos(node.GetCellPos());
+    }
+
+    public virtual void Start()
+    {
+
     }
     #endregion
+
 }
