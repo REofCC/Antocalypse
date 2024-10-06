@@ -17,13 +17,14 @@ public class HexaGrid : MonoBehaviour
     int mapSizeX;
     int mapSizeY;
     #endregion
-    #region Direction for Get Node Circlular
+    #region Direction for Get Node Circlular Rotation
     int[] oddDirX = {0,1,1,1,0,-1 };
     int[] evenDirX = {-1,0,1,0,-1,-1 };
     int[] DirY = {-1,-1,0,1,1,0 };
     #endregion
     #region Offset for Get Room Node
-
+    int[,] roomDirX = { { 0, 1 }, { -1, 1 }, { -1, 2 }, { -2, 2 }, { -2, -3 }, { -3, 3 } };
+    int[,] X_Phase = { { 0, 1 }, { 1, 3 }, { 2, 5 } };
     #endregion
     #region Getter & Setter
     public void SetMapSizeX(int mapSizeX)
@@ -46,7 +47,7 @@ public class HexaGrid : MonoBehaviour
     {
         hexgrid[x, y] = node;
     }
-    public HexaMapNode GetNode(int x, int y)
+    public HexaMapNode GetNode(int x, int y) //need offset
     {
         return hexgrid[x, y];
     }
@@ -107,11 +108,15 @@ public class HexaGrid : MonoBehaviour
         }
         return true;
     }
-    private bool CheckRoom(HexaMapNode node, int phase)
+    private bool CheckRoom(HexaMapNode node)
     {
-        if (node.GetTileType() == TileType.RoomCenter || node.GetTileType() == TileType.RoomNode)
+        if(node == null)
+        {
             return false;
-        List<HexaMapNode> list = GetNeighborNode(node.GetGridPos().x, node.GetGridPos().y);
+        }
+        TileType type = node.GetTileType();
+        if (type == TileType.RoomCenter || type == TileType.RoomNode)
+            return false;
         return true;
     }
     #endregion
@@ -138,6 +143,7 @@ public class HexaGrid : MonoBehaviour
                 {
                     string name = tilemap.GetTile(pos).name;
                     HexaMapNode node = tileFactory.GetNode(name);
+                    node.Start();
                     node.SetGridPos(new Vector2Int(x+ offset.x, y+offset.y));
                     node.SetCellPos(pos);
                     node.SetWorldPos(tilemap.CellToWorld(pos));
@@ -150,7 +156,6 @@ public class HexaGrid : MonoBehaviour
     }
     #endregion
     #region Neighbor
-    
     public List<HexaMapNode> GetNeighborNode(int x, int y)
     {
         int idxX, idxY;
@@ -213,17 +218,20 @@ public class HexaGrid : MonoBehaviour
     }
     #endregion
     #region TileSwap
-    public void SwapNode(int x, int y, string tile, int id)
+    public void SwapNode(int x, int y, string tile)
     {
         HexaMapNode prevNode = GetNode(x, y);
         HexaMapNode node = tileFactory.GetNode(tile);
         node.SetNodePosition(prevNode);
-        tilemap.SetTile(node.GetCellPos(), tileFactory.GetTile(id));
+        tilemap.SetTile(node.GetCellPos(), tileFactory.GetTile(((int)node.GetTileType())));
     }
+    #endregion
+    #region Room
+
     #endregion
     #endregion
     #region Unity Function
-    private void Start()
+    private void Awake()
     {
         cellPositionCalc = new CellPositionCalc();
         tileFactory = GetComponent<NodeFactory>();

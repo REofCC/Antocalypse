@@ -2,17 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Wall : MonoBehaviour
+public class Wall : HexaMapNode
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        SetBreakable(true);
+        SetWalkable(false);
+        SetBuildable(false);
+        SetTileType(TileType.Wall);
     }
 }

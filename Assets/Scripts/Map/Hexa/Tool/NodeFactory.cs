@@ -8,8 +8,10 @@ public class NodeFactory : MonoBehaviour
     #region Attribute
     Dictionary<string, Func<HexaMapNode>> nodeDict = new()
     {
-        { "WalkableTile", ()=>new HexaMapNode() },
-        { "UnwalkableTile", ()=>new HexaMapNode() }
+        {"Wall", ()=>new Wall() },
+        { "Path", ()=>new Path() },
+        { "RoomCenter", ()=>new RoomCenter() },
+        {"RoomNode", ()=>new RoomNode() },
     };
     [SerializeField]
     List<TileBase> tileDict = new();

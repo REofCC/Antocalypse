@@ -5,6 +5,7 @@ public class RoomCenter : HexaMapNode
     #region Attribute
     List<RoomNode> nodes;
     BaseBuilding building;
+    int roomLevel = 1;
     #endregion
 
     #region Getter & Setter

@@ -30,8 +30,11 @@ public class CellPositionCalc
     #region Function
     public Vector2Int CalcOffset(Tilemap tilemap)
     {
+        SetTileMap(tilemap);
         BoundsInt bound = tilemap.cellBounds;
+        Debug.Log(bound);
         SetOffset(new Vector2Int(Mathf.Abs(bound.xMin), Mathf.Abs(bound.yMin)));
+        Debug.Log($"{bound.xMin},{bound.yMin}");
         return GetOffset();
     }
     public Vector3 CalcWorldPos(HexaMapNode mapNode)
