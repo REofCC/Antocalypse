@@ -1,8 +1,8 @@
 public enum TaskType
 {
-    Basic, Gather, Build
+    None, Gather, Build, Eat
 }
 public enum State 
 { 
-    Idle, Move, Gather, Build 
+    Idle, Move, Gather, Build, Eat
 };

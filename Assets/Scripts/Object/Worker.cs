@@ -15,6 +15,7 @@ public class Worker : MonoBehaviour
 
     bool isHolding; //자원 보유 중
 
+    TaskType currentTask;
     State state;
     State nextState;
     Vector2 targetPos;
@@ -25,6 +26,7 @@ public class Worker : MonoBehaviour
         state = State.Idle;
         isHolding = false;
         cargoPos = cargo.transform.position;
+        currentTask = TaskType.None;
     }
 
     private void FixedUpdate()
@@ -60,11 +62,12 @@ public class Worker : MonoBehaviour
     public void MoveToward(Vector2 target, TaskType type)
     {
         Debug.Log("Start Move");
+        if (currentTask == TaskType.Eat)
         switch (type)
         {
-            case TaskType.Basic: 
+            case TaskType.None:
                 targetPos = target;
-                nextState = State.Idle;
+                state = State.Move;
                 break;
             case TaskType.Gather: 
                 targetPos = target;
@@ -87,6 +90,28 @@ public class Worker : MonoBehaviour
             ChangeState(nextState);
         }
         transform.position = Vector2.MoveTowards(transform.position, targetPos, entityData.speed * Time.deltaTime);
+    }
+    public void GetTask(Vector2 target, TaskType type)
+    {
+        Debug.Log("Task Confirmed");
+        switch (type)
+        {
+            case TaskType.None:
+                targetPos = target;
+                nextState = State.Idle;
+                break;
+            case TaskType.Gather:
+                targetPos = target;
+                nextState = State.Gather;
+                break;
+            case TaskType.Build:
+                targetPos = target;
+                nextState = State.Build;
+                break;
+        }
+
+        ChangeState(State.Move);
+        targetPos = target;
     }
     void Idle()
     {

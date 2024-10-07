@@ -10,6 +10,8 @@ public class TaskManager : MonoBehaviour
     [SerializeField]
     List<GameObject> workers;
 
+    GameObject entity;
+
     LayerMask antLayer;
     private void Awake()
     {
@@ -39,7 +41,7 @@ public class TaskManager : MonoBehaviour
 
         foreach (var hit in Physics2D.CircleCastAll(resourceNode.transform.position, Mathf.Infinity, Vector2.zero,Mathf.Infinity, antLayer))
         {
-            if (hit.collider.GetComponent<Worker>().GetCurrentState() == State.Idle)
+            if ((hit.collider.GetComponent<Worker>().GetCurrentState() == State.Idle) || (hit.collider.GetComponent<Worker>().GetCurrentState() == State.Idle))
             {
                 entity = hit.collider.gameObject;
                 Debug.Log("Idle Found");
@@ -53,5 +55,25 @@ public class TaskManager : MonoBehaviour
         }
 
         return entity;
+    }
+
+    void AssignTask(TaskType task)
+    {
+        entity = FindIdleEntity();
+
+        if (entity)
+        {
+            Debug.Log("There's No Idle Entity");
+            return;
+        }
+
+        switch (task)
+        {
+            case TaskType.Gather:
+                ResourceCollect();
+                break;
+            case TaskType.Build:
+                break;
+        }
     }
 }
