@@ -12,10 +12,10 @@ public class ResourceNode : MonoBehaviour
     {
         if (collision.CompareTag("Worker"))
         {
-            if (collision.gameObject.GetComponent<Worker>().GetState() == State.Gather) //자원 수집 개미와 충돌 시
+            if (collision.gameObject.GetComponent<Worker>().GetCurrentState() == State.Gather) //자원 수집 개미와 충돌 시
             {
                 Debug.Log("Gather Resource");
-                nodeData.value -= 3;
+                nodeData.value -= collision.gameObject.GetComponent<Worker>().getGatherValue();
             }
         }
     }

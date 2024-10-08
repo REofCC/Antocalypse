@@ -17,3 +17,4 @@ MonoBehaviour:
   _hp: 10
   _speed: 5
   _kcal: 100
+  _gatherValue: 3

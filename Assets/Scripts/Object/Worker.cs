@@ -12,6 +12,7 @@ public class Worker : MonoBehaviour
     GameObject cargo;
 
     Vector2 cargoPos;
+    Vector2 nodePos;
 
     bool isHolding; //자원 보유 중
 
@@ -31,6 +32,10 @@ public class Worker : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (FoodCheck())    //배고픔 체크
+        {
+            ChangeState(State.Eat);
+        }
         switch (state)
         {
             case State.Idle:
@@ -57,39 +62,51 @@ public class Worker : MonoBehaviour
             case State.Move:
                 this.state = State.Move;
                 break;
-        }
-    }
-    public void MoveToward(Vector2 target, TaskType type)
-    {
-        Debug.Log("Start Move");
-        if (currentTask == TaskType.Eat)
-        switch (type)
-        {
-            case TaskType.None:
-                targetPos = target;
-                state = State.Move;
+            case State.Eat:
+                this.state = State.Eat;
                 break;
-            case TaskType.Gather: 
-                targetPos = target;
-                nextState = State.Gather;
-                break;
-            case TaskType.Build: 
-                targetPos = target;
-                nextState = State.Build;
+            case State.Build:
+                this.state = State.Build;
                 break;
         }
-
-        ChangeState(State.Move);
-        targetPos = target;
     }
     void Move()
     {
         if (transform.position.x == targetPos.x && transform.position.y == targetPos.y)
         {
             Debug.Log("Move Finish");
-            ChangeState(nextState);
+            ChangeState(State.Idle);
+            MoveEnd();
         }
         transform.position = Vector2.MoveTowards(transform.position, targetPos, entityData.speed * Time.deltaTime);
+    }
+    void MoveEnd()
+    {
+        switch(currentTask)
+        {
+            case TaskType.None:
+                ChangeState(State.Idle);
+                break;
+            case TaskType.Gather:
+                if (transform.position.x == cargoPos.x && transform.position.y == cargoPos.y)   // 저장소에 도착 시 
+                {
+                    ColonyManager.Instance.GetResoruce(entityData.holdValue);   // 보유중인 자원만큼 저장소 자원 추가
+                    targetPos = nodePos;
+                    ChangeState(State.Move);
+                }
+                else if (transform.position.x == nodePos.x && transform.position.y == nodePos.y)    // 자원 노드에 도착 시
+                {
+                        targetPos = nodePos;
+                        ChangeState(State.Gather);  // 수집 상태로 변경
+                }
+                break;
+            case TaskType.Build:
+                ChangeState(State.Idle);
+                break;
+            case TaskType.Eat:
+                ChangeState(State.Idle);
+                break;
+        }
     }
     public void GetTask(Vector2 target, TaskType type)
     {
@@ -98,24 +115,42 @@ public class Worker : MonoBehaviour
         {
             case TaskType.None:
                 targetPos = target;
-                nextState = State.Idle;
+                currentTask = type;
+                //nextState = State.Idle;
                 break;
             case TaskType.Gather:
-                targetPos = target;
-                nextState = State.Gather;
+                nodePos = target;
+                currentTask = type;
+                //nextState = State.Gather;
                 break;
             case TaskType.Build:
                 targetPos = target;
-                nextState = State.Build;
+                currentTask = type;
+                //nextState = State.Build;
                 break;
         }
-
-        ChangeState(State.Move);
-        targetPos = target;
+        if (state != State.Eat)
+        {
+            nodePos = target;
+            targetPos = nodePos;
+            ChangeState(State.Move);
+        }
     }
     void Idle()
     {
         // 유휴 행동
+    }
+
+    bool FoodCheck()
+    {
+        if (entityData.kcal < 50)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     void GatherResouce()
@@ -123,18 +158,12 @@ public class Worker : MonoBehaviour
         Debug.Log("Gathering Resouces");
         //자원 수집
         entityData.isHolding = true;
-        entityData.holdValue = entityData.gatherValue;
+        entityData.holdValue = entityData.gatherValue;  //자원 수집량만큼 보유
         //자원 수집 애니메이션 및 딜레이 추가
 
         targetPos = cargoPos;
         Debug.Log("Returning to Cargo");
-        nextState = State.Idle;
         ChangeState(State.Move);
-    }
-
-    public State GetCurrentState()
-    {
-        return state;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -148,12 +177,20 @@ public class Worker : MonoBehaviour
             Debug.Log("arrived at ResourceNode");
         }
     }
-    public State GetState()
+    public State GetCurrentState()
     {
         return state;
+    }
+    public TaskType GetCurrentTask()
+    {
+        return currentTask;
     }
     public bool IsHolding()
     {
         return isHolding;
+    }
+    public int getGatherValue()
+    {
+        return entityData.gatherValue;
     }
 }

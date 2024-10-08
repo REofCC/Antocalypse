@@ -26,7 +26,7 @@ public class TaskManager : MonoBehaviour
         entity = FindIdleEntity();
         if (entity != null)
         {
-            entity.GetComponent<Worker>().MoveToward(resourceNode.transform.position, TaskType.Gather);
+            entity.GetComponent<Worker>().GetTask(resourceNode.transform.position, TaskType.Gather);
         }
         else
         {
@@ -41,7 +41,7 @@ public class TaskManager : MonoBehaviour
 
         foreach (var hit in Physics2D.CircleCastAll(resourceNode.transform.position, Mathf.Infinity, Vector2.zero,Mathf.Infinity, antLayer))
         {
-            if ((hit.collider.GetComponent<Worker>().GetCurrentState() == State.Idle) || (hit.collider.GetComponent<Worker>().GetCurrentState() == State.Idle))
+            if ((hit.collider.GetComponent<Worker>().GetCurrentTask() == TaskType.None) || (hit.collider.GetComponent<Worker>().GetCurrentTask() == TaskType.Eat))
             {
                 entity = hit.collider.gameObject;
                 Debug.Log("Idle Found");
