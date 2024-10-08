@@ -4,15 +4,23 @@ using UnityEngine;
 
 public class TestTool : MonoBehaviour
 {
+    public Test test;
+    public HexaGrid grid;
     // Start is called before the first frame update
     void Start()
     {
-        
+        test = GetComponent<Test>();
+        grid = GameObject.Find("MapTool").GetComponent<HexaGrid>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Break()
     {
-        
+        Vector2Int gridPos = test.current.GetGridPos();
+        Debug.Log($"GridPos :{gridPos}");
+        if(test.current.GetBreakable())
+        {
+            grid.SwapNode(gridPos.x, gridPos.y, "Path");
+            
+        }
     }
 }

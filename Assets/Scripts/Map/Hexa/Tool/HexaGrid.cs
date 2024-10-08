@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -222,6 +223,7 @@ public class HexaGrid : MonoBehaviour
     {
         HexaMapNode prevNode = GetNode(x, y);
         HexaMapNode node = tileFactory.GetNode(tile);
+        node.Start();
         node.SetNodePosition(prevNode);
         tilemap.SetTile(node.GetCellPos(), tileFactory.GetTile(((int)node.GetTileType())));
     }

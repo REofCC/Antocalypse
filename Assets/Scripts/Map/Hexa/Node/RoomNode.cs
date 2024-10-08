@@ -32,7 +32,7 @@ public class RoomNode : HexaMapNode
         SetBreakable(false);
         SetBuildable(true);
         SetWalkable(true);
-        SetTileType(TileType.RoomCenter);
+        SetTileType(TileType.RoomNode);
     }
     #endregion
 }
