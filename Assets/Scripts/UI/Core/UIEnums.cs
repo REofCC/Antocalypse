@@ -12,6 +12,14 @@ public static class UIEnums
         DISABLED
     }
 
+    public enum MouseAction
+    {
+        CLICK,
+        HOVER,
+        PRESS,
+        RELEASE
+    }
+
     public enum SlideDirection
     {
         UP,
