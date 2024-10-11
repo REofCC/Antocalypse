@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 using static UIEnums;
 
 public class SlidePopup  : MonoBehaviour
@@ -12,6 +12,7 @@ public class SlidePopup  : MonoBehaviour
     [SerializeField] RectTransform popupPanel;    
     [SerializeField] float slideDuration = 0.5f;
     bool isPopupOpen = false;
+    [SerializeField] List<Button> buttons = new List<Button>();
 
     Vector2 hiddenPosition;
     Vector2 shownPosition;
@@ -21,6 +22,8 @@ public class SlidePopup  : MonoBehaviour
         SetupDirections();
 
         popupPanel.anchoredPosition = hiddenPosition;
+
+        SetButtonsInteractable(false);
     }
 
     void SetupDirections()
@@ -57,7 +60,13 @@ public class SlidePopup  : MonoBehaviour
             return;
         }
 
-        popupPanel.DOAnchorPos(shownPosition, slideDuration).SetEase(Ease.OutQuad);
+        SetButtonsInteractable(false);
+
+        popupPanel.DOAnchorPos(shownPosition, slideDuration).SetEase(Ease.OutQuad).OnComplete(() =>
+        {
+            SetButtonsInteractable(true);
+        });
+
         isPopupOpen = true;
     }
 
@@ -67,6 +76,8 @@ public class SlidePopup  : MonoBehaviour
         {
             return;
         }
+        
+        SetButtonsInteractable(false);
 
         popupPanel.DOAnchorPos(hiddenPosition, slideDuration).SetEase(Ease.OutQuad);
         isPopupOpen = false;
@@ -77,5 +88,13 @@ public class SlidePopup  : MonoBehaviour
     public bool IsPopupOpen()
     {
         return isPopupOpen;
+    }
+
+    void SetButtonsInteractable(bool interactable)
+    {
+        foreach (Button button in buttons)
+        {
+            button.interactable = interactable;
+        }
     }
 }
