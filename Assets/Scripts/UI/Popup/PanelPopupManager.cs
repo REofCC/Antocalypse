@@ -2,23 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PopupManager : MonoBehaviour
-{
-    public static PopupManager Instance;
-
-    SlidePopup currentPopup;
-
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
+public class PanelPopupManager : MonoBehaviour
+{    
+    SlidePopup currentPopup;   
 
     public void TogglePopup(SlidePopup newPopup)
     {
@@ -41,6 +27,14 @@ public class PopupManager : MonoBehaviour
     public void ClosePopup(SlidePopup closePopup)
     {
         if (currentPopup == closePopup)
+        {
+            currentPopup = null;
+        }
+    }
+
+    public void PopupClosed(SlidePopup closedPopup)
+    {
+        if (currentPopup == closedPopup)
         {
             currentPopup = null;
         }
