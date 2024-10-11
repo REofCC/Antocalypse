@@ -28,7 +28,7 @@ public class SlidePopup  : MonoBehaviour
 
     void SetupDirections()
     {
-        shownPosition = Vector2.zero;
+        shownPosition = new Vector2(popupPanel.anchoredPosition.x, popupPanel.anchoredPosition.y);
 
         switch (slideDirection)
         {
