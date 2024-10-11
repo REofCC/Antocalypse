@@ -6,9 +6,17 @@ public static class UIEnums
 {
     public enum ButtonState
     {
-        Normal,
-        Hover,
-        Pressed,
-        Disabled
+        NORMAL,
+        HOVER,
+        PRESSED,
+        DISABLED
+    }
+
+    public enum SlideDirection
+    {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT
     }
 }

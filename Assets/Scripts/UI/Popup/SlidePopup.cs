@@ -2,9 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UIElements;
+using static UIEnums;
 
 public class SlidePopup  : MonoBehaviour
 {
+    [SerializeField] SlideDirection slideDirection;
+    [SerializeField] PanelPopupManager popupManager;
     [SerializeField] RectTransform popupPanel;    
     [SerializeField] float slideDuration = 0.5f;
     bool isPopupOpen = false;
@@ -14,15 +18,35 @@ public class SlidePopup  : MonoBehaviour
 
     private void Start()
     {
-        hiddenPosition = popupPanel.anchoredPosition;
-        shownPosition = hiddenPosition + new Vector2(0, popupPanel.rect.height);
+        SetupDirections();
 
         popupPanel.anchoredPosition = hiddenPosition;
     }
 
+    void SetupDirections()
+    {
+        shownPosition = Vector2.zero;
+
+        switch (slideDirection)
+        {
+            case SlideDirection.UP:
+                hiddenPosition = new Vector2(popupPanel.anchoredPosition.x, -popupPanel.rect.height);
+                break;
+            case SlideDirection.DOWN:
+                hiddenPosition = new Vector2(popupPanel.anchoredPosition.x, popupPanel.rect.height);
+                break;
+            case SlideDirection.LEFT:
+                hiddenPosition = new Vector2(popupPanel.rect.width, popupPanel.anchoredPosition.y);
+                break;
+            case SlideDirection.RIGHT:
+                hiddenPosition = new Vector2(-popupPanel.rect.width, popupPanel.anchoredPosition.y);
+                break;
+        }
+    }
+
     public void TogglePopup()
     {
-        PopupManager.Instance.TogglePopup(this);    
+        popupManager.TogglePopup(this);    
     }
 
 
@@ -45,7 +69,9 @@ public class SlidePopup  : MonoBehaviour
         }
 
         popupPanel.DOAnchorPos(hiddenPosition, slideDuration).SetEase(Ease.OutQuad);
-        isPopupOpen = false;        
+        isPopupOpen = false;
+
+        popupManager.PopupClosed(this);
     }
 
     public bool IsPopupOpen()

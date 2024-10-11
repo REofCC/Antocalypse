@@ -12,7 +12,7 @@ public class PopupButton : MonoBehaviour
         transform.GetComponent<Button>().onClick.AddListener(onButtonClick);
     }
 
-    public void onButtonClick()
+    public void onButtonClick() 
     {
         slidePopup.TogglePopup();
     }
