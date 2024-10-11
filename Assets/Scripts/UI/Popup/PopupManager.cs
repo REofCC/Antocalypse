@@ -20,19 +20,27 @@ public class PopupManager : MonoBehaviour
         }
     }
 
-    public void OpenPopup(SlidePopup newPopup)
+    public void TogglePopup(SlidePopup newPopup)
     {
-        if (currentPopup != null)
+        if (currentPopup == newPopup && newPopup.IsPopupOpen())
+        {
+            newPopup.ClosePopup();
+            currentPopup = null;
+            return;
+        }
+
+        if(currentPopup != null && currentPopup != newPopup)
         {
             currentPopup.ClosePopup();
         }
 
-        currentPopup = newPopup;        
-    }
+        currentPopup = newPopup;
+        newPopup.OpenPopup();
+    }    
 
-    public void ClosePopup(SlidePopup popup)
+    public void ClosePopup(SlidePopup closePopup)
     {
-        if (currentPopup == popup)
+        if (currentPopup == closePopup)
         {
             currentPopup = null;
         }

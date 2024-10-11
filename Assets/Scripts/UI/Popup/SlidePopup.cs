@@ -22,32 +22,34 @@ public class SlidePopup  : MonoBehaviour
 
     public void TogglePopup()
     {
-        if (isPopupOpen)
-        {
-            ClosePopup();
-        }
-        else
-        {
-            OpenPopup();
-        }
-
-        isPopupOpen = !isPopupOpen;
+        PopupManager.Instance.TogglePopup(this);    
     }
 
 
     public void OpenPopup()
     {
-        PopupManager.Instance.OpenPopup(this);
+        if(isPopupOpen)
+        {
+            return;
+        }
 
         popupPanel.DOAnchorPos(shownPosition, slideDuration).SetEase(Ease.OutQuad);
         isPopupOpen = true;
     }
 
     public void ClosePopup()
-    {        
-        popupPanel.DOAnchorPos(hiddenPosition, slideDuration).SetEase(Ease.OutQuad);
-        isPopupOpen = false;
+    {      
+        if(!isPopupOpen)
+        {
+            return;
+        }
 
-        PopupManager.Instance.ClosePopup(this);
+        popupPanel.DOAnchorPos(hiddenPosition, slideDuration).SetEase(Ease.OutQuad);
+        isPopupOpen = false;        
+    }
+
+    public bool IsPopupOpen()
+    {
+        return isPopupOpen;
     }
 }
