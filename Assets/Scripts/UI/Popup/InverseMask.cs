@@ -4,15 +4,16 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class InverseMask : Mask
-{
+{    
     public override bool IsRaycastLocationValid(Vector2 sp, Camera eventCamera)
-    {
-        return !base.IsRaycastLocationValid(sp, eventCamera);
+    {        
+        return base.IsRaycastLocationValid(sp, eventCamera);
     }
 
     protected override void OnEnable()
     {
         base.OnEnable();
+        
         Graphic graphic = GetComponent<Graphic>();
         if (graphic != null)
         {
@@ -29,5 +30,10 @@ public class InverseMask : Mask
             graphic.material.SetInt("_StencilComp", (int)UnityEngine.Rendering.CompareFunction.Always);
         }
         base.OnDisable();
+    }
+    
+    protected override void OnTransformParentChanged()
+    {
+        base.OnTransformParentChanged();        
     }
 }
