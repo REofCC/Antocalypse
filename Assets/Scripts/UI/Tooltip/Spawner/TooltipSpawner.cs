@@ -58,7 +58,7 @@ public abstract class TooltipSpawner : MonoBehaviour, IPointerEnterHandler, IPoi
         GetComponent<RectTransform>().GetWorldCorners(slotCorners);
 
         bool below = transform.position.y > Screen.height / 2;
-        bool right = transform.position.x < Screen.width / 2;
+        bool right = transform.position.x <= Screen.width / 2;
 
         int slotCorner = GetCornerIndex(below, right);
         int tooltipCorner = GetCornerIndex(!below, !right);
@@ -68,22 +68,10 @@ public abstract class TooltipSpawner : MonoBehaviour, IPointerEnterHandler, IPoi
 
     int GetCornerIndex(bool below, bool right)
     {
-        if(below && right)
-        {
-            return 0;
-        }
-        else if (below && !right)
-        {
-            return 1;
-        }
-        else if (!below && !right)
-        {
-            return 2;
-        }
-        else
-        {
-            return 3;
-        }
+        if(below && !right) return 0;       
+        else if (!below && !right) return 1;        
+        else if (!below && right) return 2;        
+        else return 3;    
     }
 
     void ClearTooltip()
