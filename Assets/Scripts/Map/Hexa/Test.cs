@@ -30,9 +30,7 @@ public class Test : MonoBehaviour
                 Vector3Int tilePos = tilemap.WorldToCell(mouseWorldPos);
                 Vector2Int gridPos = calc.CalcGridPos(mouseWorldPos);
                 // 3. 타일 좌표 출력
-                Debug.Log("Tilemap 타일 좌표: " + tilePos);
                 HexaMapNode node = grid.GetNode(gridPos.x, gridPos.y);
-                Debug.Log($"GridPos :{node.GetGridPos()}");
                 current = node;
                 //Debug.Log($"WorldPos :{node.GetWorldPos()}");
                 //Debug.Log($"CellPos :{node.GetCellPos()}");

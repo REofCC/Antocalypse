@@ -16,7 +16,6 @@ public class TestTool : MonoBehaviour
     public void Break()
     {
         Vector2Int gridPos = test.current.GetGridPos();
-        Debug.Log($"GridPos :{gridPos}");
         if(test.current.GetBreakable())
         {
             grid.SwapNode(gridPos.x, gridPos.y, "Path");

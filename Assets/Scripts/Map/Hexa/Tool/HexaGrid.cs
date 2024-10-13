@@ -19,14 +19,23 @@ public class HexaGrid : MonoBehaviour
     int mapSizeY;
     #endregion
     #region Direction for Get Node Circlular Rotation
-    int[] oddDirX = {0,1,1,1,0,-1 };
-    int[] evenDirX = {-1,0,1,0,-1,-1 };
-    int[] DirY = {-1,-1,0,1,1,0 };
+    int[][] oddDirX;
+    int[][] evenDirX;
+    int[][] DirY;
+    //phase1
+    int[] oddDirX1 = {0,1,1,1,0,-1 };
+    int[] evenDirX1 = {-1,0,1,0,-1,-1 };
+    int[] DirY1 = {-1,-1,0,1,1,0 };
+    //phase2
+    int[] oddDirX2 = { -1, 0, 1, 2, 2, 2, 1, 0, -1, -1, -2, -1 };
+    int[] evenDirX2 = { -1, 0, 1, 1, 2, 1, 1, 0, -1, -2, -2, -2 };
+    int[] DirY2 = { -2, -2, -2, -1, 0, 1, 2, 2, 2, 1, 0, -1 };
+    //phase3
+    int[] oddDirX3 = { };
+    int[] evenDirX3 = { };
+    int[] DirY3 = { -3, -3, -3, -3, -2, -1, 0, 1, 2, 3, 3, 3, 3, 2, 1, 0, -1, -2 };
     #endregion
-    #region Offset for Get Room Node
-    int[,] roomDirX = { { 0, 1 }, { -1, 1 }, { -1, 2 }, { -2, 2 }, { -2, -3 }, { -3, 3 } };
-    int[,] X_Phase = { { 0, 1 }, { 1, 3 }, { 2, 5 } };
-    #endregion
+
     #region Getter & Setter
     public void SetMapSizeX(int mapSizeX)
     {
@@ -67,6 +76,21 @@ public class HexaGrid : MonoBehaviour
     public CellPositionCalc GetCellPosCalc()
     {
         return cellPositionCalc;
+    }
+
+    public void SetDirection()
+    {
+        oddDirX[1] = oddDirX1;
+        oddDirX[2] = oddDirX2;
+        oddDirX[3] = oddDirX3;
+
+        evenDirX[1] = evenDirX1;
+        evenDirX[2] = evenDirX2;
+        evenDirX[3] = evenDirX3;
+
+        DirY[1] = DirY1;
+        DirY[2] = DirY2;
+        DirY[3] = DirY3;
     }
     #endregion
 
@@ -149,7 +173,6 @@ public class HexaGrid : MonoBehaviour
                     node.SetCellPos(pos);
                     node.SetWorldPos(tilemap.CellToWorld(pos));
                     SetWalkable(x + offset.x, y + offset.y, node.GetWalkable());
-                    Debug.Log(name);
                     SetNode(x + offset.x, y + offset.y, node);
                 }
             }
@@ -165,8 +188,8 @@ public class HexaGrid : MonoBehaviour
         {
             for(int i = 0; i < 6; i++)
             {
-                idxX = x + evenDirX[i];
-                idxY = y+ DirY[i];
+                idxX = x + evenDirX1[i];
+                idxY = y+ DirY1[i];
                 if(IsNodeExist(idxX, idxY))
                 {
                     neighbors.Add(GetNode(idxX, idxY));
@@ -177,8 +200,8 @@ public class HexaGrid : MonoBehaviour
         {
             for (int i = 0; i < 6; i++)
             {
-                idxX = x + oddDirX[i];
-                idxY = y + DirY[i];
+                idxX = x + oddDirX1[i];
+                idxY = y + DirY1[i];
                 if (IsNodeExist(idxX, idxY))
                 {
                     neighbors.Add(GetNode(idxX, idxY));
@@ -195,8 +218,8 @@ public class HexaGrid : MonoBehaviour
         {
             for (int i = 0; i < 6; i++)
             {
-                idxX = x + evenDirX[i];
-                idxY = y + DirY[i];
+                idxX = x + evenDirX1[i];
+                idxY = y + DirY1[i];
                 if (IsNodeExist(idxX, idxY) && GetNode(idxX,idxY).GetWalkable())
                 {
                     neighbors.Add(GetNode(idxX, idxY));
@@ -207,8 +230,8 @@ public class HexaGrid : MonoBehaviour
         {
             for (int i = 0; i < 6; i++)
             {
-                idxX = x + oddDirX[i];
-                idxY = y + DirY[i];
+                idxX = x + oddDirX1[i];
+                idxY = y + DirY1[i];
                 if (IsNodeExist(idxX, idxY) && GetNode(idxX, idxY).GetWalkable())
                 {
                     neighbors.Add(GetNode(idxX, idxY));
@@ -229,12 +252,21 @@ public class HexaGrid : MonoBehaviour
     }
     #endregion
     #region Room
+    public void GetRoomNode(HexaMapNode RoomCenter, int phase)
+    {
 
+    }
+
+    public void GetRoomNeighborNode(HexaMapNode Roomcenter,  int phase)
+    {
+
+    }
     #endregion
     #endregion
     #region Unity Function
     private void Awake()
     {
+        SetDirection();
         cellPositionCalc = new CellPositionCalc();
         tileFactory = GetComponent<NodeFactory>();
         tilemap = GameObject.Find("Grid").transform.GetChild(0).GetComponent<Tilemap>();

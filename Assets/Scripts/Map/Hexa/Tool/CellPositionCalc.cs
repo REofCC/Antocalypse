@@ -32,9 +32,7 @@ public class CellPositionCalc
     {
         SetTileMap(tilemap);
         BoundsInt bound = tilemap.cellBounds;
-        Debug.Log(bound);
         SetOffset(new Vector2Int(Mathf.Abs(bound.xMin), Mathf.Abs(bound.yMin)));
-        Debug.Log($"{bound.xMin},{bound.yMin}");
         return GetOffset();
     }
     public Vector3 CalcWorldPos(HexaMapNode mapNode)
