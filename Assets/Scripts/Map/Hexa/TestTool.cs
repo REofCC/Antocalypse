@@ -16,10 +16,15 @@ public class TestTool : MonoBehaviour
     public void Break()
     {
         Vector2Int gridPos = test.current.GetGridPos();
-        if(test.current.GetBreakable())
+        Debug.Log(grid.IsBreakable(test.current));
+        if(grid.IsBreakable(test.current))
         {
             grid.SwapNode(gridPos.x, gridPos.y, "Path");
             
         }
+    }
+    public void MakeRoom()
+    {
+        grid.MakeRoom(test.current);
     }
 }

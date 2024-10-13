@@ -33,7 +33,7 @@ public class Test : MonoBehaviour
                 HexaMapNode node = grid.GetNode(gridPos.x, gridPos.y);
                 current = node;
                 //Debug.Log($"WorldPos :{node.GetWorldPos()}");
-                //Debug.Log($"CellPos :{node.GetCellPos()}");
+                Debug.Log($"CellPos :{node.GetCellPos()}");
                 //Debug.Log(tilemap.GetTile(tilePos).name);
             }
         }
