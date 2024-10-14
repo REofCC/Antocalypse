@@ -6,3 +6,10 @@ public enum State
 { 
     Idle, Move, Gather, Build, Eat
 };
+
+public enum BTNodeState
+{
+    Success,
+    Failure,
+    Running
+}
