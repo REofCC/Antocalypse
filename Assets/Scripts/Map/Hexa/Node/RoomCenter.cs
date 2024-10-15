@@ -5,7 +5,7 @@ public class RoomCenter : HexaMapNode
     #region Attribute
     List<RoomNode> nodes;
     BaseBuilding building;
-    int roomLevel = 1;
+    int roomPhase = 1;
     #endregion
 
     #region Getter & Setter
@@ -30,6 +30,13 @@ public class RoomCenter : HexaMapNode
             {
                 this.nodes.Add(nodes[i]);
             }
+        }
+    }
+    public void AddRoomNode(RoomNode node)
+    {
+        if (!this.nodes.Contains(node))
+        {
+            this.nodes.Add(node);
         }
     }
     public override void Start()

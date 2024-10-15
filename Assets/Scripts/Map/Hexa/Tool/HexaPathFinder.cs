@@ -70,10 +70,10 @@ public class HexaPathFinder : MonoBehaviour
             }
         }
     }
-    public List<Vector2> GetRoute()
+    public List<Vector3> GetRoute()
     {
         HexaMapNode idx = end;
-        List<Vector2> routes = new List<Vector2>();
+        List<Vector3> routes = new List<Vector3>();
 
         routes.Add(grid.GetCellPosCalc().CalcWorldPos(idx));
         while(idx != start)
@@ -83,10 +83,8 @@ public class HexaPathFinder : MonoBehaviour
         }
         return routes;
     }
-    public List<Vector2> StartFind(HexaMapNode start, HexaMapNode end)
+    public List<Vector3> StartFind(HexaMapNode start, HexaMapNode end)
     {
-        List<Vector2> route = new();
-        
         ClearList();
         
         SetStartNode(start);

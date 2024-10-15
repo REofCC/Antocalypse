@@ -1,8 +1,10 @@
 using System.Collections.Generic;
-using System.Data;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using static UnityEngine.RuleTile.TilingRuleOutput;
+
+//TODO 1. Refactoring CheckRoom & MakeRoom
+//TODO 2. Expand Room
 
 public class HexaGrid : MonoBehaviour
 {
@@ -172,28 +174,7 @@ public class HexaGrid : MonoBehaviour
             return false;
         return true;
     }
-    private bool CheckRoomNode(HexaMapNode node)
-    {
-        if (node == null)
-        {
-            return false;
-        }
-        TileType type = node.GetTileType();
-        if (type == TileType.RoomCenter || type == TileType.RoomNode || (!node.GetBreakable()&& type!= TileType.Path))
-            return false;
-        return true;
-    }
-    private bool CheckRoomWall(HexaMapNode node)
-    {
-        if (node == null)
-        {
-            return false;
-        }
-        TileType type = node.GetTileType();
-        if (type == TileType.RoomCenter || type == TileType.RoomNode)
-            return false;
-        return true;
-    }
+    
     #endregion
     #region Grid
     private void CalcMapSize()
@@ -260,7 +241,7 @@ public class HexaGrid : MonoBehaviour
 
         return neighbors;
     }
-    private List<HexaMapNode> GetNeighborRingNode(int x, int y, int phase)
+    private List<HexaMapNode> GetNeighborRingNode(int x, int y, int phase) // max phase = 0 min phase = 2
     {
         int idxX, idxY;
         List<HexaMapNode> neighbors = new();
@@ -291,7 +272,6 @@ public class HexaGrid : MonoBehaviour
         return neighbors;
     }
     #endregion
-    #endregion
     #region TileSwap
     public void SwapNode(int x, int y, string tile)
     {
@@ -304,35 +284,82 @@ public class HexaGrid : MonoBehaviour
     }
     #endregion
     #region Room
+    private bool CheckRoomNode(List<HexaMapNode> nodes)
+    {
+        for (int i = 0; i < nodes.Count; i++)
+        {
+            TileType type = nodes[i].GetTileType();
+            if (type == TileType.RoomCenter || type == TileType.RoomNode || (!nodes[i].GetBreakable() && type != TileType.Path))
+                return false;
+        }
+        return true;
+    }
+    private bool CheckRoomWall(List<HexaMapNode> rings)
+    { 
+        for (int i = 0; i < rings.Count; i++)
+        {
+            TileType type = rings[i].GetTileType();
+            if (type == TileType.RoomCenter || type == TileType.RoomNode)
+                return false;
+        }
+        return true;
+    }
     public bool MakeRoom(HexaMapNode RoomCenter)
     {
         Vector2Int centerPos = RoomCenter.GetGridPos();
         List<HexaMapNode> nodes = GetNeighborNode(centerPos.x, centerPos.y, 1);
-
-        // if not exist node is contain return null
         if (nodes.Count != roomNodeNum[0])
             return false;
-        for (int i = 0; i < nodes.Count; i++)
-        {
-            if (!CheckRoomNode(nodes[i]))
-                return false;
-        }
+        if (!CheckRoomNode(nodes))
+            return false;
+        
         List<HexaMapNode> rings = GetNeighborRingNode(centerPos.x, centerPos.y, 1);
         if (rings.Count != ringNodeNum[1])
             return false;
-        for (int i = 0; i < rings.Count; i++)
-        {
-            if (!CheckRoomNode(rings[i]))
-                return false;
-        }
+        if (!CheckRoomWall(rings))
+            return false;
+
+        SwapNode(centerPos.x, centerPos.y, "RoomCenter");
+        RoomCenter center = (RoomCenter)GetNode(centerPos.x, centerPos.y);
         for (int i = 0; i < nodes.Count; i++)
         {
             Vector2Int nodePos = nodes[i].GetGridPos();
             SwapNode(nodePos.x, nodePos.y, "RoomNode");
+            center.AddRoomNode((RoomNode)GetNode(nodePos.x, nodePos.y));
         }
-        SwapNode(centerPos.x, centerPos.y, "RoomCenter");
+
         return true;
     }
+
+    public bool ExpandRoom(HexaMapNode RoomCenter, int phase = 2)
+    {
+        if (RoomCenter.GetTileType() != TileType.RoomCenter)
+            return false;
+        Vector2Int centerPos = RoomCenter.GetGridPos();
+        List<HexaMapNode> nodes = GetNeighborRingNode(centerPos.x,centerPos.y, phase);
+        if (nodes.Count != ringNodeNum[phase - 1])
+            return false;
+        if (CheckRoomNode(nodes))
+            return false;
+
+        List<HexaMapNode> rings = GetNeighborRingNode(centerPos.x, centerPos.y, phase + 1);
+        if (rings.Count != ringNodeNum[phase])
+            return false;
+        if (!CheckRoomWall(rings))
+            return false;
+
+        SwapNode(centerPos.x, centerPos.y, "RoomCenter");
+        RoomCenter center = (RoomCenter)GetNode(centerPos.x, centerPos.y);
+        for (int i = 0; i < nodes.Count; i++)
+        {
+            Vector2Int nodePos = nodes[i].GetGridPos();
+            SwapNode(nodePos.x, nodePos.y, "RoomNode");
+            center.AddRoomNode((RoomNode)GetNode(nodePos.x, nodePos.y));
+        }
+        return true;
+
+    }
+    #endregion
     #endregion
     #region Unity Function
     private void Awake()
