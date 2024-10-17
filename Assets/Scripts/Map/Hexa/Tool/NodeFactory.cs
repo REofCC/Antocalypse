@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 public class NodeFactory : MonoBehaviour
 {
     #region Attribute
-    Dictionary<string, Func<HexaMapNode>> nodeDict = new()
+    readonly Dictionary<string, Func<HexaMapNode>> nodeDict = new()
     {
         { "Wall", ()=>new Wall() },
         { "Path", ()=>new Path() },

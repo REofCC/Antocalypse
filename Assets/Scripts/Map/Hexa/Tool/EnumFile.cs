@@ -9,7 +9,25 @@ public enum TileType
     None
 }
 
-enum Building
+public enum BuildingType
 {
+    //Population
+    ResidenceChamber,
+    SpawningChamber,
+    //Food
+    SolidWareHouse,
+    LiquidWareHouse,
+    ProcessingChamber,
+    //Evolution
+    EvolutionChamber,
+    GenCollectChamber,
+    //Travel
+    ExpeditionAggregation
+}
 
+public enum ResourceType
+{
+    SolidFood,
+    LiquidFood,
+    BuildingMarterial
 }

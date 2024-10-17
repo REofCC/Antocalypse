@@ -10,7 +10,7 @@ public class HexaPathFinder : MonoBehaviour
     HexaMapNode current;
     HexaGrid grid;
 
-    List<HexaMapNode> candidates = new ();
+    List<HexaMapNode> candidates = new();
     List<HexaMapNode> finished = new();
     #endregion
     #region  Setter & Getter
@@ -73,7 +73,7 @@ public class HexaPathFinder : MonoBehaviour
     public List<Vector3> GetRoute()
     {
         HexaMapNode idx = end;
-        List<Vector3> routes = new List<Vector3>();
+        List<Vector3> routes = new();
 
         routes.Add(grid.GetCellPosCalc().CalcWorldPos(idx));
         while(idx != start)

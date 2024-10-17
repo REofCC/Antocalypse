@@ -5,7 +5,7 @@ public class RoomCenter : HexaMapNode
     #region Attribute
     List<RoomNode> nodes;
     BaseBuilding building;
-    int roomPhase = 1;
+    int roomPhase;
     #endregion
 
     #region Getter & Setter
@@ -18,6 +18,14 @@ public class RoomCenter : HexaMapNode
     public BaseBuilding GetBuilding()
     {
         return building;
+    }
+    public void SetRoomPhase(int phase)
+    {
+        roomPhase = phase;
+    }
+    public int GetRoomPhase()
+    {
+        return roomPhase;
     }
     #endregion
 

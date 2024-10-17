@@ -4,15 +4,39 @@ using UnityEngine;
 
 public class BaseBuilding : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    #region Attribute
+    BuildingType type;
+    int level;
+    HexaMapNode buildedPos;
+    #endregion
 
-    // Update is called once per frame
-    void Update()
+    #region Getter & Setter
+    public BuildingType GetBuildingType()
     {
-        
+        return type;
     }
+    public void SetBuildingType(BuildingType type)
+    {
+        this.type = type;
+    }
+    public int GetBuildingLevel()
+    {
+        return level;
+    }
+    public void SetBuildingLevel(int level)
+    {
+        this.level = level;
+    }
+    public HexaMapNode GetBuildedPos()
+    {
+        return buildedPos;
+    }
+    public void SetBuildedPos(HexaMapNode node)
+    {
+        buildedPos = node;
+    }
+    #endregion
+
+    #region Function
+    #endregion
 }

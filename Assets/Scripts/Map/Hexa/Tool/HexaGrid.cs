@@ -23,25 +23,25 @@ public class HexaGrid : MonoBehaviour
     #endregion
     #region Direction for Get Node Circlular Rotation
     //Unity Cell System = Even-r Horizontal Layout
-    int[] ringNodeNum = { 6, 12, 18 };
+    readonly int[] ringNodeNum = { 6, 12, 18 };
 
-    int[] roomNodeNum = {6, 18};
+    readonly int[] roomNodeNum = {6, 18};
 
     int[][] oddDirX;
     int[][] evenDirX;
     int[][] DirY;
 
-    int[] evenDirX1 = { 0, 1, 1, 1, 0, -1 };
-    int[] evenDirX2 = { -1, 0, 1, 2, 2, 2, 1, 0, -1, -1, -2, -1 };
-    int[] evenDirX3 = { -1, 0, 1, 2, 2, 3, 3, 3, 2, 2, 1, 0, -1, -2, -2, -3, -2, -2 };
+    readonly int[] evenDirX1 = { 0, 1, 1, 1, 0, -1 };
+    readonly int[] evenDirX2 = { -1, 0, 1, 2, 2, 2, 1, 0, -1, -1, -2, -1 };
+    readonly int[] evenDirX3 = { -1, 0, 1, 2, 2, 3, 3, 3, 2, 2, 1, 0, -1, -2, -2, -3, -2, -2 };
 
-    int[] oddDirX1 = { -1, 0, 1, 0, -1, -1 };
-    int[] oddDirX2 = { -1, 0, 1, 2, 2, 2, 1, 0, -1, -1, -2, -1 };
-    int[] oddDirX3 = { -2, -1, 0, 1, 2, 2, 3, 2, 2, 1, 0, -1, -2, -2, -3, -3, -3, -2 };
+    readonly int[] oddDirX1 = { -1, 0, 1, 0, -1, -1 };
+    readonly int[] oddDirX2 = { -1, 0, 1, 2, 2, 2, 1, 0, -1, -1, -2, -1 };
+    readonly int[] oddDirX3 = { -2, -1, 0, 1, 2, 2, 3, 2, 2, 1, 0, -1, -2, -2, -3, -3, -3, -2 };
 
-    int[] DirY1 = { -1, -1, 0, 1, 1, 0 };
-    int[] DirY2 = { -2, -2, -2, -1, 0, 1, 2, 2, 2, 1, 0, -1 };
-    int[] DirY3 = { -3, -3, -3, -3, -2, -1, 0, 1, 2, 3, 3, 3, 3, 2, 1, 0, -1, -2 };
+    readonly int[] DirY1 = { -1, -1, 0, 1, 1, 0 };
+    readonly int[] DirY2 = { -2, -2, -2, -1, 0, 1, 2, 2, 2, 1, 0, -1 };
+    readonly int[] DirY3 = { -3, -3, -3, -3, -2, -1, 0, 1, 2, 3, 3, 3, 3, 2, 1, 0, -1, -2 };
 
     #endregion
 
@@ -194,7 +194,7 @@ public class HexaGrid : MonoBehaviour
         {
             for (int y = tilemap.cellBounds.yMin; y <= tilemap.cellBounds.yMax; y++)
             {
-                Vector3Int pos = new Vector3Int(x, y, 0);
+                Vector3Int pos = new (x, y, 0);
                 if (tilemap.GetTile(pos) != null)
                 {
                     string name = tilemap.GetTile(pos).name;
@@ -325,7 +325,9 @@ public class HexaGrid : MonoBehaviour
         {
             Vector2Int nodePos = nodes[i].GetGridPos();
             SwapNode(nodePos.x, nodePos.y, "RoomNode");
-            center.AddRoomNode((RoomNode)GetNode(nodePos.x, nodePos.y));
+            RoomNode node = (RoomNode)GetNode(nodePos.x, nodePos.y);
+            center.AddRoomNode(node);
+            node.SetCenter(center);
         }
 
         return true;
@@ -354,10 +356,22 @@ public class HexaGrid : MonoBehaviour
         {
             Vector2Int nodePos = nodes[i].GetGridPos();
             SwapNode(nodePos.x, nodePos.y, "RoomNode");
-            center.AddRoomNode((RoomNode)GetNode(nodePos.x, nodePos.y));
+            RoomNode node = (RoomNode)GetNode(nodePos.x, nodePos.y);
+            center.AddRoomNode(node);
+            node.SetCenter(center);
         }
         return true;
 
+    }
+    #endregion
+    #region Action
+    public void BreakTile(HexaMapNode node)
+    {
+        if (IsBreakable(node))
+        {
+            Vector2Int gridPos = node.GetGridPos();
+            SwapNode(gridPos.x, gridPos.y, "Path");
+        }
     }
     #endregion
     #endregion
