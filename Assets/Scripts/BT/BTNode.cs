@@ -1,4 +1,6 @@
-public class BTNode : MonoBehaviour
+
+using System.Collections.Generic;
+public class BTNode
 {
     protected List<BTNode> children = new List<BTNode>();
 

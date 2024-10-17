@@ -1,7 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "EntityData", menuName = "Scriptable Object/EntityData", order = int.MaxValue)]
-public class EntityData : ScriptableObject
+public class EntityData:MonoBehaviour
 {
 
     [SerializeField]
@@ -16,8 +15,9 @@ public class EntityData : ScriptableObject
     int _kcal;
     [SerializeField]
     int _gatherValue; //자원 운반량
-
+    [SerializeField]
     bool _isHolding;  //자원 운반중
+    [SerializeField]
     int _holdValue;  //자원 소지량
 
     public string entityType { get { return _entityType; } set { _entityType = value; } }

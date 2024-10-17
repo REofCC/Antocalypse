@@ -9,7 +9,7 @@ public class BTAction : BTNode
 
     public override BTNodeState Evaluate()
     {
-        return action;
+        return action();
     }
 
 }

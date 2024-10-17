@@ -4,7 +4,7 @@ public enum TaskType
 }
 public enum State 
 { 
-    Idle, Move, Gather, Build, Eat
+    Idle, Move, Gather, Return, Build, Eat
 };
 
 public enum BTNodeState

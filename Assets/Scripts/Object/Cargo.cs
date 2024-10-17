@@ -17,7 +17,7 @@ public class Cargo : MonoBehaviour
     {
         if (collision.CompareTag("Worker"))
         {
-            if (collision.gameObject.GetComponent<Worker>().IsHolding()) //자원 보유 개미와 충돌 시
+            if (collision.gameObject.GetComponent<Worker>().GetCurrentState()==State.Return) //자원 보유 개미와 충돌 시
             {
                 Debug.Log("Gather Resource");
                 colony.GetResoruce(3);

@@ -2,20 +2,19 @@ public class BTSequence : BTNode
 {
     public override BTNodeState Evaluate()
     {
-        bool isAnyChildRunning = false;
-
         foreach (BTNode node in children)
         {
             BTNodeState result = node.Evaluate();
+
             if (result == BTNodeState.Failure)
             {
                 return BTNodeState.Failure;
             }
-            else if (result- node.Evaluate() == BTNodeState.Running) 
+            else if (result == BTNodeState.Running) 
             {
-                isAnyChildRunning = true;
+                return BTNodeState.Running;
             }
         }
-        return isAnyChildRunning ? BTNodeState.Running : BTNodeState.Success;
+        return BTNodeState.Success;
     }
 }

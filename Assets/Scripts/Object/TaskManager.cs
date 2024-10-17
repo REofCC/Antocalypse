@@ -23,7 +23,7 @@ public class TaskManager : MonoBehaviour
     {
         GameObject entity = null;
         Debug.Log("Order Collect");
-        entity = FindIdleEntity();
+        entity = FindEntity(TaskType.None);
         if (entity != null)
         {
             entity.GetComponent<Worker>().GetTask(resourceNode.transform.position, TaskType.Gather);
@@ -34,24 +34,24 @@ public class TaskManager : MonoBehaviour
         }
     }
 
-    public GameObject FindIdleEntity()
+    public GameObject FindEntity(TaskType task)
     {
         float minDistance;
         GameObject entity = null;
 
         foreach (var hit in Physics2D.CircleCastAll(resourceNode.transform.position, Mathf.Infinity, Vector2.zero,Mathf.Infinity, antLayer))
         {
-            if ((hit.collider.GetComponent<Worker>().GetCurrentTask() == TaskType.None) || (hit.collider.GetComponent<Worker>().GetCurrentTask() == TaskType.Eat))
+            if ((hit.collider.GetComponent<Worker>().GetCurrentTask() == task))
             {
                 entity = hit.collider.gameObject;
-                Debug.Log("Idle Found");
+                Debug.Log("Found");
                 break;
             }
         }
         
         if (entity == null)
         {
-            Debug.Log("Can't Find Idle");
+            Debug.Log("Can't Find");
         }
 
         return entity;
@@ -59,21 +59,24 @@ public class TaskManager : MonoBehaviour
 
     void AssignTask(TaskType task)
     {
-        entity = FindIdleEntity();
+        entity = FindEntity(TaskType.None);
 
-        if (entity)
+        if (!entity)
         {
             Debug.Log("There's No Idle Entity");
             return;
         }
+        entity.GetComponent<Worker>().GetTask(task);
+    }
+    public void DismissTask()
+    {
+        entity = FindEntity(TaskType.Gather);
 
-        switch (task)
+        if (!entity)
         {
-            case TaskType.Gather:
-                ResourceCollect();
-                break;
-            case TaskType.Build:
-                break;
+            Debug.Log("There's No Gathering Entity");
+            return;
         }
+        entity.GetComponent<Worker>().GetTask(TaskType.None);
     }
 }
