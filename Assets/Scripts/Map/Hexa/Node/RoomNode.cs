@@ -2,7 +2,7 @@ public class RoomNode : HexaMapNode
 {
     #region Attribute
     RoomCenter center;
-    BaseBuilding building;
+    protected BaseBuilding building;
     #endregion
 
     #region Getter & Setter
@@ -16,14 +16,18 @@ public class RoomNode : HexaMapNode
     }
     public virtual void SetBuilding(BaseBuilding building)
     {
-        this.building = building;
-        SetBuildable(false);
-        center.AddBuildings(building);
+        if (GetBuildable())
+        {
+            this.building = building;
+            SetBuildable(false);
+            center.AddBuildings(building);
+        }
     }
     public BaseBuilding GetBuilding()
     {
         return building;
     }
+    
     #endregion
 
     #region Function
@@ -33,6 +37,12 @@ public class RoomNode : HexaMapNode
         SetBuildable(true);
         SetWalkable(true);
         SetTileType(TileType.RoomNode);
+    }
+    public virtual void Demolition()
+    {
+        SetBuildable(true);
+        center.RemoveBuildings(building);
+        this.building = null;
     }
     #endregion
 }

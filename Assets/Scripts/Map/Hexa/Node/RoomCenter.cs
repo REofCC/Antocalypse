@@ -4,7 +4,6 @@ public class RoomCenter : RoomNode
 {
     #region Attribute
     List<RoomNode> nodes;
-    BaseBuilding building;
     Dictionary<BaseBuilding, int> buildings = new();
     int roomPhase;
     #endregion
@@ -20,7 +19,6 @@ public class RoomCenter : RoomNode
     }
     #endregion
 
-    
     #region Function
     public override void SetBuilding(BaseBuilding building)
     {
@@ -33,8 +31,21 @@ public class RoomCenter : RoomNode
         if (buildings.ContainsKey(building))
         {
             buildings[building] += 1;
+            return;
         }
         buildings.Add(building, 1);
+    }
+    public void RemoveBuildings(BaseBuilding building)
+    {
+        if (buildings.ContainsKey(building))
+        {
+            if(buildings[building] >= 2)
+            {
+                buildings[building] -= 1;
+                return;
+            }
+            buildings.Remove(building);
+        }
     }
     public void AddRoomNode(List<RoomNode> nodes)
     {
@@ -60,6 +71,12 @@ public class RoomCenter : RoomNode
         SetWalkable(true);
         SetTileType(TileType.RoomCenter);
         nodes = new List<RoomNode>();
+    }
+    public override void Demolition()
+    {
+        SetBuildable(true);
+        RemoveBuildings(building);
+        this.building = null;
     }
     #endregion
 }

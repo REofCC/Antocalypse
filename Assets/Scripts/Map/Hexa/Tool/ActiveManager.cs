@@ -86,6 +86,15 @@ public class ActiveManager : MonoBehaviour
         }
         builder.Build((RoomNode)node, "BaseBuilding");
     }
+
+    public void DemolitionBuilding()
+    {
+        if (building == null)
+        {
+            return;
+        }
+        builder.Demolition(building.gameObject);
+    }
     #endregion
 
     #region Unity Function
