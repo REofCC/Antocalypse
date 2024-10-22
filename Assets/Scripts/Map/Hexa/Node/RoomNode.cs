@@ -14,11 +14,11 @@ public class RoomNode : HexaMapNode
     {
         return center;
     }
-    public void SetBuilding(BaseBuilding building)
+    public virtual void SetBuilding(BaseBuilding building)
     {
         this.building = building;
         SetBuildable(false);
-        SetWalkable(false);
+        center.AddBuildings(building);
     }
     public BaseBuilding GetBuilding()
     {

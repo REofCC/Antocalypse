@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BaseBuilding : MonoBehaviour
@@ -8,6 +6,8 @@ public class BaseBuilding : MonoBehaviour
     BuildingType type;
     int level;
     HexaMapNode buildedPos;
+    [SerializeField]
+    BuildResourceData buildData;
     #endregion
 
     #region Getter & Setter
@@ -35,8 +35,16 @@ public class BaseBuilding : MonoBehaviour
     {
         buildedPos = node;
     }
+    public BuildResourceData GetBuildResourceData()
+    {
+        return buildData;
+    }
     #endregion
 
     #region Function
+    public virtual bool UpgradeBuilding()
+    {
+        return true;
+    }
     #endregion
 }

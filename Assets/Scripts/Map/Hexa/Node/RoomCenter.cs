@@ -1,24 +1,15 @@
 using System.Collections.Generic;
 
-public class RoomCenter : HexaMapNode
+public class RoomCenter : RoomNode
 {
     #region Attribute
     List<RoomNode> nodes;
     BaseBuilding building;
+    Dictionary<BaseBuilding, int> buildings = new();
     int roomPhase;
     #endregion
 
     #region Getter & Setter
-    public void SetBuilding(BaseBuilding building)
-    {
-        this.building = building;
-        SetBuildable(false);
-        SetWalkable(false);
-    }
-    public BaseBuilding GetBuilding()
-    {
-        return building;
-    }
     public void SetRoomPhase(int phase)
     {
         roomPhase = phase;
@@ -29,7 +20,22 @@ public class RoomCenter : HexaMapNode
     }
     #endregion
 
+    
     #region Function
+    public override void SetBuilding(BaseBuilding building)
+    {
+        this.building = building;
+        SetBuildable(false);
+        AddBuildings(building);
+    }
+    public void AddBuildings(BaseBuilding building)
+    {
+        if (buildings.ContainsKey(building))
+        {
+            buildings[building] += 1;
+        }
+        buildings.Add(building, 1);
+    }
     public void AddRoomNode(List<RoomNode> nodes)
     {
         for (int i = 0; i < nodes.Count; i++)
