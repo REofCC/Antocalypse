@@ -19,4 +19,13 @@ public class ResourceNode : MonoBehaviour
             }
         }
     }
+    
+    void AssingGather()
+    {
+        GameManager.Task.AssignTask(TaskType.Gather, transform.position);
+    }
+    void DismissGather()
+    {
+        GameManager.Task.DismissTask(TaskType.Gather, transform.position);
+    }
 }

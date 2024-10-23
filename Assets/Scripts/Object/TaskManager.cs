@@ -57,7 +57,7 @@ public class TaskManager : MonoBehaviour
         return entity;
     }
 
-    void AssignTask(TaskType task)
+    public void AssignTask(TaskType task, Vector2 target)
     {
         entity = FindEntity(TaskType.None);
 
@@ -68,9 +68,9 @@ public class TaskManager : MonoBehaviour
         }
         entity.GetComponent<Worker>().GetTask(task);
     }
-    public void DismissTask()
+    public void DismissTask(TaskType task, Vector2 target)
     {
-        entity = FindEntity(TaskType.Gather);
+        entity = FindEntity(task);
 
         if (!entity)
         {

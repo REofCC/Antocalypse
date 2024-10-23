@@ -3,6 +3,12 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
+
+    public static ColonyManager Colony { get { return _colony; } }
+    static ColonyManager _colony = new();
+    public static TaskManager Task { get { return _task; } }
+    static TaskManager _task = new();
+
     public static GameManager Instance
     {
         get
