@@ -31,13 +31,13 @@ public class ActiveManager : MonoBehaviour
     #endregion
 
     #region Function
-    public HexaMapNode ClickTile(Vector3 pos)
+    private HexaMapNode ClickTile(Vector3 pos)
     {
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(pos.x, pos.y, Camera.main.transform.position.z * -1));
         Vector2Int gridPos = grid.GetCellPosCalc().CalcGridPos(mouseWorldPos);
         return grid.GetNode(gridPos.x, gridPos.y);
     }
-    public void ClickBuilding()
+    private void ClickBuilding()
     {
         if (node.GetTileType() == TileType.RoomNode || node.GetTileType() == TileType.RoomCenter)
         {

@@ -1,5 +1,3 @@
-using UnityEngine.Tilemaps;
-
 public enum TileType
 {
     Wall,
@@ -23,11 +21,4 @@ public enum BuildingType
     GenCollectChamber,
     //Travel
     ExpeditionAggregation
-}
-
-public enum ResourceType
-{
-    SolidFood,
-    LiquidFood,
-    BuildingMarterial
 }

@@ -33,9 +33,23 @@ public class HexaPathFinder : MonoBehaviour
     #endregion
 
     #region Function
+    private void ResetCost()
+    {
+        for(int i=0; i<finished.Count; i++)
+        {
+            finished[i].SetHcost(999999);
+            finished[i].SetParent(null);
+        }
+        for (int i = 0; i < candidates.Count; i++)
+        {
+            candidates[i].SetHcost(999999);
+            candidates[i].SetParent(null);
+        }
+    }
     private void ClearList()
     {
         candidates.Clear();
+        finished.Clear();
     }
     private int SortHcost(HexaMapNode anode, HexaMapNode bnode)
     {
@@ -70,7 +84,7 @@ public class HexaPathFinder : MonoBehaviour
             }
         }
     }
-    public List<Vector3> GetRoute()
+    private List<Vector3> GetRoute()
     {
         HexaMapNode idx = end;
         List<Vector3> routes = new();
@@ -83,7 +97,7 @@ public class HexaPathFinder : MonoBehaviour
         }
         return routes;
     }
-    public List<Vector3> StartFind(HexaMapNode start, HexaMapNode end)
+    public List<Vector3> PathFinding(HexaMapNode start, HexaMapNode end)
     {
         ClearList();
         
@@ -99,7 +113,10 @@ public class HexaPathFinder : MonoBehaviour
                 return null;
             }
         }
-        return GetRoute();
+        
+        List<Vector3> routes =  GetRoute();
+        ResetCost();
+        return routes;
     }
     #endregion
 

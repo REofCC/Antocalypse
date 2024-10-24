@@ -1,6 +1,6 @@
 public class Path : HexaMapNode
 {
-    #region
+    #region Function
     public override void Start()
     {
         SetBreakable(false);

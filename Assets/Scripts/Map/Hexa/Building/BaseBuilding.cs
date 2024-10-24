@@ -6,8 +6,6 @@ public class BaseBuilding : MonoBehaviour
     BuildingType type;
     int level;
     HexaMapNode buildedPos;
-    [SerializeField]
-    BuildResourceData buildData;
     #endregion
 
     #region Getter & Setter
@@ -34,10 +32,6 @@ public class BaseBuilding : MonoBehaviour
     public void SetBuildedPos(HexaMapNode node)
     {
         buildedPos = node;
-    }
-    public BuildResourceData GetBuildResourceData()
-    {
-        return buildData;
     }
     #endregion
 
