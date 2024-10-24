@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class GameState : MonoBehaviour
@@ -15,8 +16,16 @@ public class GameState : MonoBehaviour
     int leaf = 0;
     int wood = 0;
     int genetic = 0;
+
+    int spawnResourceDecs;
+    float spawnDescPerc;
+    int maxPopulation;
+    int maxSolidFood;
+    int maxLiquidFood;
+
     #endregion
     #region Getter & Setter
+    #region Resource
     public int GetLiquidFood()
     {
         return liquidFood;
@@ -56,6 +65,25 @@ public class GameState : MonoBehaviour
     private void SetGenetic(int value)
     {
         genetic = value;
+    }
+    #endregion
+    #region Building Effect
+    public float GetSpawnDesc()
+    {
+        return spawnDescPerc;
+    }
+    #endregion
+    public int GetMaxPopulation()
+    {
+        return maxPopulation;
+    }
+    public int GetMaxSolidFood()
+    {
+        return maxSolidFood;
+    }
+    public int GetMaxLiquidFood()
+    {
+        return maxLiquidFood;
     }
     #endregion
     #region Function
@@ -137,6 +165,26 @@ public class GameState : MonoBehaviour
         SetGenetic(GetGenetic() - value);
         return true;
     }
+    #endregion
+    #region Building Effect
+    public void CalcSpawnResourceDesc(int value)
+    {
+        spawnResourceDecs += value;
+        spawnDescPerc = (spawnResourceDecs)/(spawnResourceDecs+100);
+    }
+    public void CalcMaxPopulation(int value)
+    {
+        maxPopulation += value;
+    }
+    public void CalcMaxSolidFood(int value)
+    {
+        maxSolidFood += value;
+    }
+    public void CalcMaxLiquidFood(int value)
+    {
+        maxLiquidFood += value;
+    }
+
     #endregion
     #endregion
     #region Unity Function
