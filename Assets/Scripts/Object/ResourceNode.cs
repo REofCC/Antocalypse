@@ -8,6 +8,22 @@ public class ResourceNode : MonoBehaviour
     protected NodeData nodeData;
     CircleCollider2D circleCollider;
 
+    private string nodeType;
+    private int value;
+    private int maxWorker;
+    private int currnetWorker;
+
+    void Start()
+    {
+        InitData();
+    }
+    private void InitData()
+    {
+        nodeType = nodeData.nodeType;
+        value = nodeData.value;
+        maxWorker = nodeData.maxWorker;
+        currnetWorker = 0;
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Worker"))
@@ -15,17 +31,31 @@ public class ResourceNode : MonoBehaviour
             if (collision.gameObject.GetComponent<Worker>().GetCurrentState() == State.Gather) //자원 수집 개미와 충돌 시
             {
                 Debug.Log("Gather Resource");
-                nodeData.value -= collision.gameObject.GetComponent<Worker>().getGatherValue();
+                nodeData.value -= collision.gameObject.GetComponent<Worker>().GetGatherValue();
             }
         }
     }
     
-    void AssingGather()
+    public void AssinGather()
     {
-        GameManager.Task.AssignTask(TaskType.Gather, transform.position);
+        if (currnetWorker >= maxWorker)
+        {
+            Debug.Log("Too Many Workers");
+            return;
+        }
+        GameManager.Task.AssignTask(TaskType.Gather, gameObject);
     }
-    void DismissGather()
+    public void DismissGather()
     {
-        GameManager.Task.DismissTask(TaskType.Gather, transform.position);
+        if (currnetWorker == 0)
+        {
+            Debug.Log("There Are No Working Workers");
+            return;
+        }
+        GameManager.Task.DismissTask(TaskType.Gather, gameObject);
+    }
+    public void ChangeCurrentWorker(int value)
+    {
+        currnetWorker += value;
     }
 }

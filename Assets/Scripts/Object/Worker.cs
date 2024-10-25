@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Xml.Serialization;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Worker : MonoBehaviour
@@ -302,8 +298,12 @@ public class Worker : MonoBehaviour
     {
         currentTask = task;
     }
-    public int getGatherValue()
+    public int GetGatherValue()
     {
         return entityData.gatherValue;
+    }
+    public Vector2 GetTargetNodePos()
+    {
+        return nodePos;
     }
 }

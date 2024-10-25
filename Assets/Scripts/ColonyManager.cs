@@ -2,37 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ColonyManager : MonoBehaviour
+public class ColonyManager
 {
-    private static ColonyManager instance = null;
-
     [SerializeField]
-    protected int maxLeaf;
+    protected int maxLeaf = 100;
     [SerializeField]
-    protected int currentLeaf;
-    void Awake()
-    {
-        if (null == instance)
-        {
-            instance = this;
-            DontDestroyOnLoad(this.gameObject);
-        }
-        else
-        {
-            Destroy(this.gameObject);
-        }
-    }
-    public static ColonyManager Instance
-    {
-        get
-        {
-            if (null == instance)
-            {
-                return null;
-            }
-            return instance;
-        }
-    }
+    protected int currentLeaf = 0;
     public void UseResoruce(int value)  // 추후 자원 종류에 따라 switch문
     {
         if (currentLeaf < value)

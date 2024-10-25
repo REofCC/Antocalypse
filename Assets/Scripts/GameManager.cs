@@ -2,39 +2,36 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    private static GameManager _instance;
+    static GameManager instance;
+    public static GameManager Manager { get { return instance; } }
 
-    public static ColonyManager Colony { get { return _colony; } }
     static ColonyManager _colony = new();
-    public static TaskManager Task { get { return _task; } }
+    public static ColonyManager Colony { get { return _colony; } }
+
     static TaskManager _task = new();
+    public static TaskManager Task { get { return _task; } }
 
-    public static GameManager Instance
+
+    private void Start()
     {
-        get
-        {
-            if (!_instance)
-            {
-                _instance = FindObjectOfType(typeof(GameManager)) as GameManager;
-
-                if (_instance == null)
-                    Debug.Log("no Singleton obj");
-            }
-            return _instance;
-        }
+        Init();
+        _task.OnStart();
     }
-
-    private void Awake()
+    void Init()
     {
-        if (_instance == null)
+        if (instance == null)
         {
-            _instance = this;
+            GameObject go = GameObject.Find("GameManager");
+            if (go == null)
+            {
+                go = new GameObject { name = "@GameManager" };
+            }
+            if (go.GetComponent<GameManager>() == null)
+            {
+                go.AddComponent<GameManager>();
+            }
+            DontDestroyOnLoad(go);
+            instance = go.GetComponent<GameManager>();
         }
-        else if (_instance != this)
-        {
-            Destroy(gameObject);
-        }
-
-        DontDestroyOnLoad(gameObject);
     }
 }

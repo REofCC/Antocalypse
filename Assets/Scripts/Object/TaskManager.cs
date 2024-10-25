@@ -3,17 +3,14 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class TaskManager : MonoBehaviour
+public class TaskManager
 {
-    [SerializeField]
-    GameObject resourceNode;
-    [SerializeField]
-    List<GameObject> workers;
+    List<GameObject> workers = new List<GameObject>();
 
     GameObject entity;
-
+    Vector2 resourceNodePos;
     LayerMask antLayer;
-    private void Awake()
+    public void OnStart()
     {
         antLayer = LayerMask.GetMask("Ant");
         workers.AddRange(GameObject.FindGameObjectsWithTag("Worker"));
@@ -26,7 +23,7 @@ public class TaskManager : MonoBehaviour
         entity = FindEntity(TaskType.None);
         if (entity != null)
         {
-            entity.GetComponent<Worker>().GetTask(resourceNode.transform.position, TaskType.Gather);
+            entity.GetComponent<Worker>().GetTask(resourceNodePos, TaskType.Gather);
         }
         else
         {
@@ -36,10 +33,9 @@ public class TaskManager : MonoBehaviour
 
     public GameObject FindEntity(TaskType task)
     {
-        float minDistance;
         GameObject entity = null;
 
-        foreach (var hit in Physics2D.CircleCastAll(resourceNode.transform.position, Mathf.Infinity, Vector2.zero,Mathf.Infinity, antLayer))
+        foreach (var hit in Physics2D.CircleCastAll(resourceNodePos, Mathf.Infinity, Vector2.zero,Mathf.Infinity, antLayer))
         {
             if ((hit.collider.GetComponent<Worker>().GetCurrentTask() == task))
             {
@@ -56,9 +52,34 @@ public class TaskManager : MonoBehaviour
 
         return entity;
     }
-
-    public void AssignTask(TaskType task, Vector2 target)
+    public GameObject FindEntity(TaskType task, Vector2 nodePos)
     {
+        GameObject entity = null;
+
+        foreach (var hit in Physics2D.CircleCastAll(resourceNodePos, Mathf.Infinity, Vector2.zero, Mathf.Infinity, antLayer))
+        {
+            if ((hit.collider.GetComponent<Worker>().GetCurrentTask() == task))
+            {
+                entity = hit.collider.gameObject;
+                if (entity.GetComponent<Worker>().GetTargetNodePos() == nodePos)
+                {
+                    Debug.Log("Found");
+                    break;
+                }
+            }
+        }
+
+        if (entity == null)
+        {
+            Debug.Log("Can't Find");
+        }
+
+        return entity;
+    }
+
+    public void AssignTask(TaskType task, GameObject node)
+    {
+        resourceNodePos = node.transform.position;
         entity = FindEntity(TaskType.None);
 
         if (!entity)
@@ -66,17 +87,19 @@ public class TaskManager : MonoBehaviour
             Debug.Log("There's No Idle Entity");
             return;
         }
-        entity.GetComponent<Worker>().GetTask(task);
+        node.GetComponent<ResourceNode>().ChangeCurrentWorker(1);
+        entity.GetComponent<Worker>().GetTask(resourceNodePos, task);
     }
-    public void DismissTask(TaskType task, Vector2 target)
+    public void DismissTask(TaskType task, GameObject node)
     {
-        entity = FindEntity(task);
+        entity = FindEntity(task, node.transform.position);
 
         if (!entity)
         {
             Debug.Log("There's No Gathering Entity");
             return;
         }
+        node.GetComponent<ResourceNode>().ChangeCurrentWorker(-1);
         entity.GetComponent<Worker>().GetTask(TaskType.None);
     }
 }
