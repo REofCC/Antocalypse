@@ -1,4 +1,6 @@
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class HexaMapNode
 {
@@ -107,7 +109,6 @@ public class HexaMapNode
         SetWorldPos(node.GetWorldPos());
         SetCellPos(node.GetCellPos());
     }
-
     public virtual void Start()
     {
 

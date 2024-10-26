@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Wall : HexaMapNode
 {
+    BaseResource resource;
+
+    #region Getter & Setter
+    #endregion
+
     public override void Start()
     {
         SetBreakable(true);

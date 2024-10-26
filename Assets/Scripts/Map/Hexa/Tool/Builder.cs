@@ -2,22 +2,23 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Builder : MonoBehaviour
+public class BuildingFactory : MonoBehaviour
 {
     #region Attribute
     [SerializeField]
     List<BuildData> buildResources = new();
     #endregion
     #region Function
-    #region Resource
-    private BuildData GetResourceData(string buildingName)
+    private BuildData GetBuildData(string buildingName)
     {
         BuildingType buildingType = (BuildingType)Enum.Parse(typeof(BuildingType), buildingName);
         return buildResources[(int)buildingType];
     }
+    #region Resource
+
     private bool UseBuildResource(string buildName, int phase = 0)
     {
-        BuildData info = GetResourceData(buildName);
+        BuildData info = GetBuildData(buildName);
         int leaf = info.Leaf[phase];
         int wood = info.Wood[phase];
         ResourceManager state = Managers.Resource;
@@ -31,9 +32,20 @@ public class Builder : MonoBehaviour
     }
     #endregion
     #region Build
-    private bool CheckBuilding(RoomNode node)
+    private bool CheckBuilding(RoomNode node, string buildingName)
     {
-        return node.GetBuildable();
+        BuildData info = GetBuildData(buildingName);
+        bool buildable = false;
+        for(int i = 0; i < info.Tiles.Count; i++)
+        {
+            if (info.Tiles[i] == node.GetTileType())
+                buildable = true;
+        }
+        if (buildable)
+        {
+            return node.GetBuildable();
+        }
+        return false;
     }
     private GameObject InstantiateBuilding(string buildingName)
     {
@@ -53,7 +65,7 @@ public class Builder : MonoBehaviour
     }
     public bool Build(RoomNode node, string buildingName)
     {
-        if (!CheckBuilding(node))
+        if (!CheckBuilding(node, buildingName))
             return false;
         if (!UseBuildResource(buildingName))
             return false;

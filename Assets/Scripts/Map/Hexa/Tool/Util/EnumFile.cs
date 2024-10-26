@@ -21,3 +21,12 @@ public enum BuildingType
     //Travel
     ExpeditionAggregation
 }
+
+public enum ResourceType
+{ 
+    SolidFood,
+    LiquidFood,
+    Leaf,
+    Wood
+}
+

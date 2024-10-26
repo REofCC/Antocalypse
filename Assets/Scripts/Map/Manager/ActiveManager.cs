@@ -8,7 +8,7 @@ public class ActiveManager : MonoBehaviour
 {
     #region Attribute
     HexaGrid grid;
-    Builder builder;
+    BuildingFactory builder;
     HexaMapNode node;
     BaseBuilding building;
     #endregion
@@ -111,7 +111,7 @@ public class ActiveManager : MonoBehaviour
     private void Start()
     {
         grid = GameObject.Find("MapTool").GetComponent<HexaGrid>();
-        builder = GameObject.Find("MapTool").GetComponent<Builder>();
+        builder = GameObject.Find("MapTool").GetComponent<BuildingFactory>();
     }
 
     private void Update()

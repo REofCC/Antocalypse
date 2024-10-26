@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a5be4bae2b0a9d748a3e3fa3f23b71d3, type: 3}
-  m_Name: ResidenceChamber
+  m_Name: EvolutionChamber
   m_EditorClassIdentifier: 
-  buildingName: ResidenceChamber
+  buildingName: EvolutionChamber
   leaf: 
   wood: 
+  tiles: 0200000003000000

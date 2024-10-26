@@ -11,6 +11,7 @@ public class HexaGrid : MonoBehaviour
     [SerializeField]
     Tilemap tilemap;
     NodeFactory tileFactory;
+    ResourceFactory resFactory;
 
     HexaMapNode[,] hexgrid;
     bool[,] walkables;
@@ -22,7 +23,7 @@ public class HexaGrid : MonoBehaviour
     //Unity Cell System = Even-r Horizontal Layout
     readonly int[] ringNodeNum = { 6, 12, 18 };
 
-    readonly int[] roomNodeNum = {6, 18};
+    readonly int[] roomNodeNum = { 6, 18 };
 
     int[][] oddDirX;
     int[][] evenDirX;
@@ -100,10 +101,6 @@ public class HexaGrid : MonoBehaviour
         DirY[0] = new int[DirY1.Length];
         DirY[1] = new int[DirY2.Length];
         DirY[2] = new int[DirY3.Length];
-
-        //Debug.Log($"evenDirx1 : {evenDirX1.Length} evenDirx2 : {evenDirX2.Length} evenDirx3 : {evenDirX3.Length}");
-        //Debug.Log($"oddDirx1 : {oddDirX1.Length} oddDirx2 : {oddDirX2.Length} oddDirx3 : {oddDirX3.Length}");
-        //Debug.Log($"DirY1 : {DirY1.Length} DirY2 : {DirY2.Length} DirY3 : {DirY3.Length}");
 
         for (int i = 0; i < evenDirX1.Length; i++)
         {
@@ -199,7 +196,7 @@ public class HexaGrid : MonoBehaviour
         SetMapSizeX(offset.x + bound.xMax + 1);
         SetMapSizeY(offset.y + bound.yMax + 1);
     }
-    private void MakeGrid()
+    public void MakeGrid()
     {
         CalcMapSize();
         hexgrid = new HexaMapNode[GetMapSizeX(), GetMapSizeY()];
@@ -209,7 +206,7 @@ public class HexaGrid : MonoBehaviour
         {
             for (int y = tilemap.cellBounds.yMin; y <= tilemap.cellBounds.yMax; y++)
             {
-                Vector3Int pos = new (x, y, 0);
+                Vector3Int pos = new(x, y, 0);
                 if (tilemap.GetTile(pos) != null)
                 {
                     string name = tilemap.GetTile(pos).name;
@@ -232,7 +229,7 @@ public class HexaGrid : MonoBehaviour
         for (int p = 0; p < phase; p++)
         {
             List<HexaMapNode> list = GetNeighborRingNode(x, y, p);
-            for( int i = 0;i < list.Count; i++)
+            for (int i = 0; i < list.Count; i++)
             {
                 neighbors.Add(list[i]);
             }
@@ -299,7 +296,6 @@ public class HexaGrid : MonoBehaviour
     }
     #endregion
     #region Room
-    
     public bool MakeRoom(HexaMapNode RoomCenter)
     {
         Vector2Int centerPos = RoomCenter.GetGridPos();
@@ -308,7 +304,7 @@ public class HexaGrid : MonoBehaviour
             return false;
         if (!CheckRoomNode(nodes))
             return false;
-        
+
         List<HexaMapNode> rings = GetNeighborRingNode(centerPos.x, centerPos.y, 1);
         if (rings.Count != ringNodeNum[1])
             return false;
@@ -325,16 +321,14 @@ public class HexaGrid : MonoBehaviour
             center.AddRoomNode(node);
             node.SetCenter(center);
         }
-
         return true;
     }
-
     public bool ExpandRoom(RoomCenter roomCenter, int phase = 2)
     {
         if (roomCenter.GetTileType() != TileType.RoomCenter)
             return false;
         Vector2Int centerPos = roomCenter.GetGridPos();
-        List<HexaMapNode> nodes = GetNeighborRingNode(centerPos.x,centerPos.y, phase-1);
+        List<HexaMapNode> nodes = GetNeighborRingNode(centerPos.x, centerPos.y, phase - 1);
         if (nodes.Count != ringNodeNum[phase - 1])
             return false;
         if (CheckRoomNode(nodes))
@@ -345,8 +339,6 @@ public class HexaGrid : MonoBehaviour
             return false;
         if (!CheckRoomWall(rings))
             return false;
-
-        
         for (int i = 0; i < nodes.Count; i++)
         {
             Vector2Int nodePos = nodes[i].GetGridPos();
@@ -358,17 +350,18 @@ public class HexaGrid : MonoBehaviour
         return true;
     }
     #endregion
-    
+
     #endregion
     #region Unity Function
-    private void Awake()
+    public void OnAwake()
     {
         SetDirection();
         cellPositionCalc = new CellPositionCalc();
-        tileFactory = GetComponent<NodeFactory>();
-        tilemap = GameObject.Find("Grid").transform.GetChild(0).GetComponent<Tilemap>();
 
-        MakeGrid();
+        MapMaker maker = GetComponent<MapMaker>();
+        tileFactory = maker.GetNodeFactory();
+        resFactory = maker.GetResourceFactory();
+        tilemap = maker.GetTileMap();
     }
     #endregion
 }
