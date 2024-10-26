@@ -1,15 +1,11 @@
-using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
+using System.Security.Cryptography;
 using UnityEngine;
 
-public class GameState : MonoBehaviour
+public class ResourceManager
 {
-    #region Global Instance
-    static GameState instance;
-    public static GameState Instance{ get { return instance; } }
-    #endregion
+    
     #region Attribute
     int liquidFood = 0;
     int solidFood = 0;
@@ -17,15 +13,10 @@ public class GameState : MonoBehaviour
     int wood = 0;
     int genetic = 0;
 
-    int spawnResourceDecs;
-    float spawnDescPerc;
-    int maxPopulation;
-    int maxSolidFood;
-    int maxLiquidFood;
-
+    int maxSolidFood = 0;
+    int maxLiquidFood = 0;
     #endregion
     #region Getter & Setter
-    #region Resource
     public int GetLiquidFood()
     {
         return liquidFood;
@@ -66,16 +57,13 @@ public class GameState : MonoBehaviour
     {
         genetic = value;
     }
-    #endregion
-    #region Building Effect
-    public float GetSpawnDesc()
+    private void SetMaxSolidFood(int value)
     {
-        return spawnDescPerc;
+        maxSolidFood = value;
     }
-    #endregion
-    public int GetMaxPopulation()
+    private void SetMaxLiquidFood(int value)
     {
-        return maxPopulation;
+        maxLiquidFood = value;
     }
     public int GetMaxSolidFood()
     {
@@ -86,7 +74,6 @@ public class GameState : MonoBehaviour
         return maxLiquidFood;
     }
     #endregion
-    #region Function
     #region Check
     public bool CheckLiquidFood(int value)
     {
@@ -166,31 +153,31 @@ public class GameState : MonoBehaviour
         return true;
     }
     #endregion
-    #region Building Effect
-    public void CalcSpawnResourceDesc(int value)
-    {
-        spawnResourceDecs += value;
-        spawnDescPerc = (spawnResourceDecs)/(spawnResourceDecs+100);
-    }
-    public void CalcMaxPopulation(int value)
-    {
-        maxPopulation += value;
-    }
+    #region Function
     public void CalcMaxSolidFood(int value)
     {
-        maxSolidFood += value;
+        SetMaxSolidFood(GetMaxSolidFood() + value);
     }
     public void CalcMaxLiquidFood(int value)
     {
-        maxLiquidFood += value;
+        SetMaxLiquidFood(GetMaxLiquidFood() + value);
     }
-
-    #endregion
-    #endregion
-    #region Unity Function
-    private void Awake()
+    public bool ChangeFood(int solid, int liquid, float time)
     {
-        instance = GetComponent<GameState>();
+        if (MinusSolidFood(solid))
+        {
+            Managers.Manager.StartCoroutine(ChangeFoodCoroutine(liquid, time));
+            return true;
+        }
+        return false;
+    }
+    #endregion
+    #region Coroutine
+    IEnumerator ChangeFoodCoroutine(int liquid, float time)
+    {
+        yield return new WaitForSeconds(time);
+        AddLiquidFood(liquid);
+        yield break;
     }
     #endregion
 }

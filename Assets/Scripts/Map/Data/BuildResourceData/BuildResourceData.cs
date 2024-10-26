@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName ="BuildResourceData", menuName = "Scriptable Object/BuildResource")]
-public class BuildResourceData : ScriptableObject
+[CreateAssetMenu(fileName ="BuildData", menuName = "Scriptable Object/Build")]
+public class BuildData : ScriptableObject
 {
     #region Attribute
     [SerializeField]

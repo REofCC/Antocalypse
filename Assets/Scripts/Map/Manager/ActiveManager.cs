@@ -87,10 +87,20 @@ public class ActiveManager : MonoBehaviour
         builder.Build((RoomNode)node, "BaseBuilding");
     }
 
+    public void UpgradeBuilding()
+    {
+        if(building == null)
+        {
+            Debug.Log("current building is null");
+            return;
+        }
+        builder.Upgrade(building);
+    }
     public void DemolitionBuilding()
     {
         if (building == null)
         {
+            Debug.Log("current building is null");
             return;
         }
         builder.Demolition(building.gameObject);
@@ -100,8 +110,8 @@ public class ActiveManager : MonoBehaviour
     #region Unity Function
     private void Start()
     {
-        grid = GetComponent<HexaGrid>();
-        builder = GetComponent<Builder>();
+        grid = GameObject.Find("MapTool").GetComponent<HexaGrid>();
+        builder = GameObject.Find("MapTool").GetComponent<Builder>();
     }
 
     private void Update()

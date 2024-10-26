@@ -19,7 +19,7 @@ public class ResidenceChamber : BaseBuilding
     {
         int value = GetPopulationInc(GetBuildingLevel()+1) - GetPopulationInc(GetBuildingLevel());
         SetBuildingLevel(GetBuildingLevel() + 1);
-        GameState.Instance.CalcMaxPopulation(value);
+        Managers.Population.CalcMaxPopulation(value);
         return true;
     }
     #endregion

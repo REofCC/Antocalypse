@@ -6,21 +6,21 @@ public class Builder : MonoBehaviour
 {
     #region Attribute
     [SerializeField]
-    List<BuildResourceData> buildResources = new();
+    List<BuildData> buildResources = new();
     #endregion
     #region Function
     #region Resource
-    private BuildResourceData GetResourceData(string buildingName)
+    private BuildData GetResourceData(string buildingName)
     {
         BuildingType buildingType = (BuildingType)Enum.Parse(typeof(BuildingType), buildingName);
         return buildResources[(int)buildingType];
     }
     private bool UseBuildResource(string buildName, int phase = 0)
     {
-        BuildResourceData info = GetResourceData(buildName);
+        BuildData info = GetResourceData(buildName);
         int leaf = info.Leaf[phase];
         int wood = info.Wood[phase];
-        GameState state = GameState.Instance;
+        ResourceManager state = Managers.Resource;
         if (state.CheckLeaf(leaf)&& state.CheckWood(wood))
         {
             state.MinusLeaf(leaf);
@@ -55,10 +55,10 @@ public class Builder : MonoBehaviour
     {
         if (!CheckBuilding(node))
             return false;
+        if (!UseBuildResource(buildingName))
+            return false;
         GameObject building = InstantiateBuilding(buildingName);
         if (building == null)
-            return false;
-        if (!UseBuildResource(buildingName))
             return false;
         SetBuildingPosition(building, node);
         return true;

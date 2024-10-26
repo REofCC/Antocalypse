@@ -6,7 +6,6 @@ public enum TileType
     RoomNode,
     None
 }
-
 public enum BuildingType
 {
     //Population

@@ -19,7 +19,7 @@ public class SolidWareHouse : BaseBuilding
     {
         int value = GetSolidSaveInc(GetBuildingLevel()+1) - GetSolidSaveInc(GetBuildingLevel());
         SetBuildingLevel(GetBuildingLevel() + 1);
-        GameState.Instance.CalcMaxSolidFood(value);
+        Managers.Resource.CalcMaxSolidFood(value);
         return true;
     }
     #endregion

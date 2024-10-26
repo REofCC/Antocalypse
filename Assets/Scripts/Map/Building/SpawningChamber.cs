@@ -19,7 +19,7 @@ public class SpawningChamber : BaseBuilding
     {
         int value = GetResourceDecs(GetBuildingLevel()+1) - GetResourceDecs(GetBuildingLevel());
         SetBuildingLevel(GetBuildingLevel() + 1);
-        GameState.Instance.CalcSpawnResourceDesc(value);
+        Managers.Population.CalcSpawnResourceDesc(value);
         return true;
     }
     #endregion

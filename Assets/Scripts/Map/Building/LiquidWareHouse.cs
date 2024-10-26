@@ -19,7 +19,7 @@ public class LiquidWareHouse : BaseBuilding
     {
         int value = GetLiquidSaveInc(GetBuildingLevel()+1) - GetLiquidSaveInc(GetBuildingLevel());
         SetBuildingLevel(GetBuildingLevel() + 1);
-        GameState.Instance.CalcMaxLiquidFood(value);
+        Managers.Resource.CalcMaxLiquidFood(value);
         return true;
     }
     #endregion
