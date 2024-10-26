@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82c3249f6a50485459c13ae29bdeccee, type: 3}
   m_Name: Liquid_s
   m_EditorClassIdentifier: 
-  type: 1
+  resourceName: Liquid_s
+  type: 0
   buildable: 0
   amount: 1500

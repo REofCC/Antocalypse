@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -47,17 +45,28 @@ public class MapMaker : MonoBehaviour
     }
     private void MakeStartPos()
     {
-        HexaMapNode node = grid.GetNode(16, 16);
+        HexaMapNode node = grid.GetNode(15, 15);
         grid.MakeRoom(node);
     }
     private void MakeResource()
     {
-
+        HexaMapNode[,] hexgrid = grid.GetGrid();
+        Vector3 startPos = grid.GetNode(15, 15).GetWorldPos();
+        for(int x = 0;x < mapSize; x++)
+        {
+            for(int y = 0;y < mapSize; y++)
+            {
+                HexaMapNode node = grid.GetNode(x, y);
+                float distance = Vector3.Distance(startPos, node.GetWorldPos());
+                resourceFactory.MakeResource(node, distance, tilemap.cellSize.x);
+            }
+        }
     }
     private void MapMaking()
     {
         MakeBase();
         MakeStartPos();
+        MakeResource();
     }
     #endregion
 

@@ -84,7 +84,10 @@ public class HexaGrid : MonoBehaviour
     {
         return cellPositionCalc;
     }
-
+    public HexaMapNode[,] GetGrid()
+    {
+        return hexgrid;
+    }
     public void SetDirection()
     {
         evenDirX = new int[3][];

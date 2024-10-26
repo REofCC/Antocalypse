@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Tilemaps;
 
 public class ActiveManager : MonoBehaviour
 {
@@ -86,7 +83,6 @@ public class ActiveManager : MonoBehaviour
         }
         builder.Build((RoomNode)node, "BaseBuilding");
     }
-
     public void UpgradeBuilding()
     {
         if(building == null)
@@ -112,6 +108,8 @@ public class ActiveManager : MonoBehaviour
     {
         grid = GameObject.Find("MapTool").GetComponent<HexaGrid>();
         builder = GameObject.Find("MapTool").GetComponent<BuildingFactory>();
+
+        Debug.Log(Vector3.Distance(grid.GetNode(15, 15).GetWorldPos(), grid.GetNode(15, 16).GetWorldPos()));
     }
 
     private void Update()
@@ -126,6 +124,8 @@ public class ActiveManager : MonoBehaviour
                 {
                     Debug.Log(node);
                     Debug.Log($"WorldPos:{node.GetWorldPos() }");
+                    Debug.Log($"GridPos: {node.GetGridPos()}");
+                    Debug.Log($"CellPos: {node.GetCellPos()}");
                 }
                 else
                 {
