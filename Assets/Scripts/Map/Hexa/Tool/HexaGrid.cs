@@ -11,7 +11,6 @@ public class HexaGrid : MonoBehaviour
     [SerializeField]
     Tilemap tilemap;
     NodeFactory tileFactory;
-    ResourceFactory resFactory;
 
     HexaMapNode[,] hexgrid;
     bool[,] walkables;
@@ -34,7 +33,7 @@ public class HexaGrid : MonoBehaviour
     readonly int[] evenDirX3 = { -1, 0, 1, 2, 2, 3, 3, 3, 2, 2, 1, 0, -1, -2, -2, -3, -2, -2 };
 
     readonly int[] oddDirX1 = { -1, 0, 1, 0, -1, -1 };
-    readonly int[] oddDirX2 = { -1, 0, 1, 2, 2, 2, 1, 0, -1, -1, -2, -1 };
+    readonly int[] oddDirX2 = { -1, 0, 1, 1, 2, 1, 1, 0, -1, -2, -2, -2 };
     readonly int[] oddDirX3 = { -2, -1, 0, 1, 2, 2, 3, 2, 2, 1, 0, -1, -2, -2, -3, -3, -3, -2 };
 
     readonly int[] DirY1 = { -1, -1, 0, 1, 1, 0 };
@@ -127,6 +126,19 @@ public class HexaGrid : MonoBehaviour
         }
 
     }
+
+    public int[][] GetDirectionOddX()
+    {
+        return oddDirX;
+    }
+    public int[][] GetDirectionEvenX()
+    {
+        return evenDirX;
+    }
+    public int[][] GetDirectionY()
+    {
+        return DirY;
+    }
     #endregion
 
     #region Function
@@ -170,26 +182,7 @@ public class HexaGrid : MonoBehaviour
             return false;
         return true;
     }
-    private bool CheckRoomNode(List<HexaMapNode> nodes)
-    {
-        for (int i = 0; i < nodes.Count; i++)
-        {
-            TileType type = nodes[i].GetTileType();
-            if (type == TileType.RoomCenter || type == TileType.RoomNode || (!nodes[i].GetBreakable() && type != TileType.Path))
-                return false;
-        }
-        return true;
-    }
-    private bool CheckRoomWall(List<HexaMapNode> rings)
-    {
-        for (int i = 0; i < rings.Count; i++)
-        {
-            TileType type = rings[i].GetTileType();
-            if (type == TileType.RoomCenter || type == TileType.RoomNode)
-                return false;
-        }
-        return true;
-    }
+    
     #endregion
     #region Grid
     private void CalcMapSize()
@@ -226,7 +219,7 @@ public class HexaGrid : MonoBehaviour
     }
     #endregion
     #region Neighbor
-    private List<HexaMapNode> GetNeighborNode(int x, int y, int phase = 1) // max phase = 3 min phase = 1
+    public List<HexaMapNode> GetNeighborNode(int x, int y, int phase = 1) // max phase = 3 min phase = 1
     {
         List<HexaMapNode> neighbors = new();
         for (int p = 0; p < phase; p++)
@@ -256,7 +249,7 @@ public class HexaGrid : MonoBehaviour
 
         return neighbors;
     }
-    private List<HexaMapNode> GetNeighborRingNode(int x, int y, int phase) // max phase = 0 min phase = 2
+    public List<HexaMapNode> GetNeighborRingNode(int x, int y, int phase) // max phase = 0 min phase = 2
     {
         int idxX, idxY;
         List<HexaMapNode> neighbors = new();
@@ -298,62 +291,6 @@ public class HexaGrid : MonoBehaviour
         tilemap.SetTile(node.GetCellPos(), tileFactory.GetTile(((int)node.GetTileType())));
     }
     #endregion
-    #region Room
-    public bool MakeRoom(HexaMapNode RoomCenter)
-    {
-        Vector2Int centerPos = RoomCenter.GetGridPos();
-        List<HexaMapNode> nodes = GetNeighborNode(centerPos.x, centerPos.y, 1);
-        if (nodes.Count != roomNodeNum[0])
-            return false;
-        if (!CheckRoomNode(nodes))
-            return false;
-
-        List<HexaMapNode> rings = GetNeighborRingNode(centerPos.x, centerPos.y, 1);
-        if (rings.Count != ringNodeNum[1])
-            return false;
-        if (!CheckRoomWall(rings))
-            return false;
-
-        SwapNode(centerPos.x, centerPos.y, "RoomCenter");
-        RoomCenter center = (RoomCenter)GetNode(centerPos.x, centerPos.y);
-        for (int i = 0; i < nodes.Count; i++)
-        {
-            Vector2Int nodePos = nodes[i].GetGridPos();
-            SwapNode(nodePos.x, nodePos.y, "RoomNode");
-            RoomNode node = (RoomNode)GetNode(nodePos.x, nodePos.y);
-            center.AddRoomNode(node);
-            node.SetCenter(center);
-        }
-        return true;
-    }
-    public bool ExpandRoom(RoomCenter roomCenter, int phase = 2)
-    {
-        if (roomCenter.GetTileType() != TileType.RoomCenter)
-            return false;
-        Vector2Int centerPos = roomCenter.GetGridPos();
-        List<HexaMapNode> nodes = GetNeighborRingNode(centerPos.x, centerPos.y, phase - 1);
-        if (nodes.Count != ringNodeNum[phase - 1])
-            return false;
-        if (CheckRoomNode(nodes))
-            return false;
-
-        List<HexaMapNode> rings = GetNeighborRingNode(centerPos.x, centerPos.y, phase);
-        if (rings.Count != ringNodeNum[phase])
-            return false;
-        if (!CheckRoomWall(rings))
-            return false;
-        for (int i = 0; i < nodes.Count; i++)
-        {
-            Vector2Int nodePos = nodes[i].GetGridPos();
-            SwapNode(nodePos.x, nodePos.y, "RoomNode");
-            RoomNode node = (RoomNode)GetNode(nodePos.x, nodePos.y);
-            roomCenter.AddRoomNode(node);
-            node.SetCenter(roomCenter);
-        }
-        return true;
-    }
-    #endregion
-
     #endregion
     #region Unity Function
     public void OnAwake()
@@ -363,7 +300,6 @@ public class HexaGrid : MonoBehaviour
 
         MapMaker maker = GetComponent<MapMaker>();
         tileFactory = maker.GetNodeFactory();
-        resFactory = maker.GetResourceFactory();
         tilemap = maker.GetTileMap();
     }
     #endregion

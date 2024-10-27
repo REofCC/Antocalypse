@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -8,6 +9,7 @@ public class MapMaker : MonoBehaviour
     Tilemap tilemap;
     NodeFactory nodeFactory;
     ResourceFactory resourceFactory;
+    RoomFactory roomFactory;
     HexaGrid grid;
     int mapSize = 31;
     #endregion
@@ -46,9 +48,9 @@ public class MapMaker : MonoBehaviour
     private void MakeStartPos()
     {
         HexaMapNode node = grid.GetNode(15, 15);
-        grid.MakeRoom(node);
+        roomFactory.MakeRoom(node);
     }
-    private void MakeResource()
+    public void MakeResource()
     {
         HexaMapNode[,] hexgrid = grid.GetGrid();
         Vector3 startPos = grid.GetNode(15, 15).GetWorldPos();
@@ -66,7 +68,7 @@ public class MapMaker : MonoBehaviour
     {
         MakeBase();
         MakeStartPos();
-        MakeResource();
+        //MakeResource();
     }
     #endregion
 
@@ -78,8 +80,11 @@ public class MapMaker : MonoBehaviour
         GameObject tool = gameObject.transform.GetChild(0).gameObject;
         nodeFactory = tool.GetComponent<NodeFactory>();
         resourceFactory = tool.GetComponent<ResourceFactory>();
+        roomFactory = tool.GetComponent <RoomFactory>();
 
         grid.OnAwake();
+        roomFactory.OnAwake();
+        resourceFactory.OnAwake(mapSize);
         MapMaking();
     }
     #endregion

@@ -6,6 +6,7 @@ public class ActiveManager : MonoBehaviour
     #region Attribute
     HexaGrid grid;
     BuildingFactory builder;
+    RoomFactory roombuilder;
     HexaMapNode node;
     BaseBuilding building;
     #endregion
@@ -61,7 +62,7 @@ public class ActiveManager : MonoBehaviour
             Debug.Log("current node is null");
             return;
         }
-        grid.MakeRoom(node);
+        roombuilder.MakeRoom(node);
     }
     public void ExpandRoom()
     {
@@ -71,7 +72,7 @@ public class ActiveManager : MonoBehaviour
             return;
         }
 
-        grid.ExpandRoom((RoomCenter)node);
+        roombuilder.ExpandRoom((RoomCenter)node);
     }
 
     public void BuildBuilding()
@@ -108,7 +109,7 @@ public class ActiveManager : MonoBehaviour
     {
         grid = GameObject.Find("MapTool").GetComponent<HexaGrid>();
         builder = GameObject.Find("MapTool").GetComponent<BuildingFactory>();
-
+        roombuilder = GameObject.Find("MapTool").transform.GetChild(0).GetComponent<RoomFactory>();
         Debug.Log(Vector3.Distance(grid.GetNode(15, 15).GetWorldPos(), grid.GetNode(15, 16).GetWorldPos()));
     }
 
@@ -123,9 +124,9 @@ public class ActiveManager : MonoBehaviour
                 if(building == null)
                 {
                     Debug.Log(node);
-                    Debug.Log($"WorldPos:{node.GetWorldPos() }");
-                    Debug.Log($"GridPos: {node.GetGridPos()}");
-                    Debug.Log($"CellPos: {node.GetCellPos()}");
+                    //Debug.Log($"WorldPos:{node.GetWorldPos() }");
+                    //Debug.Log($"GridPos: {node.GetGridPos()}");
+                    //Debug.Log($"CellPos: {node.GetCellPos()}");
                 }
                 else
                 {

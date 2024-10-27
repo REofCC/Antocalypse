@@ -160,21 +160,21 @@ public class ResourceManager
     {
         SetMaxLiquidFood(GetMaxLiquidFood() + value);
     }
-    public bool ChangeFood(int solid, int liquid, float time)
+    public bool ChangeFood(int solid, int liquid, float time, float ratio)
     {
         if (MinusSolidFood(solid))
         {
-            Managers.Manager.StartCoroutine(ChangeFoodCoroutine(liquid, time));
+            Managers.Manager.StartCoroutine(ChangeFoodCoroutine(liquid, time, ratio));
             return true;
         }
         return false;
     }
     #endregion
     #region Coroutine
-    IEnumerator ChangeFoodCoroutine(int liquid, float time)
+    IEnumerator ChangeFoodCoroutine(int liquid, float time, float ratio)
     {
         yield return new WaitForSeconds(time);
-        AddLiquidFood(liquid);
+        AddLiquidFood(((int)(liquid*ratio)));
         yield break;
     }
     #endregion

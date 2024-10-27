@@ -6,7 +6,7 @@ public class ProcessingChamber : BaseBuilding
     #region Attribute
     float[] time = { };
     int[] MaxChangeFood = { };
-    float ratio;
+    float ratio = 1;
     #endregion
 
     #region Getter & Setter
@@ -29,7 +29,7 @@ public class ProcessingChamber : BaseBuilding
     {
         if(solid > GetMaxChange() || solid <= 0)
             return false;
-        return Managers.Resource.ChangeFood(solid, CalcRelease(solid), GetTime());
+        return Managers.Resource.ChangeFood(solid, CalcRelease(solid), GetTime(), ratio);
     }
     public override bool UpgradeBuilding()
     {
