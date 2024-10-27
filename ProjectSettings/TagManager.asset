@@ -3,7 +3,10 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Worker
+  - ResourceNode
+  - Cargo
   layers:
   - Default
   - TransparentFX
@@ -13,6 +16,8 @@ TagManager:
   - UI
   - Map
   - Resource
+  - Ant
+  - 
   - 
   - 
   - 
