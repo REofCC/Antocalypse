@@ -21,7 +21,7 @@ public enum BuildingType
     //Travel
     ExpeditionAggregation
 }
-public enum ResourceType
+public enum Resourcetype
 {
     Liquid,
     Solid,

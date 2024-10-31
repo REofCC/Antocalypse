@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
 
 public class HexaGrid : MonoBehaviour
 {
@@ -19,7 +20,7 @@ public class HexaGrid : MonoBehaviour
     int mapSizeY;
     #endregion
     #region Direction for Get Node Circlular Rotation
-    //Unity Cell System = Even-r Horizontal Layout
+    //Unity Cell System = odd-r Horizontal Layout
     readonly int[] ringNodeNum = { 6, 12, 18 };
 
     readonly int[] roomNodeNum = { 6, 18 };
@@ -28,13 +29,13 @@ public class HexaGrid : MonoBehaviour
     int[][] evenDirX;
     int[][] DirY;
 
-    readonly int[] evenDirX1 = { 0, 1, 1, 1, 0, -1 };
-    readonly int[] evenDirX2 = { -1, 0, 1, 2, 2, 2, 1, 0, -1, -1, -2, -1 };
-    readonly int[] evenDirX3 = { -1, 0, 1, 2, 2, 3, 3, 3, 2, 2, 1, 0, -1, -2, -2, -3, -2, -2 };
+    readonly int[] oddDirX1 = { 0, 1, 1, 1, 0, -1 };
+    readonly int[] oddDirX2 = { -1, 0, 1, 2, 2, 2, 1, 0, -1, -1, -2, -1 };
+    readonly int[] oddDirX3 = { -1, 0, 1, 2, 2, 3, 3, 3, 2, 2, 1, 0, -1, -2, -2, -3, -2, -2 };
 
-    readonly int[] oddDirX1 = { -1, 0, 1, 0, -1, -1 };
-    readonly int[] oddDirX2 = { -1, 0, 1, 1, 2, 1, 1, 0, -1, -2, -2, -2 };
-    readonly int[] oddDirX3 = { -2, -1, 0, 1, 2, 2, 3, 2, 2, 1, 0, -1, -2, -2, -3, -3, -3, -2 };
+    readonly int[] evenDirX1 = { -1, 0, 1, 0, -1, -1 };
+    readonly int[] evenDirX2 = { -1, 0, 1, 1, 2, 1, 1, 0, -1, -2, -2, -2 };
+    readonly int[] evenDirX3 = { -2, -1, 0, 1, 2, 2, 3, 2, 2, 1, 0, -1, -2, -2, -3, -3, -3, -2 };
 
     readonly int[] DirY1 = { -1, -1, 0, 1, 1, 0 };
     readonly int[] DirY2 = { -2, -2, -2, -1, 0, 1, 2, 2, 2, 1, 0, -1 };
@@ -162,7 +163,7 @@ public class HexaGrid : MonoBehaviour
         {
             return false;
         }
-        List<HexaMapNode> list = GetNeighborNode(node.GetGridPos().x, node.GetGridPos().y, 1);
+        List<HexaMapNode> list = GetNeighborNode(node.GetCellPos().x, node.GetCellPos().y, 1);
         for (int i = 0; i < list.Count; i++)
         {
             if (list[i].GetTileType() == TileType.Path)
@@ -235,19 +236,17 @@ public class HexaGrid : MonoBehaviour
     }
     public List<HexaMapNode> GetNeighborWalkableNode(int x, int y)
     {
-        int idxX, idxY;
-        List<HexaMapNode> neighbors = new();
-        for (int i = 0; i < 6; i++)
+        List<HexaMapNode> result = new();
+        List<HexaMapNode> neighbors = GetNeighborNode(x,y,1);
+        for (int i = 0; i < neighbors.Count; i++)
         {
-            idxX = x + evenDirX1[i];
-            idxY = y + DirY1[i];
-            if (IsNodeExist(idxX, idxY) && GetNode(idxX, idxY).GetWalkable())
+            if (neighbors[i].GetWalkable())
             {
-                neighbors.Add(GetNode(idxX, idxY));
+                result.Add(neighbors[i]);
             }
         }
 
-        return neighbors;
+        return result;
     }
     public List<HexaMapNode> GetNeighborRingNode(int x, int y, int phase) // max phase = 0 min phase = 2
     {

@@ -31,7 +31,7 @@ public class RoomFactory : MonoBehaviour
     #region Room
     public bool MakeRoom(HexaMapNode RoomCenter)
     {
-        Vector2Int centerPos = RoomCenter.GetGridPos();
+        Vector3Int centerPos = RoomCenter.GetCellPos();
         List<HexaMapNode> nodes = grid.GetNeighborNode(centerPos.x, centerPos.y, 1);
         if (nodes.Count != roomNodeNum[0])
             return false;

@@ -110,7 +110,6 @@ public class ActiveManager : MonoBehaviour
         grid = GameObject.Find("MapTool").GetComponent<HexaGrid>();
         builder = GameObject.Find("MapTool").GetComponent<BuildingFactory>();
         roombuilder = GameObject.Find("MapTool").transform.GetChild(0).GetComponent<RoomFactory>();
-        Debug.Log(Vector3.Distance(grid.GetNode(15, 15).GetWorldPos(), grid.GetNode(15, 16).GetWorldPos()));
     }
 
     private void Update()
@@ -124,9 +123,6 @@ public class ActiveManager : MonoBehaviour
                 if(building == null)
                 {
                     Debug.Log(node);
-                    //Debug.Log($"WorldPos:{node.GetWorldPos() }");
-                    //Debug.Log($"GridPos: {node.GetGridPos()}");
-                    //Debug.Log($"CellPos: {node.GetCellPos()}");
                 }
                 else
                 {
