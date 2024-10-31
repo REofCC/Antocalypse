@@ -14,7 +14,6 @@ public class HexaGrid : MonoBehaviour
     NodeFactory tileFactory;
 
     HexaMapNode[,] hexgrid;
-    bool[,] walkables;
 
     int mapSizeX;
     int mapSizeY;
@@ -67,18 +66,6 @@ public class HexaGrid : MonoBehaviour
     public HexaMapNode GetNode(int x, int y) //need offset
     {
         return hexgrid[x, y];
-    }
-    public void SetWalkable(int x, int y, bool walkable)
-    {
-        walkables[x, y] = walkable;
-    }
-    public bool[,] GetWalkable()
-    {
-        return walkables;
-    }
-    public bool GetWalkable(int x, int y)
-    {
-        return walkables[x, y];
     }
     public CellPositionCalc GetCellPosCalc()
     {
@@ -197,7 +184,6 @@ public class HexaGrid : MonoBehaviour
     {
         CalcMapSize();
         hexgrid = new HexaMapNode[GetMapSizeX(), GetMapSizeY()];
-        walkables = new bool[GetMapSizeX(), GetMapSizeY()];
         Vector2Int offset = cellPositionCalc.GetOffset();
         for (int x = tilemap.cellBounds.xMin; x <= tilemap.cellBounds.xMax; x++)
         {
@@ -212,7 +198,6 @@ public class HexaGrid : MonoBehaviour
                     node.SetGridPos(new Vector2Int(x + offset.x, y + offset.y));
                     node.SetCellPos(pos);
                     node.SetWorldPos(tilemap.CellToWorld(pos));
-                    SetWalkable(x + offset.x, y + offset.y, node.GetWalkable());
                     SetNode(x + offset.x, y + offset.y, node);
                 }
             }
