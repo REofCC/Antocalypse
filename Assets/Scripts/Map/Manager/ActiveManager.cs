@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -8,6 +9,7 @@ public class ActiveManager : MonoBehaviour
     BuildingFactory builder;
     RoomFactory roombuilder;
     HexaMapNode node;
+    HexaPathFinder finder;
     BaseBuilding building;
     #endregion
 
@@ -102,15 +104,22 @@ public class ActiveManager : MonoBehaviour
         }
         builder.Demolition(building.gameObject);
     }
+
+    public void PathFind()
+    {
+        HexaMapNode start = grid.GetNode(15,15);
+        List<Vector3> route = finder.PathFinding(start, GetCurrentNode());
+        Debug.Log(route);
+    }
     #endregion
 
     #region Unity Function
     private void Start()
     {
         grid = GameObject.Find("MapTool").GetComponent<HexaGrid>();
-        builder = GameObject.Find("MapTool").GetComponent<BuildingFactory>();
+        builder = GameObject.Find("MapTool").transform.GetChild(0).GetComponent<BuildingFactory>();
+        finder = GameObject.Find("MapTool").GetComponent<HexaPathFinder>();
         roombuilder = GameObject.Find("MapTool").transform.GetChild(0).GetComponent<RoomFactory>();
-        Debug.Log(Vector3.Distance(grid.GetNode(15, 15).GetWorldPos(), grid.GetNode(15, 16).GetWorldPos()));
     }
 
     private void Update()
@@ -124,9 +133,6 @@ public class ActiveManager : MonoBehaviour
                 if(building == null)
                 {
                     Debug.Log(node);
-                    //Debug.Log($"WorldPos:{node.GetWorldPos() }");
-                    //Debug.Log($"GridPos: {node.GetGridPos()}");
-                    //Debug.Log($"CellPos: {node.GetCellPos()}");
                 }
                 else
                 {

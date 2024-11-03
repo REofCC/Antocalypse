@@ -70,6 +70,12 @@ public class HexaPathFinder : MonoBehaviour
         candidates.Remove(current);
         finished.Add(current);
         candidates.Sort(SortHcost);
+        if (candidates.Count > 0)
+        {
+            Debug.Log("Error : Cant Find Path");
+            current = null;
+            return;
+        }
         current = candidates[0];
     }
     private void GetCandidateNode(HexaMapNode node)
@@ -77,10 +83,10 @@ public class HexaPathFinder : MonoBehaviour
         List<HexaMapNode> nodes = grid.GetNeighborWalkableNode(node.GetCellPos().x, node.GetCellPos().y);
         for (int i = 0; i < nodes.Count; i++)
         {
-            if (!finished.Contains(nodes[i]))
+            CalcCost(nodes[i]);
+            if (!finished.Contains(nodes[i]) && !candidates.Contains(nodes[i]))
             {
                 candidates.Add(nodes[i]);
-                CalcCost(nodes[i]);
             }
         }
     }
@@ -108,7 +114,7 @@ public class HexaPathFinder : MonoBehaviour
         {
             GetCandidateNode(current);
             SelectNextNode();
-            if(candidates.Count == 0)
+            if(current == null)
             {
                 return null;
             }

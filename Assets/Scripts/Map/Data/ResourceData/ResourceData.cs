@@ -7,7 +7,7 @@ public class ResourceData : ScriptableObject
     [SerializeField]
     string resourceName;
     [SerializeField]
-    ResourceType type;
+    Resourcetype type;
     [SerializeField]
     bool buildable;
     [SerializeField]
@@ -16,7 +16,7 @@ public class ResourceData : ScriptableObject
 
     #region Getter & Setter
     public string ResourceName { get { return resourceName; } }
-    public ResourceType ResourceType { get { return type; } }
+    public Resourcetype ResourceType { get { return type; } }
     public bool Buildable { get { return buildable; } }
     public int Amount { get { return amount; } }
     #endregion

@@ -16,7 +16,7 @@ public class ResourceFactory : MonoBehaviour
     int[][] DirY;
 
     int mapSize;
-    int ratio = 25;
+    int ratio = 75;
     #endregion
 
     #region Function

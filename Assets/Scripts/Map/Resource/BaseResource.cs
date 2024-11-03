@@ -6,7 +6,7 @@ public class BaseResource : MonoBehaviour
     int currentAmount;
     [SerializeField]
     string resName;
-    ResourceType type;
+    Resourcetype type;
     HexaMapNode node;
     #endregion
 
@@ -27,11 +27,11 @@ public class BaseResource : MonoBehaviour
     {
         currentAmount = value;
     }
-    private void SetResourceType(ResourceType type)
+    private void SetResourceType(Resourcetype type)
     {
         this.type = type;
     }
-    public ResourceType GetResourceType()
+    public Resourcetype GetResourceType()
     {
         return type;
     }
