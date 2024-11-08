@@ -8,6 +8,7 @@ using static UIEnums;
 public class SlidePopup  : MonoBehaviour
 {
     [SerializeField] SlideDirection slideDirection;
+    [SerializeField] Ease easeType = Ease.OutQuad;
     [SerializeField] PanelPopupManager popupManager;
     [SerializeField] RectTransform popupPanel;    
     [SerializeField] float slideDuration = 0.5f;
@@ -62,7 +63,7 @@ public class SlidePopup  : MonoBehaviour
 
         SetButtonsInteractable(false);
 
-        popupPanel.DOAnchorPos(shownPosition, slideDuration).SetEase(Ease.OutQuad).OnComplete(() =>
+        popupPanel.DOAnchorPos(shownPosition, slideDuration).SetEase(easeType).OnComplete(() =>
         {
             SetButtonsInteractable(true);
         }).SetUpdate(true);
@@ -79,7 +80,7 @@ public class SlidePopup  : MonoBehaviour
         
         SetButtonsInteractable(false);
 
-        popupPanel.DOAnchorPos(hiddenPosition, slideDuration).SetEase(Ease.OutQuad).SetUpdate(true);
+        popupPanel.DOAnchorPos(hiddenPosition, slideDuration).SetEase(easeType).SetUpdate(true);
         isPopupOpen = false;
 
         popupManager.PopupClosed(this);

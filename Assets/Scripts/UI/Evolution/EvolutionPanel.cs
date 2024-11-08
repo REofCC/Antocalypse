@@ -8,14 +8,16 @@ public class EvolutionPanel : MonoBehaviour, ISrollViewControl
     [Header("Top Button")]
     [SerializeField] Button queenAntPanelButton;
     [SerializeField] Button specializePanelButton;
+    [SerializeField] Button exitButton;
     [SerializeField] Scrollbar scrollbar;
     Coroutine currentCoroutine;
     float scrollSpeed = 10f;
-
+    
     private void Start()
     {
         queenAntPanelButton.onClick.AddListener(() => TopButtonClick(true));
         specializePanelButton.onClick.AddListener(() => TopButtonClick(false));
+        exitButton.onClick.AddListener(ExitButtonClick);
     }
 
     void TopButtonClick(bool _isQueenAnt)
@@ -26,6 +28,11 @@ public class EvolutionPanel : MonoBehaviour, ISrollViewControl
         }
 
         currentCoroutine = StartCoroutine(SlideScrollBar(_isQueenAnt));
+    }
+
+    void ExitButtonClick()
+    {
+        GetComponent<SlidePopup>().ClosePopup();
     }
 
     public IEnumerator SlideScrollBar(bool _isQueenAnt)
