@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EvolutionPanel : MonoBehaviour, ISrollViewControl
+public class ResearchPanelUI : MonoBehaviour, ISrollViewControl
 {
     [Header("Top Button")]
     [SerializeField] Button queenAntPanelButton;
