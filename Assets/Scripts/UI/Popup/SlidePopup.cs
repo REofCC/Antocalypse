@@ -65,7 +65,7 @@ public class SlidePopup  : MonoBehaviour
         popupPanel.DOAnchorPos(shownPosition, slideDuration).SetEase(Ease.OutQuad).OnComplete(() =>
         {
             SetButtonsInteractable(true);
-        });
+        }).SetUpdate(true);
 
         isPopupOpen = true;
     }
@@ -79,7 +79,7 @@ public class SlidePopup  : MonoBehaviour
         
         SetButtonsInteractable(false);
 
-        popupPanel.DOAnchorPos(hiddenPosition, slideDuration).SetEase(Ease.OutQuad);
+        popupPanel.DOAnchorPos(hiddenPosition, slideDuration).SetEase(Ease.OutQuad).SetUpdate(true);
         isPopupOpen = false;
 
         popupManager.PopupClosed(this);

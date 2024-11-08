@@ -36,7 +36,7 @@ public class EvolutionPanel : MonoBehaviour, ISrollViewControl
 
             if (_isQueenAnt)
             {
-                scrollbar.value = Mathf.Lerp(scrollbar.value, 0f, Time.deltaTime * scrollSpeed);
+                scrollbar.value = Mathf.Lerp(scrollbar.value, 0f, Time.unscaledDeltaTime * scrollSpeed);
 
                 if (Mathf.Approximately(scrollbar.value, 0f))
                 {
@@ -46,7 +46,7 @@ public class EvolutionPanel : MonoBehaviour, ISrollViewControl
             }
             else
             {
-                scrollbar.value = Mathf.Lerp(scrollbar.value, 1f, Time.deltaTime * 10f);
+                scrollbar.value = Mathf.Lerp(scrollbar.value, 1f, Time.unscaledDeltaTime * 10f);
 
                 if (Mathf.Approximately(scrollbar.value, 1f))
                 {
