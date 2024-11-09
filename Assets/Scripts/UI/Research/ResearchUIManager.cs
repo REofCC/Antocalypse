@@ -10,11 +10,13 @@ public class ResearchUIManager : MonoBehaviour
     [SerializeField] List<Button> nodeButtonList = new List<Button>();
     [SerializeField] RectTransform queenAntResearchPanel;
     [SerializeField] RectTransform specializeResearchPanel;
+    ResearchInformationUI researchInformationUI;
 
     private void Start()
-    {        
-        researchTreeManager.ResearchUpdate += Redraw;
-        Redraw();
+    {
+        researchInformationUI = GetComponent<ResearchInformationUI>();
+        researchTreeManager.ResearchUpdate += Redraw;        
+        InitializeNodeButton();
     }
 
     void Redraw()
@@ -22,37 +24,65 @@ public class ResearchUIManager : MonoBehaviour
         for (int i = 0; i < nodeButtonList.Count; i++)
         {
             Button button = nodeButtonList[i];
-            ResearchNode node = researchTreeManager.GetNodeByIndex(i);            
-            button.gameObject.transform.transform.GetChild(0).GetComponent<TMP_Text>().text = node.NodeName;
+            ResearchNode node = button.GetComponent<ResearchNodeButtonUI>().GetResearchNodeInButton();
 
             if (node == null)
             {
                 return;
             }
 
-            switch(node.NodeState)
+            ChangeNodeState(node, button);
+        }
+    }
+    
+    void InitializeNodeButton()
+    {
+        for (int i = 0; i < nodeButtonList.Count; i++)
+        {
+            Button button = nodeButtonList[i];
+            ResearchNode node = researchTreeManager.GetNodeByIndex(i);
+            button.GetComponent<ResearchNodeButtonUI>().SetResearchUIManager(this);
+            button.gameObject.transform.transform.GetChild(0).GetComponent<TMP_Text>().text = node.NodeName;
+            button.GetComponent<ResearchNodeButtonUI>().SetResearchNodeInButton(node);
+
+            if (node == null)
             {
-                case NodeState.LOCKED:
-                    button.interactable = false;
-                    break;
-                case NodeState.UNLOCKED:
-                    button.interactable = true;
-                    break;
-                case NodeState.IN_PROGRESS:
-                    button.interactable = false;
-                    break;
-                case NodeState.COMPLETED:
-                    button.interactable = false;
-                    break;
-                case NodeState.CLOSED:
-                    button.interactable = false;
-                    break;
+                return;
             }
+
+            ChangeNodeState(node, button);
         }
     }
 
+    //버튼안의 ResearchNode의 State를 바꿔주는 함수
+    public void ChangeNodeState(ResearchNode node, Button button)
+    {
+        switch (node.NodeState)
+        {
+            case NodeState.LOCKED:
+                button.GetComponent<Image>().color = Color.gray;
+                break;
+            case NodeState.UNLOCKED:
+                button.GetComponent<Image>().color = Color.white;
+                break;
+            case NodeState.IN_PROGRESS:
+                button.GetComponent<Image>().color = Color.gray;
+                break;
+            case NodeState.COMPLETED:
+                button.GetComponent<Image>().color = Color.gray;
+                break;
+            case NodeState.CLOSED:
+                button.GetComponent<Image>().color = Color.gray;
+                break;
+        }
+    }
     void StartResearch(ResearchNode node)
     {
         researchTreeManager.StartResearchNode(node);
+    }
+
+    public void TossNodeInformation(ResearchNode node)
+    {
+        researchInformationUI.DisplayNodeInformation(node);
     }
 }

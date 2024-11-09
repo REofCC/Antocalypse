@@ -21,12 +21,15 @@ public class ResearchTreeManager : MonoBehaviour
 
     private void Start()
     {
+        foreach (ResearchNode node in researchNodes)
+        {
+            node.SetNodeState(NodeState.LOCKED);
+        }
+
         foreach (ResearchNode node in initialNodes)
         {
-            if (node.NodeState == NodeState.UNLOCKED)
-            {
-                unlockedNodes.Add(node);
-            }
+            node.SetNodeState(NodeState.UNLOCKED);
+            unlockedNodes.Add(node);
         }
     }
 
@@ -65,7 +68,7 @@ public class ResearchTreeManager : MonoBehaviour
         node.SetNodeState(NodeState.IN_PROGRESS);
         yield return new WaitForSeconds(node.ProgressTime); //[LSH:TODO] 게임 내 연차로 연동해야함        
         CompletedResearch(node);
-        ResearchUpdate.Invoke();
+        UpdateNode();
     }
 
     void CompletedResearch(ResearchNode node)
@@ -73,20 +76,33 @@ public class ResearchTreeManager : MonoBehaviour
         node.SetNodeState(NodeState.COMPLETED);        
         UnlockNode(node);
     }
-
+    
     void UnlockNode(ResearchNode node)
     {
-        foreach(ResearchNode unlockedNode in node.NextNodes)
+        foreach (ResearchNode nextNode in node.NextNodes)
         {
-            if (unlockedNode.NodeState == NodeState.LOCKED)
+            // 다음 노드의 모든 PreviousNodes가 COMPLETED 상태인지 확인
+            bool allPreviousCompleted = true;
+            foreach (ResearchNode previousNode in nextNode.PreviousNodes)
             {
-                unlockedNode.SetNodeState(NodeState.UNLOCKED);
-                unlockedNodes.Add(unlockedNode);
+                if (previousNode.NodeState != NodeState.COMPLETED)
+                {
+                    allPreviousCompleted = false;
+                    break;
+                }
             }
-        }        
-        
-        UpdateNode();
+
+            // 모든 PreviousNode가 COMPLETED일 때만 UNLOCK
+            if (allPreviousCompleted && nextNode.NodeState == NodeState.LOCKED)
+            {
+                nextNode.SetNodeState(NodeState.UNLOCKED);
+                unlockedNodes.Add(nextNode);
+            }
+        }
+
+        UpdateNode(); // UI 업데이트를 위해 UpdateNode 호출
     }
+
 
     void CloseExclusiveNode(ResearchNode node)
     {

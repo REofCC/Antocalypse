@@ -13,7 +13,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] SpeedControlPanel speedControlPanel;
     [SerializeField] OptionsPanel optionsPanel;
     [SerializeField] ExplorationPanel explorationPanel;
-    [SerializeField] EvolutionPanel evolutionPanel;
+    [SerializeField] ResearchPanelUI evolutionPanel;
     [SerializeField] WinterProgressBar winterProgressBar;
 
     private void Awake()
