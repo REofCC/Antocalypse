@@ -80,8 +80,7 @@ public class ResearchTreeManager : MonoBehaviour
     void UnlockNode(ResearchNode node)
     {
         foreach (ResearchNode nextNode in node.NextNodes)
-        {
-            // 다음 노드의 모든 PreviousNodes가 COMPLETED 상태인지 확인
+        {            
             bool allPreviousCompleted = true;
             foreach (ResearchNode previousNode in nextNode.PreviousNodes)
             {
@@ -91,8 +90,7 @@ public class ResearchTreeManager : MonoBehaviour
                     break;
                 }
             }
-
-            // 모든 PreviousNode가 COMPLETED일 때만 UNLOCK
+            
             if (allPreviousCompleted && nextNode.NodeState == NodeState.LOCKED)
             {
                 nextNode.SetNodeState(NodeState.UNLOCKED);
@@ -100,7 +98,7 @@ public class ResearchTreeManager : MonoBehaviour
             }
         }
 
-        UpdateNode(); // UI 업데이트를 위해 UpdateNode 호출
+        UpdateNode();
     }
 
 
