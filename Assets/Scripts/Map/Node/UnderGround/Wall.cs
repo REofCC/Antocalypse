@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Wall : HexaMapNode
 {
+    #region Attribute
     BaseResource resource;
+    #endregion
 
     #region Getter & Setter
     public void SetResource(BaseResource resource)

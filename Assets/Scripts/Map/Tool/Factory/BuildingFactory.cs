@@ -15,7 +15,6 @@ public class BuildingFactory : MonoBehaviour
         return buildResources[(int)buildingType];
     }
     #region Resource
-
     private bool UseBuildResource(string buildName, int phase = 0)
     {
         BuildData info = GetBuildData(buildName);
@@ -100,6 +99,5 @@ public class BuildingFactory : MonoBehaviour
         return true;
     }
     #endregion
-
     #endregion
 }

@@ -1,13 +1,19 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BaseResource : MonoBehaviour
 {
     #region Attribute
     int currentAmount;
+    int currentWorker;
+    List<Worker> workers = new();
+
     [SerializeField]
     string resName;
     Resourcetype type;
+    ResourceData info;
     HexaMapNode node;
+    BaseBuilding warehouse;
     #endregion
 
     #region Getter & Setter
@@ -15,21 +21,13 @@ public class BaseResource : MonoBehaviour
     {
         return resName;
     }
-    public ResourceData GetInfo(ResourceData info)
+    public ResourceData GetInfo()
     {
         return info;
     }
     public int GetCurrentAmount()
     {
         return currentAmount;
-    }
-    private void SetCurrentAmount(int value)
-    {
-        currentAmount = value;
-    }
-    private void SetResourceType(Resourcetype type)
-    {
-        this.type = type;
     }
     public Resourcetype GetResourceType()
     {
@@ -43,14 +41,20 @@ public class BaseResource : MonoBehaviour
     {
         return node;
     }
+    public void SetResourceData(ResourceData data)
+    {
+        info = data;
+        currentAmount = data.Amount;
+        type = data.ResourceType;
+    }
+    public void SetWareHouse(BaseBuilding warehouse)
+    {
+        this.warehouse = warehouse;
+    }
     #endregion
 
     #region Function
-    public void SetResourceData(ResourceData data)
-    {
-        SetCurrentAmount(data.Amount);
-        SetResourceType(data.ResourceType);
-    }
+
     private int MinusAmount(int value)
     {
         int amount;
@@ -69,8 +73,56 @@ public class BaseResource : MonoBehaviour
         
         return amount;
     }
+    public void AddWorker(int entities)
+    {
+        int entityNum;
+        if(currentWorker + entities > info.MaxWorker)
+        {
+            return;
+        }
+        for (entityNum = 0; entityNum < entities; entityNum++)
+        {
+            GameObject worker = null;
+            //GameObject worker = GameManager.Task.AssignTask(TaskType.Gather, this.gameObject);
+            if (worker == null)
+            {
+                break;
+            }
+            workers.Add(worker.GetComponent<Worker>());
+        }
+        currentWorker += entityNum;
+    }
+    public void RemoveWorker(int entities)
+    {
+        if (entities > currentWorker)
+            return;
+        List<Worker> delworkers = new();
+        for (int i = 0; i < entities; i++) 
+        {
+            workers[i].GetTask(TaskType.None);
+            delworkers.Add(workers[i]);
+        }
+        for (int i = 0; i < entities; i++)
+        {
+            workers.Remove(delworkers[i]);
+        }
+        currentWorker -= entities;
+    }
     #endregion
 
     #region Unity Function
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Worker worker = collision.GetComponent<Worker>();
+        if (worker == null)
+        {
+            return;
+        }
+
+        if (workers.Contains(worker))
+        {
+            Extraction(worker.GetGatherValue());
+        }
+    }
     #endregion
 }

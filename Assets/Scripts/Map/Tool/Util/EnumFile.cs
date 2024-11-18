@@ -28,3 +28,10 @@ public enum Resourcetype
     Leaf,
     Wood
 }
+
+public enum EventType 
+{
+    Battle,
+    Resource,
+
+}

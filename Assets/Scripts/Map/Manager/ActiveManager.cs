@@ -34,7 +34,10 @@ public class ActiveManager : MonoBehaviour
     private HexaMapNode ClickTile(Vector3 pos)
     {
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(pos.x, pos.y, Camera.main.transform.position.z * -1));
+        Debug.Log(mouseWorldPos);
+
         Vector2Int gridPos = grid.GetCellPosCalc().CalcGridPos(mouseWorldPos);
+        Debug.Log(gridPos);
         return grid.GetNode(gridPos.x, gridPos.y);
     }
     private void ClickBuilding()

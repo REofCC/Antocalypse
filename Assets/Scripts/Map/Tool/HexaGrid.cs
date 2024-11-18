@@ -1,8 +1,6 @@
-
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.UIElements;
 
 public class HexaGrid : MonoBehaviour
 {
@@ -11,7 +9,7 @@ public class HexaGrid : MonoBehaviour
     CellPositionCalc cellPositionCalc;
     [SerializeField]
     Tilemap tilemap;
-    NodeFactory tileFactory;
+    UnderGroundNodeFactory tileFactory;
 
     HexaMapNode[,] hexgrid;
 
@@ -66,6 +64,11 @@ public class HexaGrid : MonoBehaviour
     public HexaMapNode GetNode(int x, int y) //need offset
     {
         return hexgrid[x, y];
+    }
+    public HexaMapNode GetNode(GameObject gameObject)
+    {
+        Vector2Int gridPos = cellPositionCalc.CalcGridPos(gameObject.transform.position);
+        return hexgrid[gridPos.x, gridPos.y];
     }
     public CellPositionCalc GetCellPosCalc()
     {

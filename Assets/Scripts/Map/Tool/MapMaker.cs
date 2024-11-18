@@ -1,4 +1,3 @@
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -7,7 +6,7 @@ public class MapMaker : MonoBehaviour
 {
     #region Attribute
     Tilemap tilemap;
-    NodeFactory nodeFactory;
+    UnderGroundNodeFactory nodeFactory;
     ResourceFactory resourceFactory;
     RoomFactory roomFactory;
     HexaGrid grid;
@@ -19,7 +18,7 @@ public class MapMaker : MonoBehaviour
     {
         return tilemap;
     }
-    public NodeFactory GetNodeFactory()
+    public UnderGroundNodeFactory GetNodeFactory()
     {
         return nodeFactory;
     }
@@ -68,7 +67,7 @@ public class MapMaker : MonoBehaviour
     {
         MakeBase();
         MakeStartPos();
-        //MakeResource();
+        MakeResource();
     }
     #endregion
 
@@ -78,7 +77,7 @@ public class MapMaker : MonoBehaviour
         tilemap = GameObject.Find("Grid").transform.GetChild(0).GetComponent<Tilemap>();
         grid = GetComponent<HexaGrid>();
         GameObject tool = gameObject.transform.GetChild(0).gameObject;
-        nodeFactory = tool.GetComponent<NodeFactory>();
+        nodeFactory = tool.GetComponent<UnderGroundNodeFactory>();
         resourceFactory = tool.GetComponent<ResourceFactory>();
         roomFactory = tool.GetComponent <RoomFactory>();
 

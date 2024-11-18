@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class LiquidFood : BaseResource
+public class SolidFood : BaseResource
 {
     #region Attribute
     
@@ -9,9 +9,9 @@ public class LiquidFood : BaseResource
     #region Function
     public void SetWareHouse(GameObject warehouse)
     {
-        if (warehouse.GetComponent<LiquidWareHouse>() != null)
+        if (warehouse.GetComponent<SolidWareHouse>() != null)
         {
-            SetWareHouse(warehouse.GetComponent<LiquidWareHouse>());
+            SetWareHouse(warehouse.GetComponent<SolidWareHouse>());
         }
     }
     #endregion
