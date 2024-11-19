@@ -35,7 +35,7 @@ public class ActiveManager : MonoBehaviour
     {
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(pos.x, pos.y, Camera.main.transform.position.z * -1));
         Vector2Int gridPos = grid.GetCellPosCalc().CalcGridPos(mouseWorldPos);
-        return grid.GetNode(gridPos.x, gridPos.y);
+        return grid.GetNode(mouseWorldPos);
     }
     private void ClickBuilding()
     {

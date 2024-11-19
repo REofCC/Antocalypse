@@ -67,6 +67,11 @@ public class HexaGrid : MonoBehaviour
     {
         return hexgrid[x, y];
     }
+    public HexaMapNode GetNode(Vector3 pos) //need offset
+    {
+        Vector2Int gridPos = cellPositionCalc.CalcGridPos(pos);
+        return hexgrid[gridPos.x, gridPos.y];
+    }
     public CellPositionCalc GetCellPosCalc()
     {
         return cellPositionCalc;
