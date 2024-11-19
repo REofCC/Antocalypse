@@ -68,6 +68,11 @@ public class HexaGrid : MonoBehaviour
     public HexaMapNode GetNode(GameObject gameObject)
     {
         Vector2Int gridPos = cellPositionCalc.CalcGridPos(gameObject.transform.position);
+    }
+    public HexaMapNode GetNode(Vector3 pos) //need offset
+    {
+        Vector2Int gridPos = cellPositionCalc.CalcGridPos(pos);
+
         return hexgrid[gridPos.x, gridPos.y];
     }
     public CellPositionCalc GetCellPosCalc()
@@ -173,7 +178,7 @@ public class HexaGrid : MonoBehaviour
             return false;
         return true;
     }
-    
+
     #endregion
     #region Grid
     private void CalcMapSize()

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Worker : MonoBehaviour
@@ -19,6 +20,7 @@ public class Worker : MonoBehaviour
     //State nextState;
     Vector2 targetPos;
 
+    public float buildTime = 2f;    //임시 건설시간
     private void Awake()
     {
         entityData = GetComponent<EntityData>();
@@ -85,7 +87,7 @@ public class Worker : MonoBehaviour
     {
         if (transform.position.x == targetPos.x && transform.position.y == targetPos.y)
         {
-            Debug.Log("Move Finish");
+            //Debug.Log("Move Finish");
             //ChangeState(State.Idle);
             return BTNodeState.Success;
         }
@@ -113,9 +115,17 @@ public class Worker : MonoBehaviour
     }
     BTNodeState Build()
     {
-        ChangeState(State.Build);
-        // 건설 자원 소모 및 대기시간, 애니메이션
-        return BTNodeState.Success;
+        if (currentTask == TaskType.Build && state != State.Build)   // 최초 진입 시
+        {
+            ChangeState(State.Build);
+            // 건설 자원 소모 및 대기시간, 애니메이션
+            StartCoroutine("BuildTimer");
+        }
+        else if (currentTask == TaskType.Build && state != State.Build)   // 건설 종료 후
+        {
+            return BTNodeState.Success;
+        }
+        return BTNodeState.Running;
     }
     BTNodeState Idle()
     {
@@ -305,5 +315,12 @@ public class Worker : MonoBehaviour
     public Vector2 GetTargetNodePos()
     {
         return nodePos;
+    }
+
+    IEnumerator BuildTimer()
+    {
+        yield return new WaitForSeconds(buildTime);
+        Debug.Log("Build Finish");
+        currentTask = TaskType.None;
     }
 }

@@ -37,8 +37,7 @@ public class ActiveManager : MonoBehaviour
         Debug.Log(mouseWorldPos);
 
         Vector2Int gridPos = grid.GetCellPosCalc().CalcGridPos(mouseWorldPos);
-        Debug.Log(gridPos);
-        return grid.GetNode(gridPos.x, gridPos.y);
+        return grid.GetNode(mouseWorldPos);
     }
     private void ClickBuilding()
     {
