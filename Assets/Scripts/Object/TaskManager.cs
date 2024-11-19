@@ -8,7 +8,7 @@ public class TaskManager
     List<GameObject> workers = new List<GameObject>();
 
     GameObject entity;
-    Vector2 resourceNodePos;
+    Vector2 nodePos;
     LayerMask antLayer;
     public void OnStart()
     {
@@ -23,7 +23,7 @@ public class TaskManager
         entity = FindEntity(TaskType.None);
         if (entity != null)
         {
-            entity.GetComponent<Worker>().GetTask(resourceNodePos, TaskType.Gather);
+            entity.GetComponent<Worker>().GetTask(nodePos, TaskType.Gather);
         }
         else
         {
@@ -35,7 +35,7 @@ public class TaskManager
     {
         GameObject entity = null;
 
-        foreach (var hit in Physics2D.CircleCastAll(resourceNodePos, Mathf.Infinity, Vector2.zero,Mathf.Infinity, antLayer))
+        foreach (var hit in Physics2D.CircleCastAll(nodePos, Mathf.Infinity, Vector2.zero,Mathf.Infinity, antLayer))
         {
             if ((hit.collider.GetComponent<Worker>().GetCurrentTask() == task))
             {
@@ -56,7 +56,7 @@ public class TaskManager
     {
         GameObject entity = null;
 
-        foreach (var hit in Physics2D.CircleCastAll(resourceNodePos, Mathf.Infinity, Vector2.zero, Mathf.Infinity, antLayer))
+        foreach (var hit in Physics2D.CircleCastAll(nodePos, Mathf.Infinity, Vector2.zero, Mathf.Infinity, antLayer))
         {
             if ((hit.collider.GetComponent<Worker>().GetCurrentTask() == task))
             {
@@ -79,7 +79,7 @@ public class TaskManager
 
     public void AssignTask(TaskType task, GameObject node)
     {
-        resourceNodePos = node.transform.position;
+        nodePos = node.transform.position;
         entity = FindEntity(TaskType.None);
 
         if (!entity)
@@ -87,8 +87,18 @@ public class TaskManager
             Debug.Log("There's No Idle Entity");
             return;
         }
-        node.GetComponent<ResourceNode>().ChangeCurrentWorker(1);
-        entity.GetComponent<Worker>().GetTask(resourceNodePos, task);
+        
+        switch(task)
+        {
+            case TaskType.Gather:
+                node.GetComponent<ResourceNode>().ChangeCurrentWorker(1);
+                entity.GetComponent<Worker>().GetTask(nodePos, task);
+                break;
+            case TaskType.Build:
+                entity.GetComponent<Worker>().GetTask(nodePos, task);
+                break;
+        }
+        
     }
     public void DismissTask(TaskType task, GameObject node)
     {
@@ -96,10 +106,21 @@ public class TaskManager
 
         if (!entity)
         {
-            Debug.Log("There's No Gathering Entity");
+            Debug.Log("There's No Working Entity");
             return;
         }
-        node.GetComponent<ResourceNode>().ChangeCurrentWorker(-1);
-        entity.GetComponent<Worker>().GetTask(TaskType.None);
+
+        switch (task)
+        {
+            case TaskType.Gather:
+                node.GetComponent<ResourceNode>().ChangeCurrentWorker(-1);
+                entity.GetComponent<Worker>().GetTask(TaskType.None);
+                break;
+            case TaskType.Build:
+                //node.GetComponent<ResourceNode>().ChangeCurrentWorker(-1);
+                entity.GetComponent<Worker>().GetTask(TaskType.None);
+                break;
+        }
+
     }
 }
