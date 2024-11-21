@@ -12,10 +12,10 @@ public class Managers : MonoBehaviour
 
     static PopulationManager population = new();
     public static PopulationManager Population { get { return population; } }
-    // ±ÇÈñÁØ - spwanManager Ãß°¡
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ - spwanManager ï¿½ß°ï¿½
     static SpawnManager spawnManager = new();
     public static SpawnManager SpawnManager { get { return spawnManager; } }
-    // ±ÇÈñÁØ - yearManager Ãß°¡
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ - yearManager ï¿½ß°ï¿½
     static YearManager yearManager;
     public static YearManager YearManager { get { return yearManager; } }
 
@@ -23,12 +23,17 @@ public class Managers : MonoBehaviour
     {
         yearManager = gameObject.AddComponent<YearManager>();        
     }
+#region TaskManager ï¿½ß°ï¿½ - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    static TaskManager _task = new();
+    public static TaskManager Task { get { return _task; } }
+    #endregion
+
     private void Start()
     {
         manager = GetComponent<Managers>();
         DontDestroyOnLoad(manager);
 
-        //¿¬Â÷ ÃÊ±â¼³Á¤ ¹× ½ÃÀÛ
+        //ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±â¼³ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         yearManager.Init();
     }
 }

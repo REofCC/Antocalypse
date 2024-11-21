@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 6245789865219512376}
   - component: {fileID: 5221623540979649652}
   - component: {fileID: 5510622207892016412}
+  - component: {fileID: 5074112212677689911}
   m_Layer: 0
   m_Name: Worker
   m_TagString: Worker
@@ -130,8 +131,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c294ca7824b64842aacfc3a250c0c06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityData: {fileID: 11400000, guid: 9ae3eeb74004aa848934f5fe70366947, type: 2}
   cargo: {fileID: 0}
+  buildTime: 2
 --- !u!70 &5510622207892016412
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -167,3 +168,23 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0.013237715}
   m_Size: {x: 1.1883652, y: 2.376731}
   m_Direction: 0
+--- !u!114 &5074112212677689911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7722046487432534800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 081f5cd905e01494892f69506f7880a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _entityType: 
+  _maxHp: 10
+  _hp: 10
+  _speed: 1
+  _kcal: 100
+  _gatherValue: 1
+  _isHolding: 0
+  _holdValue: 0
