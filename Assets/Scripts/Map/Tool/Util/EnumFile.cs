@@ -4,6 +4,7 @@ public enum TileType
     Path,
     RoomCenter,
     RoomNode,
+    DoorNode,
     None
 }
 public enum BuildingType

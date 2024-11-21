@@ -52,12 +52,14 @@ public class ActiveManager : MonoBehaviour
         }
         building = null;
     }
+
+
     public void BreakTile()
     {
         if (node == null || !grid.IsBreakable(node)) return;
 
         Vector2Int gridPos = node.GetGridPos();
-        grid.SwapNode(gridPos.x, gridPos.y, "Path");
+        grid.SwapNode(gridPos.x, gridPos.y, "Path", true);
     }
     public void MakeRoom()
     {

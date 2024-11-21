@@ -648,9 +648,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1621850673}
-        m_TargetAssemblyTypeName: MapMaker, Assembly-CSharp
-        m_MethodName: MakeResource
+      - m_Target: {fileID: 1881327503}
+        m_TargetAssemblyTypeName: ActiveManager, Assembly-CSharp
+        m_MethodName: PathFind
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -781,7 +781,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1881327503}
         m_TargetAssemblyTypeName: ActiveManager, Assembly-CSharp
         m_MethodName: ExpandRoom
         m_Mode: 1
@@ -1678,7 +1678,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1881327503}
         m_TargetAssemblyTypeName: ActiveManager, Assembly-CSharp
         m_MethodName: MakeRoom
         m_Mode: 1

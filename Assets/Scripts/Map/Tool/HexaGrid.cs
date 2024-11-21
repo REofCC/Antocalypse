@@ -13,6 +13,8 @@ public class HexaGrid : MonoBehaviour
 
     HexaMapNode[,] hexgrid;
 
+    DoorNode door;
+
     int mapSizeX;
     int mapSizeY;
     #endregion
@@ -61,15 +63,17 @@ public class HexaGrid : MonoBehaviour
     {
         hexgrid[x, y] = node;
     }
-    public HexaMapNode GetNode(int x, int y) //need offset
+    public HexaMapNode GetNode(int x, int y) //need gridPos
     {
         return hexgrid[x, y];
     }
     public HexaMapNode GetNode(GameObject gameObject)
     {
         Vector2Int gridPos = cellPositionCalc.CalcGridPos(gameObject.transform.position);
+
+        return hexgrid[gridPos.x, gridPos.y];
     }
-    public HexaMapNode GetNode(Vector3 pos) //need offset
+    public HexaMapNode GetNode(Vector3 pos) //need worldPosition
     {
         Vector2Int gridPos = cellPositionCalc.CalcGridPos(pos);
 
@@ -135,6 +139,14 @@ public class HexaGrid : MonoBehaviour
     {
         return DirY;
     }
+    public DoorNode GetDoorPos()
+    {
+        return door;
+    }
+    public void SetDoorPos(DoorNode door)
+    {
+        this.door = door;
+    }
     #endregion
 
     #region Function
@@ -178,7 +190,17 @@ public class HexaGrid : MonoBehaviour
             return false;
         return true;
     }
-
+    private bool CheckDoorConnect(HexaMapNode node)
+    {
+        Vector2Int gridPos = node.GetGridPos();
+        List<HexaMapNode> list = GetNeighborNode(gridPos.x, gridPos.y);
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (list[i].GetTileType() == TileType.DoorNode)
+                return true;
+        }
+        return false;
+    }
     #endregion
     #region Grid
     private void CalcMapSize()
@@ -273,7 +295,7 @@ public class HexaGrid : MonoBehaviour
     }
     #endregion
     #region TileSwap
-    public void SwapNode(int x, int y, string tile)
+    public void SwapNode(int x, int y, string tile, bool is_pass)
     {
         HexaMapNode prevNode = GetNode(x, y);
         HexaMapNode node = tileFactory.GetNode(tile);
@@ -281,6 +303,11 @@ public class HexaGrid : MonoBehaviour
         node.SetNodePosition(prevNode);
         SetNode(x, y, node);
         tilemap.SetTile(node.GetCellPos(), tileFactory.GetTile(((int)node.GetTileType())));
+
+        if (is_pass && !door.IsConnected())
+        {
+            door.SetConnect(CheckDoorConnect(node));
+        }
     }
     #endregion
     #endregion
