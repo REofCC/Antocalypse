@@ -12,6 +12,7 @@ public class UnderGroundNodeFactory : MonoBehaviour
         { "Path", ()=>new Path() },
         { "RoomCenter", ()=>new RoomCenter() },
         { "RoomNode", ()=>new RoomNode() },
+        {"Door", ()=>new DoorNode() },
     };
     [SerializeField]
     List<TileBase> tileDict = new();
