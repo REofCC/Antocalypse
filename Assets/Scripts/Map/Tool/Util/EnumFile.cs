@@ -4,6 +4,7 @@ public enum TileType
     Path,
     RoomCenter,
     RoomNode,
+    DoorNode,
     None
 }
 public enum BuildingType
@@ -27,4 +28,11 @@ public enum Resourcetype
     Solid,
     Leaf,
     Wood
+}
+
+public enum EventType 
+{
+    Battle,
+    Resource,
+
 }

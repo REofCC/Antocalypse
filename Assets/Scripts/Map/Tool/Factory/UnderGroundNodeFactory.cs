@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class NodeFactory : MonoBehaviour
+public class UnderGroundNodeFactory : MonoBehaviour
 {
     #region Attribute
     readonly Dictionary<string, Func<HexaMapNode>> nodeDict = new()

@@ -12,7 +12,7 @@ public class RoomFactory : MonoBehaviour
         for (int i = 0; i < nodes.Count; i++)
         {
             TileType type = nodes[i].GetTileType();
-            if (type == TileType.RoomCenter || type == TileType.RoomNode || (!nodes[i].GetBreakable() && type != TileType.Path))
+            if (type != TileType.Wall && type != TileType.Path)
                 return false;
         }
         return true;
@@ -44,12 +44,12 @@ public class RoomFactory : MonoBehaviour
         if (!CheckRoomWall(rings))
             return false;
 
-        grid.SwapNode(centerPos.x, centerPos.y, "RoomCenter");
+        grid.SwapNode(centerPos.x, centerPos.y, "RoomCenter", true);
         RoomCenter center = (RoomCenter)grid.GetNode(centerPos.x, centerPos.y);
         for (int i = 0; i < nodes.Count; i++)
         {
             Vector2Int nodePos = nodes[i].GetGridPos();
-            grid.SwapNode(nodePos.x, nodePos.y, "RoomNode");
+            grid.SwapNode(nodePos.x, nodePos.y, "RoomNode", true);
             RoomNode node = (RoomNode)grid.GetNode(nodePos.x, nodePos.y);
             center.AddRoomNode(node);
             node.SetCenter(center);
@@ -75,7 +75,7 @@ public class RoomFactory : MonoBehaviour
         for (int i = 0; i < nodes.Count; i++)
         {
             Vector2Int nodePos = nodes[i].GetGridPos();
-            grid.SwapNode(nodePos.x, nodePos.y, "RoomNode");
+            grid.SwapNode(nodePos.x, nodePos.y, "RoomNode", true);
             RoomNode node = (RoomNode)grid.GetNode(nodePos.x, nodePos.y);
             roomCenter.AddRoomNode(node);
             node.SetCenter(roomCenter);
