@@ -86,6 +86,6 @@ public class RoomFactory : MonoBehaviour
 
     public void OnAwake()
     {
-        grid = gameObject.transform.parent.GetComponent<HexaGrid>();
+        grid = MapManager.Map.UnderGrid;
     }
 }

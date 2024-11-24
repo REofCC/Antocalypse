@@ -10,7 +10,7 @@ public class MapMaker : MonoBehaviour
     ResourceFactory resourceFactory;
     RoomFactory roomFactory;
     HexaGrid grid;
-    int mapSize = 31;
+    int mapSize;
     #endregion
 
     #region Getter & Setter
@@ -49,7 +49,7 @@ public class MapMaker : MonoBehaviour
         HexaMapNode node = grid.GetNode(15, 15);
         roomFactory.MakeRoom(node);
     }
-    public void MakeResource()
+    private void MakeResource()
     {
         HexaMapNode[,] hexgrid = grid.GetGrid();
         Vector3 startPos = grid.GetNode(15, 15).GetWorldPos();
@@ -63,7 +63,7 @@ public class MapMaker : MonoBehaviour
             }
         }
     }
-    private void MapMaking()
+    public void MapMaking()
     {
         MakeBase();
         MakeStartPos();
@@ -72,19 +72,14 @@ public class MapMaker : MonoBehaviour
     #endregion
 
     #region Unity Function
-    public void Awake()
+    public void OnAwake(int mapSize)
     {
-        tilemap = GameObject.Find("Grid").transform.GetChild(0).GetComponent<Tilemap>();
-        grid = GetComponent<HexaGrid>();
-        GameObject tool = gameObject.transform.GetChild(0).gameObject;
-        nodeFactory = tool.GetComponent<UnderGroundNodeFactory>();
-        resourceFactory = tool.GetComponent<ResourceFactory>();
-        roomFactory = tool.GetComponent <RoomFactory>();
-
-        grid.OnAwake();
-        roomFactory.OnAwake();
-        resourceFactory.OnAwake(mapSize);
-        MapMaking();
+        tilemap = MapManager.Map.UnderTileMap;
+        grid = MapManager.Map.UnderGrid;
+        nodeFactory = MapManager.Map.UnderNodeFactory;
+        resourceFactory = MapManager.Map.ResourceFactory;
+        roomFactory = MapManager.Map.RoomFactory;
+        this.mapSize = mapSize;
     }
     #endregion
 }

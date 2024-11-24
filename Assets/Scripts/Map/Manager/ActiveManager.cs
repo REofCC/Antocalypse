@@ -5,11 +5,7 @@ using UnityEngine.EventSystems;
 public class ActiveManager : MonoBehaviour
 {
     #region Attribute
-    HexaGrid grid;
-    BuildingFactory builder;
-    RoomFactory roombuilder;
     HexaMapNode node;
-    HexaPathFinder finder;
     BaseBuilding building;
     #endregion
 
@@ -36,8 +32,8 @@ public class ActiveManager : MonoBehaviour
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(pos.x, pos.y, Camera.main.transform.position.z * -1));
         Debug.Log(mouseWorldPos);
 
-        Vector2Int gridPos = grid.GetCellPosCalc().CalcGridPos(mouseWorldPos);
-        return grid.GetNode(mouseWorldPos);
+        Vector2Int gridPos = MapManager.Map.PositionCalc.CalcGridPos(mouseWorldPos);
+        return MapManager.Map.UpGrid.GetNode(mouseWorldPos);
     }
     private void ClickBuilding()
     {
@@ -52,14 +48,12 @@ public class ActiveManager : MonoBehaviour
         }
         building = null;
     }
-
-
     public void BreakTile()
     {
-        if (node == null || !grid.IsBreakable(node)) return;
+        if (node == null || !MapManager.Map.UpGrid.IsBreakable(node)) return;
 
         Vector2Int gridPos = node.GetGridPos();
-        grid.SwapNode(gridPos.x, gridPos.y, "Path", true);
+        MapManager.Map.UnderGrid.SwapNode(gridPos.x, gridPos.y, "Path", true);
     }
     public void MakeRoom()
     {
@@ -68,7 +62,7 @@ public class ActiveManager : MonoBehaviour
             Debug.Log("current node is null");
             return;
         }
-        roombuilder.MakeRoom(node);
+        MapManager.Map.RoomFactory.MakeRoom(node);
     }
     public void ExpandRoom()
     {
@@ -78,9 +72,8 @@ public class ActiveManager : MonoBehaviour
             return;
         }
 
-        roombuilder.ExpandRoom((RoomCenter)node);
+        MapManager.Map.RoomFactory.ExpandRoom((RoomCenter)node);
     }
-
     public void BuildBuilding()
     {
         if (node == null)
@@ -88,7 +81,7 @@ public class ActiveManager : MonoBehaviour
             Debug.Log("current node is null");
             return;
         }
-        builder.Build((RoomNode)node, "BaseBuilding");
+        MapManager.Map.BuildingFactory.Build((RoomNode)node, "BaseBuilding");
     }
     public void UpgradeBuilding()
     {
@@ -97,7 +90,7 @@ public class ActiveManager : MonoBehaviour
             Debug.Log("current building is null");
             return;
         }
-        builder.Upgrade(building);
+        MapManager.Map.BuildingFactory.Upgrade(building);
     }
     public void DemolitionBuilding()
     {
@@ -106,25 +99,22 @@ public class ActiveManager : MonoBehaviour
             Debug.Log("current building is null");
             return;
         }
-        builder.Demolition(building.gameObject);
+        MapManager.Map.BuildingFactory.Demolition(building.gameObject);
     }
-
     public void PathFind()
     {
-        HexaMapNode start = grid.GetNode(15,15);
-        List<Vector3> route = finder.PathFinding(start, GetCurrentNode());
+        HexaMapNode start = MapManager.Map.UpGrid.GetNode(15,15);
+        List<Vector3> route = MapManager.Map.PathFinder.PathFinding(start, GetCurrentNode());
         Debug.Log(route);
+    }
+
+    public void MakeMap()
+    {
+        MapManager.Map.MapMaker.MapMaking();
     }
     #endregion
 
     #region Unity Function
-    private void Start()
-    {
-        grid = GameObject.Find("MapTool").GetComponent<HexaGrid>();
-        builder = GameObject.Find("MapTool").transform.GetChild(0).GetComponent<BuildingFactory>();
-        finder = GameObject.Find("MapTool").GetComponent<HexaPathFinder>();
-        roombuilder = GameObject.Find("MapTool").transform.GetChild(0).GetComponent<RoomFactory>();
-    }
 
     private void Update()
     {

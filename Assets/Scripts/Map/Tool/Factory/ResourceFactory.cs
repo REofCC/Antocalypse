@@ -132,7 +132,7 @@ public class ResourceFactory : MonoBehaviour
     public void OnAwake(int mapSize)
     {
         resources = GameObject.Find("Resources");
-        grid = transform.parent.GetComponent<HexaGrid>();
+        grid = MapManager.Map.UnderGrid;
         this.mapSize = mapSize;
 
         enables = new bool[mapSize,mapSize];

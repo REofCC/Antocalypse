@@ -303,11 +303,12 @@ public class HexaGrid : MonoBehaviour
         node.SetNodePosition(prevNode);
         SetNode(x, y, node);
         tilemap.SetTile(node.GetCellPos(), tileFactory.GetTile(((int)node.GetTileType())));
-
+        /*
         if (is_pass && !door.IsConnected())
         {
             door.SetConnect(CheckDoorConnect(node));
         }
+        */
     }
     #endregion
     #endregion
@@ -315,11 +316,10 @@ public class HexaGrid : MonoBehaviour
     public void OnAwake()
     {
         SetDirection();
-        cellPositionCalc = new CellPositionCalc();
+        cellPositionCalc = MapManager.Map.PositionCalc;
 
-        MapMaker maker = GetComponent<MapMaker>();
-        tileFactory = maker.GetNodeFactory();
-        tilemap = maker.GetTileMap();
+        tileFactory = MapManager.Map.UnderNodeFactory;
+        tilemap = MapManager.Map.UnderTileMap;
     }
     #endregion
 }
