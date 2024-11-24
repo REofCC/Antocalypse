@@ -49,7 +49,7 @@ public class MapMaker : MonoBehaviour
         HexaMapNode node = grid.GetNode(15, 15);
         roomFactory.MakeRoom(node);
     }
-    public void MakeResource()
+    private void MakeResource()
     {
         HexaMapNode[,] hexgrid = grid.GetGrid();
         Vector3 startPos = grid.GetNode(15, 15).GetWorldPos();
@@ -63,7 +63,7 @@ public class MapMaker : MonoBehaviour
             }
         }
     }
-    private void MapMaking()
+    public void MapMaking()
     {
         MakeBase();
         MakeStartPos();
