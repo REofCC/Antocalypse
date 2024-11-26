@@ -17,6 +17,8 @@ public class ResearchTreeManager : MonoBehaviour
     [SerializeField] List<ResearchNode> initialNodes = new List<ResearchNode>();
     [SerializeField] List<ResearchNode> unlockedNodes = new List<ResearchNode>();
     [SerializeField] List<ResearchNode> researchNodes = new List<ResearchNode>();
+    List<ResearchNode> completedNodes = new List<ResearchNode>();
+
     public event Action ResearchUpdate;
 
     private void Start()
@@ -75,6 +77,7 @@ public class ResearchTreeManager : MonoBehaviour
     {
         node.SetNodeState(NodeState.COMPLETED);        
         UnlockNode(node);
+        completedNodes.Add(node);
     }
     
     void UnlockNode(ResearchNode node)
@@ -139,5 +142,10 @@ public class ResearchTreeManager : MonoBehaviour
         }
 
         return null;
+    }
+    
+    public bool IsCompletedNode(ResearchNode node)
+    {
+        return completedNodes.Contains(node);
     }
 }
