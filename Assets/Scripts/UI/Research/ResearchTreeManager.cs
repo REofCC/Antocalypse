@@ -57,15 +57,15 @@ public class ResearchTreeManager : MonoBehaviour
             return;
         }
 
-        DeductResource(node.Cost);
-        StartCoroutine(ProgressResearch(node));
-
+        DeductResource(node.Cost);        
         CloseExclusiveNode(node);
+        node.SetNodeState(NodeState.IN_PROGRESS);
+        StartCoroutine(ProgressResearch(node));
+        UpdateNode();
     }
 
     IEnumerator ProgressResearch(ResearchNode node)
-    {
-        node.SetNodeState(NodeState.IN_PROGRESS);
+    {        
         yield return new WaitForSeconds(node.ProgressTime); //[LSH:TODO] 게임 내 연차로 연동해야함        
         CompletedResearch(node);
         UpdateNode();

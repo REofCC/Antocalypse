@@ -54,7 +54,6 @@ public class ResearchUIManager : MonoBehaviour
         }
     }
 
-    //버튼안의 ResearchNode의 State를 바꿔주는 함수
     public void ChangeNodeState(ResearchNode node, Button button)
     {
         switch (node.NodeState)
