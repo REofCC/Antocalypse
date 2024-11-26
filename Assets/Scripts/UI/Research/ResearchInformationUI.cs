@@ -19,6 +19,7 @@ public class ResearchInformationUI : MonoBehaviour
     {
         progressResearchButton.onClick.AddListener(OnProgressResearch);
         cancleResearchButton.onClick.AddListener(OnCancleResearch);
+        researchTreeManager.ResearchUpdate += UpdateButtonState;
     }
 
     public void DisplayNodeInformation(ResearchNode node)
@@ -31,6 +32,7 @@ public class ResearchInformationUI : MonoBehaviour
         UpdateButtonState();
     }
 
+    //[LSH:TODO]해당 함수는 ResearchTreeManager에 위치하는것이 패턴상 더 적절할것 같다
     public void UpdateButtonState()
     {
         if(currentResearchNode.NodeState == NodeState.UNLOCKED)

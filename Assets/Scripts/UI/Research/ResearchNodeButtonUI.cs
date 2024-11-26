@@ -8,11 +8,11 @@ using UnityEngine.UI;
 public class ResearchNodeButtonUI : MonoBehaviour
 {
     [SerializeField] ResearchNode researchNode;
-    ResearchUIManager researchUIManager;    
-    
+    ResearchUIManager researchUIManager;
+
     private void Start()
     {
-        GetComponent<Button>().onClick.AddListener(OnClickNodeButton);     
+        GetComponent<Button>().onClick.AddListener(OnClickNodeButton);        
     }
 
     public void SetResearchUIManager(ResearchUIManager manager)
@@ -24,11 +24,17 @@ public class ResearchNodeButtonUI : MonoBehaviour
     {
         researchNode = node;
         SetNodeSprite(node);        
+
     }
     
     public ResearchNode GetResearchNodeInButton()
     {
         return researchNode;
+    }
+
+    void DrawConnectionLine()
+    {
+
     }
 
     void SetNodeSprite(ResearchNode node)
