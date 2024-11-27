@@ -65,8 +65,6 @@ public class MapManager : MonoBehaviour
         enemyFactory = go.GetComponent<EnemyFactory>();
         eventFactory = go.GetComponent<EventFactory>();
 
-        ResourceFactory.OnAwake(mapSize);
-        RoomFactory.OnAwake();
         return true;
     }
 
@@ -74,11 +72,8 @@ public class MapManager : MonoBehaviour
     {
         GameObject go = GameObject.Find("MapTool");
         pathFinder = go.GetComponent<HexaPathFinder>();
-        positionCalc = new();
         mapMaker = go.GetComponent<MapMaker>();
 
-        pathFinder.OnAwake();
-        mapMaker.OnAwake(mapSize);
         return true;
     }
 
@@ -89,6 +84,18 @@ public class MapManager : MonoBehaviour
 
         go = GameObject.Find("MapTool");
         underGrid = go.GetComponent<HexaGrid>();
+        
+        return true;
+    }
+
+    private bool OnAwake()
+    {
+        underGrid.OnAwake();
+        pathFinder.OnAwake();
+        mapMaker.OnAwake(mapSize);
+        ResourceFactory.OnAwake(mapSize);
+        RoomFactory.OnAwake();
+
         return true;
     }
     #endregion
@@ -97,6 +104,7 @@ public class MapManager : MonoBehaviour
     private void Start()
     {
         mapManager = GetComponent<MapManager>();
+        positionCalc = new();
         if (!SetGrid())
         {
             Debug.Log("Error : Grid Missing");
@@ -109,6 +117,11 @@ public class MapManager : MonoBehaviour
         {
             Debug.Log("Error : Tool Missing");
         }
+        if (!OnAwake())
+        {
+            Debug.Log("Error : Awake Missing");
+        }
+        MapMaker.MapMaking();
     }
     #endregion
 }
