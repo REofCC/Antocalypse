@@ -32,7 +32,7 @@ public class ResearchPanelUI : MonoBehaviour, ISrollViewControl
 
     void ExitButtonClick()
     {
-        GetComponent<SlidePopup>().ClosePopup();
+        GetComponentInParent<SlidePopup>().ClosePopup();
     }
 
     public IEnumerator SlideScrollBar(bool _isQueenAnt)
