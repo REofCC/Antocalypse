@@ -23,7 +23,7 @@ public class TaskManager
         entity = FindEntity(TaskType.None);
         if (entity != null)
         {
-            entity.GetComponent<Worker>().GetTask(nodePos, TaskType.Gather);
+            //entity.GetComponent<Worker>().GetTask(nodePos, TaskType.Gather);
         }
         else
         {
@@ -77,9 +77,9 @@ public class TaskManager
         return entity;
     }
 
-    public void AssignTask(TaskType task, GameObject node)
+    public void AssignTask(TaskType task, HexaMapNode target)
     {
-        nodePos = node.transform.position;
+        nodePos = target.GetWorldPos();
         entity = FindEntity(TaskType.None);
 
         if (!entity)
@@ -87,15 +87,16 @@ public class TaskManager
             Debug.Log("There's No Idle Entity");
             return;
         }
-        
-        switch(task)
+        HexaMapNode start = MapManager.Map.UnderGrid.GetNode(entity.transform.position);
+        List<Vector3> path = MapManager.Map.PathFinder.PathFinding(start, target);
+        switch (task)
         {
             case TaskType.Gather:
-                node.GetComponent<ResourceNode>().ChangeCurrentWorker(1);
-                entity.GetComponent<Worker>().GetTask(nodePos, task);
+                //target.GetComponent<ResourceNode>().ChangeCurrentWorker(1);
+                entity.GetComponent<Worker>().GetTask(path, task);
                 break;
             case TaskType.Build:
-                entity.GetComponent<Worker>().GetTask(nodePos, task);
+                entity.GetComponent<Worker>().GetTask(path, task);
                 break;
         }
         

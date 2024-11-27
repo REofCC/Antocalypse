@@ -105,9 +105,11 @@ public class ActiveManager : MonoBehaviour
         }
         else
         {
-            MapManager.Map.UnderGrid.SwapNode(gridPos.x, gridPos.y, "Path", true);
+            node.SetIsWorked(false); //When Complete Work Must be false;
+            // ������ - TaskManager ���� �׽�Ʈ
+            Managers.Task.AssignTask(TaskType.Build, node);
         }
-        node.SetIsWorked(false); //When Complete Work Must be false;
+        //MapManager.Map.UnderGrid.SwapNode(gridPos.x, gridPos.y, "Path", true);
     }
     /*
     public void MakeRoom()

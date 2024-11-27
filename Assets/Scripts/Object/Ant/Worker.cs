@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Worker : MonoBehaviour
@@ -19,6 +20,8 @@ public class Worker : MonoBehaviour
     State state;
     //State nextState;
     Vector2 targetPos;
+    List<Vector3> path;
+    int pathIndex;
 
     public float buildTime = 2f;    //임시 건설시간
     // ToDo : 건설 명령 받을 때 건설시간 받아야 함
@@ -90,7 +93,14 @@ public class Worker : MonoBehaviour
         {
             //Debug.Log("Move Finish");
             //ChangeState(State.Idle);
-            return BTNodeState.Success;
+            if (pathIndex == 0) // 경로 마지막일 때
+                return BTNodeState.Success;
+            else
+            {
+                pathIndex--;
+                targetPos = path[pathIndex];
+                return BTNodeState.Running;
+            }
         }
         transform.position = Vector2.MoveTowards(transform.position, targetPos, entityData.speed * Time.deltaTime);
         return BTNodeState.Running;
@@ -234,28 +244,30 @@ public class Worker : MonoBehaviour
     //            break;
     //    }
     //}
-    public void GetTask(Vector2 target, TaskType type)
+    public void GetTask(List<Vector3> path, TaskType type)
     {
         Debug.Log("Task Confirmed");
+        this.path = path;
+        pathIndex = path.Count - 1;
+        targetPos = path[pathIndex];
+
         switch (type)
         {
             case TaskType.None:
-                targetPos = target;
                 currentTask = type;
                 //nextState = State.Idle;
                 break;
             case TaskType.Gather:
-                nodePos = target;
                 currentTask = type;
                 //nextState = State.Gather;
                 break;
             case TaskType.Build:
-                targetPos = target;
                 currentTask = type;
                 //nextState = State.Build;
                 break;
         }
     }
+    
     //void Idle()
     //{
     //    // 유휴 행동
@@ -322,6 +334,7 @@ public class Worker : MonoBehaviour
     {
         yield return new WaitForSeconds(buildTime);
         Debug.Log("Build Finish");
+        // 작업 완료 전달?
         currentTask = TaskType.None;
     }
 }

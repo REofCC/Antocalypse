@@ -43,7 +43,7 @@ public class ResourceNode : MonoBehaviour
             Debug.Log("Too Many Workers");
             return;
         }
-        GameManager.Task.AssignTask(TaskType.Gather, gameObject);
+        //GameManager.Task.AssignTask(TaskType.Gather, gameObject);
     }
     public void DismissGather()
     {
