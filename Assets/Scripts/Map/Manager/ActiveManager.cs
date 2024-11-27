@@ -33,7 +33,7 @@ public class ActiveManager : MonoBehaviour
         Debug.Log(mouseWorldPos);
 
         Vector2Int gridPos = MapManager.Map.PositionCalc.CalcGridPos(mouseWorldPos);
-        return MapManager.Map.UpGrid.GetNode(mouseWorldPos);
+        return MapManager.Map.UnderGrid.GetNode(mouseWorldPos);
     }
     private void ClickBuilding()
     {
@@ -103,7 +103,7 @@ public class ActiveManager : MonoBehaviour
     }
     public void PathFind()
     {
-        HexaMapNode start = MapManager.Map.UpGrid.GetNode(15,15);
+        HexaMapNode start = MapManager.Map.UnderGrid.GetNode(15,15);
         List<Vector3> route = MapManager.Map.PathFinder.PathFinding(start, GetCurrentNode());
         Debug.Log(route);
     }
