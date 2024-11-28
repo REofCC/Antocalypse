@@ -81,7 +81,7 @@ public class ActiveManager : MonoBehaviour
             Debug.Log("current node is null");
             return;
         }
-        MapManager.Map.BuildingFactory.Build((RoomNode)node, "BaseBuilding");
+        MapManager.Map.BuildingFactory.Build((RoomNode)node, "BaseBuilding", 1.0f);
     }
     public void UpgradeBuilding()
     {

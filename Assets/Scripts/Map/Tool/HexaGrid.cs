@@ -295,7 +295,7 @@ public class HexaGrid : MonoBehaviour
     }
     #endregion
     #region TileSwap
-    public void SwapNode(int x, int y, string tile, bool is_pass)
+    public HexaMapNode SwapNode(int x, int y, string tile, bool is_pass)
     {
         HexaMapNode prevNode = GetNode(x, y);
         HexaMapNode node = tileFactory.GetNode(tile);
@@ -309,6 +309,7 @@ public class HexaGrid : MonoBehaviour
             door.SetConnect(CheckDoorConnect(node));
         }
         */
+        return node;
     }
     #endregion
     #endregion

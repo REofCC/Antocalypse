@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -62,17 +63,25 @@ public class BuildingFactory : MonoBehaviour
         node.SetBuilding(building.GetComponent<BaseBuilding>());
 
     }
-    public bool Build(RoomNode node, string buildingName)
+    public bool BuildStart(RoomNode node, string buildingName)
     {
         if (!CheckBuilding(node, buildingName))
             return false;
         if (!UseBuildResource(buildingName))
             return false;
+        return true;
+    }
+    private bool BuildEnd(RoomNode node, string buildingName)
+    {
         GameObject building = InstantiateBuilding(buildingName);
         if (building == null)
             return false;
         SetBuildingPosition(building, node);
         return true;
+    }
+    public void Build(RoomNode node, string buildingName, float time)
+    {
+        StartCoroutine(BuildingCoroutine(node, buildingName, time));
     }
     public bool Upgrade(BaseBuilding building)
     {
@@ -99,5 +108,17 @@ public class BuildingFactory : MonoBehaviour
         return true;
     }
     #endregion
+    #endregion
+    #region Coroutine Time
+    IEnumerator BuildingCoroutine(RoomNode node, string buildingName, float time)
+    {
+        if(!BuildStart(node, buildingName))
+        {
+            yield break;
+        }
+        yield return new WaitForSeconds(time);
+        BuildEnd(node, buildingName);
+        yield break;
+    }
     #endregion
 }
