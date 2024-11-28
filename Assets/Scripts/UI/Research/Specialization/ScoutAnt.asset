@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2205705d26f7004bba06b78983dc131, type: 3}
-  m_Name: Specialization
+  m_Name: ScoutAnt
   m_EditorClassIdentifier: 
-  specializationName: Heezunal 1
-  Description: Heezunal 111
+  antType: Scout Ant
+  specializationName: Exploration
+  description: Enhances exploration speed and loot discovery on the surface.
   isAdopted: 0

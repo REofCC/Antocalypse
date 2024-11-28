@@ -10,8 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2205705d26f7004bba06b78983dc131, type: 3}
-  m_Name: Specialization 2
+  m_Name: WorkerAnt
   m_EditorClassIdentifier: 
-  specializationName: Heezunal 3
-  Description: Heezunal 33333
+  antType: Worker Ant
+  specializationName: Underground Resource Development
+  description: Increases underground resource collection and activates new resource
+    nodes.
   isAdopted: 0
