@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.Recorder.AOV;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,8 @@ public class SpecializationPanelUI : MonoBehaviour
     [SerializeField] ResearchSelectUI researchSelectUI;
     [SerializeField] List<Button> typeButtons = new List<Button>();
     [SerializeField] List<Specialization> specializations = new List<Specialization>();
+    [SerializeField] TMP_Text antType;
+    [SerializeField] TMP_Text specializationName;
     [SerializeField] TMP_Text description;
     [SerializeField] Button progressButton;
     [SerializeField] Button exitButton;
@@ -27,13 +30,17 @@ public class SpecializationPanelUI : MonoBehaviour
 
     void Redraw()
     {
+        antType.text = "";
+        specializationName.text = "";
         description.text = "";
         progressButton.gameObject.SetActive(false);
     }
 
     void OnClickTypeButton(int typeNum)
     {
-        description.text = specializations[typeNum].GetDescription();
+        antType.text = specializations[typeNum].AntType;
+        specializationName.text = specializations[typeNum].SpecializationName;
+        description.text = specializations[typeNum].Description;
         progressButton.gameObject.SetActive(true);
     }
 
