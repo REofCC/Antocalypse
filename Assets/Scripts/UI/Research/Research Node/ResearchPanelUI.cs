@@ -9,7 +9,9 @@ public class ResearchPanelUI : MonoBehaviour, ISrollViewControl
     [SerializeField] Button queenAntPanelButton;
     [SerializeField] Button specializePanelButton;
     [SerializeField] Button exitButton;
-    [SerializeField] Scrollbar scrollbar;
+    [SerializeField] Scrollbar researchScrollbar;
+    [SerializeField] Scrollbar informationScrollbar;
+
     Coroutine currentCoroutine;
     float scrollSpeed = 10f;
     
@@ -43,21 +45,25 @@ public class ResearchPanelUI : MonoBehaviour, ISrollViewControl
 
             if (_isQueenAnt)
             {
-                scrollbar.value = Mathf.Lerp(scrollbar.value, 0f, Time.unscaledDeltaTime * scrollSpeed);
+                researchScrollbar.value = Mathf.Lerp(researchScrollbar.value, 0f, Time.unscaledDeltaTime * scrollSpeed);
+                informationScrollbar.value = Mathf.Lerp(informationScrollbar.value, 0f, Time.unscaledDeltaTime * scrollSpeed);
 
-                if (Mathf.Approximately(scrollbar.value, 0f))
+                if (Mathf.Approximately(researchScrollbar.value, 0f) && Mathf.Approximately(informationScrollbar.value, 0f))
                 {
-                    scrollbar.value = 0f;
+                    researchScrollbar.value = 0f;
+                    informationScrollbar.value = 0f;
                     yield break;
                 }
             }
             else
             {
-                scrollbar.value = Mathf.Lerp(scrollbar.value, 1f, Time.unscaledDeltaTime * 10f);
+                researchScrollbar.value = Mathf.Lerp(researchScrollbar.value, 1f, Time.unscaledDeltaTime * scrollSpeed);
+                informationScrollbar.value = Mathf.Lerp(informationScrollbar.value, 1f, Time.unscaledDeltaTime * scrollSpeed);
 
-                if (Mathf.Approximately(scrollbar.value, 1f))
+                if (Mathf.Approximately(researchScrollbar.value, 1f) && Mathf.Approximately(informationScrollbar.value, 1f))
                 {
-                    scrollbar.value = 1f;
+                    researchScrollbar.value = 1f;
+                    informationScrollbar.value = 1f;
                     yield break;
                 }
             }
