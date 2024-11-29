@@ -45,10 +45,16 @@ public class SpecializationPanelUI : MonoBehaviour
     }
 
     void OnClickProgressButton()
-    {        
-        researchSelectUI.SpecializationCompleted();
+    {
         //[TODO:LSH]SpecializationManager.Instance.AdoptSpecialization(specializations[typeNum]);
         GetComponentInParent<SlidePopup>().ClosePopup();
+        StartCoroutine(WaitForPopupClose());
+    }
+
+    IEnumerator WaitForPopupClose()
+    {
+        yield return new WaitUntil(() => !GetComponentInParent<SlidePopup>().IsPopupOpen());
+        researchSelectUI.SpecializationCompleted();
     }
 
     void ExitButtonClick()
