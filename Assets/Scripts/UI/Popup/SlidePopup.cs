@@ -5,12 +5,12 @@ using DG.Tweening;
 using UnityEngine.UI;
 using static UIEnums;
 
-public class SlidePopup  : MonoBehaviour
+public class SlidePopup : MonoBehaviour
 {
     [SerializeField] SlideDirection slideDirection;
     [SerializeField] Ease easeType = Ease.OutQuad;
     [SerializeField] PanelPopupManager popupManager;
-    [SerializeField] RectTransform popupPanel;    
+    [SerializeField] RectTransform popupPanel;
     [SerializeField] float slideDuration = 0.5f;
     bool isPopupOpen = false;
     [SerializeField] List<Button> buttons = new List<Button>();
@@ -50,13 +50,12 @@ public class SlidePopup  : MonoBehaviour
 
     public void TogglePopup()
     {
-        popupManager.TogglePopup(this);    
+        popupManager.TogglePopup(this);
     }
-
 
     public void OpenPopup()
     {
-        if(isPopupOpen)
+        if (isPopupOpen)
         {
             return;
         }
@@ -72,18 +71,19 @@ public class SlidePopup  : MonoBehaviour
     }
 
     public void ClosePopup()
-    {      
-        if(!isPopupOpen)
+    {
+        if (!isPopupOpen)
         {
             return;
         }
-        
+
         SetButtonsInteractable(false);
 
-        popupPanel.DOAnchorPos(hiddenPosition, slideDuration).SetEase(easeType).SetUpdate(true);
-        isPopupOpen = false;
-
-        popupManager.PopupClosed(this);
+        popupPanel.DOAnchorPos(hiddenPosition, slideDuration).SetEase(easeType).OnComplete(() =>
+        {
+            isPopupOpen = false;
+            popupManager.PopupClosed(this);
+        }).SetUpdate(true);
     }
 
     public bool IsPopupOpen()

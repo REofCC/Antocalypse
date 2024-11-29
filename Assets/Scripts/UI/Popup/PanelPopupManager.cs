@@ -2,9 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum CloseType
+{
+    IMMEDIATELY,
+    AFTER_ANIMATION,
+}
 public class PanelPopupManager : MonoBehaviour
-{    
-    SlidePopup currentPopup;   
+{
+    SlidePopup currentPopup;
+    [SerializeField] CloseType closeType = CloseType.IMMEDIATELY;
 
     public void TogglePopup(SlidePopup newPopup)
     {
@@ -15,14 +21,33 @@ public class PanelPopupManager : MonoBehaviour
             return;
         }
 
-        if(currentPopup != null && currentPopup != newPopup)
+        if (currentPopup != null && currentPopup != newPopup)
         {
-            currentPopup.ClosePopup();
+            if (closeType == CloseType.IMMEDIATELY)
+            {
+                currentPopup.ClosePopup();
+                currentPopup = newPopup;
+                newPopup.OpenPopup();
+            }
+            else if (closeType == CloseType.AFTER_ANIMATION)
+            {
+                StartCoroutine(CloseAndOpenPopup(currentPopup, newPopup));
+            }
         }
+        else
+        {
+            currentPopup = newPopup;
+            newPopup.OpenPopup();
+        }
+    }
 
-        currentPopup = newPopup;
-        newPopup.OpenPopup();
-    }    
+    private IEnumerator CloseAndOpenPopup(SlidePopup closePopup, SlidePopup openPopup)
+    {
+        closePopup.ClosePopup();        
+        yield return new WaitUntil(() => !closePopup.IsPopupOpen());
+        currentPopup = openPopup;
+        openPopup.OpenPopup();
+    }
 
     public void ClosePopup(SlidePopup closePopup)
     {
