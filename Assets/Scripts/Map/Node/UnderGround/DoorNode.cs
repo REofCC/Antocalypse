@@ -22,5 +22,12 @@ public class DoorNode : HexaMapNode
     #endregion
 
     #region Function
+    public override void Start()
+    {
+        SetBreakable(false);
+        SetBuildable(false);
+        SetWalkable(true);
+        SetTileType(TileType.DoorNode);
+    }
     #endregion
 }

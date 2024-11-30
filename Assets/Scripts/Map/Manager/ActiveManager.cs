@@ -50,7 +50,7 @@ public class ActiveManager : MonoBehaviour
     }
     public void BreakTile()
     {
-        if (node == null || !MapManager.Map.UpGrid.IsBreakable(node)) return;
+        if (node == null || !MapManager.Map.UnderGrid.IsBreakable(node)) return;
 
         Vector2Int gridPos = node.GetGridPos();
         MapManager.Map.UnderGrid.SwapNode(gridPos.x, gridPos.y, "Path", true);
@@ -81,7 +81,7 @@ public class ActiveManager : MonoBehaviour
             Debug.Log("current node is null");
             return;
         }
-        MapManager.Map.BuildingFactory.Build((RoomNode)node, "BaseBuilding");
+        MapManager.Map.BuildingFactory.Build((RoomNode)node, "BaseBuilding", 1.0f);
     }
     public void UpgradeBuilding()
     {
@@ -105,6 +105,13 @@ public class ActiveManager : MonoBehaviour
     {
         HexaMapNode start = MapManager.Map.UnderGrid.GetNode(15,15);
         List<Vector3> route = MapManager.Map.PathFinder.PathFinding(start, GetCurrentNode());
+        Debug.Log(route);
+    }
+
+    public void PathFindWall()
+    {
+        HexaMapNode start = MapManager.Map.UnderGrid.GetNode(15, 15);
+        List<Vector3> route = MapManager.Map.PathFinder.ReachWallPathFinding(start, GetCurrentNode());
         Debug.Log(route);
     }
 

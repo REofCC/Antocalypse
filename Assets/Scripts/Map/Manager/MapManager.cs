@@ -17,7 +17,7 @@ public class MapManager : MonoBehaviour
     Tilemap undermap;
 
     //ground map
-    HexaGrid upGrid; 
+    HexaGrid upGrid;
     Tilemap upmap;
 
     MapMaker mapMaker;
@@ -81,10 +81,10 @@ public class MapManager : MonoBehaviour
     {
         GameObject go = GameObject.Find("Grid");
         undermap = go.transform.GetChild(0).GetComponent<Tilemap>();
-
+        upmap = go.transform.GetChild(1).GetComponent<Tilemap>();
         go = GameObject.Find("MapTool");
         underGrid = go.GetComponent<HexaGrid>();
-        
+
         return true;
     }
 

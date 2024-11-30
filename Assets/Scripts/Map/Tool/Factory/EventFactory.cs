@@ -19,10 +19,10 @@ public class EventFactory : MonoBehaviour
 
     private GameObject GenerateEventObject(EventData eventData)
     {
-        GameObject obj = Resources.Load<GameObject>($"Prefabs/Enemy/{eventData.EventName}");
+        GameObject obj = Resources.Load<GameObject>($"Prefabs/Event/{eventData.EventName}");
         if (obj == null)
         {
-            Debug.Log($"Error : Prefabs/Enemy/{eventData.EventName} is not exist");
+            Debug.Log($"Error : Prefabs/Event/{eventData.EventName} is not exist");
             return null;
         }
         return Instantiate(obj, eventObjects.transform);
