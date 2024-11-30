@@ -13,6 +13,7 @@ public class HexaPathFinder : MonoBehaviour
     List<HexaMapNode> candidates = new();
     List<HexaMapNode> finished = new();
     #endregion
+    
     #region  Setter & Getter
     public void SetStartNode( HexaMapNode start)
     {
@@ -70,7 +71,7 @@ public class HexaPathFinder : MonoBehaviour
         candidates.Remove(current);
         finished.Add(current);
         candidates.Sort(SortHcost);
-        if (candidates.Count > 0)
+        if (candidates.Count <= 0)
         {
             Debug.Log("Error : Cant Find Path");
             current = null;
@@ -98,10 +99,26 @@ public class HexaPathFinder : MonoBehaviour
         routes.Add(grid.GetCellPosCalc().CalcWorldPos(idx));
         while(idx != start)
         {
+            Debug.Log(idx.GetCellPos());
             idx = idx.GetParent();
             routes.Add(grid.GetCellPosCalc().CalcWorldPos(idx));
         }
         return routes;
+    }
+    private bool CheckEnd()
+    {
+        Vector2Int pos = current.GetGridPos();
+        List<HexaMapNode> nodes = grid.GetNeighborNode(pos.x, pos.y);
+        for(int i =  0; i < nodes.Count; i++)
+        {
+            if (nodes[i] == end)
+            {
+                end = current;
+                return true;
+            }
+                
+        }
+        return false;
     }
     public List<Vector3> PathFinding(HexaMapNode start, HexaMapNode end)
     {
@@ -123,6 +140,30 @@ public class HexaPathFinder : MonoBehaviour
         List<Vector3> routes =  GetRoute();
         ResetCost();
         return routes;
+    }
+
+    public List<Vector3> ReachWallPathFinding(HexaMapNode start, HexaMapNode end)
+    {
+        ClearList();
+        SetStartNode(start);
+        SetEndNode(end);
+        current = start;
+        while (true)
+        {
+            if (CheckEnd())
+            {
+                List<Vector3> routes = GetRoute();
+                ResetCost();
+                return routes;
+            }
+            GetCandidateNode(current);
+            SelectNextNode();
+            
+            if (current == null)
+            {
+                return null;
+            }
+        }
     }
     #endregion
 

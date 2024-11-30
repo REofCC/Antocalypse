@@ -11,7 +11,6 @@ public class MapMaker : MonoBehaviour
     RoomFactory roomFactory;
     HexaGrid grid;
     int mapSize;
-    bool is_door_created = false;
     #endregion
 
     #region Getter & Setter
