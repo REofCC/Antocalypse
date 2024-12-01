@@ -30,6 +30,8 @@ public class Managers : MonoBehaviour
 
     private void Start()
     {
+        // 권희준 - task 초기화
+        _task.Init();
         manager = GetComponent<Managers>();
         DontDestroyOnLoad(manager);
 

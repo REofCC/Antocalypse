@@ -1,6 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using System.Linq;
 using UnityEngine;
 
 public class TaskManager
@@ -10,9 +9,13 @@ public class TaskManager
     GameObject entity;
     Vector2 nodePos;
     LayerMask antLayer;
-    public void OnStart()
+
+    float scanRange;
+    public void Init()
     {
-        antLayer = LayerMask.GetMask("Ant");
+        scanRange = 100f;
+        antLayer = 1 << LayerMask.NameToLayer("Ant");
+
         workers.AddRange(GameObject.FindGameObjectsWithTag("Worker"));
         //resourceNode.AddRange(GameObject.FindGameObjectsWithTag("resourceNode"));
     }
@@ -30,12 +33,18 @@ public class TaskManager
             Debug.Log("No Entity to Order");
         }
     }
-
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(nodePos, scanRange);
+    }
     public GameObject FindEntity(TaskType task)
     {
         GameObject entity = null;
+         
+        var hits = Physics2D.CircleCastAll(nodePos, scanRange, Vector2.zero, Mathf.Infinity, antLayer);
 
-        foreach (var hit in Physics2D.CircleCastAll(nodePos, Mathf.Infinity, Vector2.zero,Mathf.Infinity, antLayer))
+        foreach (var hit in hits.OrderBy(distance => Vector2.Distance(nodePos, distance.point)))
         {
             if ((hit.collider.GetComponent<Worker>().GetCurrentTask() == task))
             {
@@ -47,7 +56,7 @@ public class TaskManager
         
         if (entity == null)
         {
-            Debug.Log("Can't Find");
+            Debug.Log("Can't Find"); 
         }
 
         return entity;
@@ -88,7 +97,9 @@ public class TaskManager
             return;
         }
         HexaMapNode start = MapManager.Map.UnderGrid.GetNode(entity.transform.position);
-        List<Vector3> path = MapManager.Map.PathFinder.PathFinding(start, target);
+        //List<Vector3> path = MapManager.Map.PathFinder.PathFinding(start, target);
+        List<Vector3> path = MapManager.Map.PathFinder.ReachWallPathFinding(start, target); //대상이 벽일 경우ㄴ 이전 노드까지 탐색
+         
         switch (task)
         {
             case TaskType.Gather:

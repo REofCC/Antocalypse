@@ -777,13 +777,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7473223932364833404, guid: 4342469bd7a2c764c98603e81424c4af, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 7722046487432534800, guid: 4342469bd7a2c764c98603e81424c4af, type: 3}
       propertyPath: m_Name
       value: Worker (2)
       objectReference: {fileID: 0}
     - target: {fileID: 7722046487432534800, guid: 4342469bd7a2c764c98603e81424c4af, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -900,13 +904,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7473223932364833404, guid: 4342469bd7a2c764c98603e81424c4af, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 7722046487432534800, guid: 4342469bd7a2c764c98603e81424c4af, type: 3}
       propertyPath: m_Name
       value: Worker (1)
       objectReference: {fileID: 0}
     - target: {fileID: 7722046487432534800, guid: 4342469bd7a2c764c98603e81424c4af, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1876,13 +1884,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7473223932364833404, guid: 4342469bd7a2c764c98603e81424c4af, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 7722046487432534800, guid: 4342469bd7a2c764c98603e81424c4af, type: 3}
       propertyPath: m_Name
       value: Worker
       objectReference: {fileID: 0}
     - target: {fileID: 7722046487432534800, guid: 4342469bd7a2c764c98603e81424c4af, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
