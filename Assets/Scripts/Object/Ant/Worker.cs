@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Worker : MonoBehaviour
 {
@@ -20,6 +22,8 @@ public class Worker : MonoBehaviour
     State state;
     //State nextState;
     Vector2 targetPos;
+    Vector2Int targetGridPos;
+    HexaMapNode targetNode;
     List<Vector3> path;
     int pathIndex;
 
@@ -244,12 +248,13 @@ public class Worker : MonoBehaviour
     //            break;
     //    }
     //}
-    public void GetTask(List<Vector3> path, TaskType type)
+    public void GetTask(HexaMapNode targetNode, List<Vector3> path, TaskType type)
     {
         Debug.Log("Task Confirmed");
         this.path = path;
         pathIndex = path.Count - 1;
         targetPos = path[pathIndex];
+        targetGridPos = targetNode.GetGridPos();
 
         switch (type)
         {
@@ -335,6 +340,8 @@ public class Worker : MonoBehaviour
         yield return new WaitForSeconds(buildTime);
         Debug.Log("Build Finish");
         // 작업 완료 전달?
+        MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "Path", true);
+        ChangeState(State.Idle);
         currentTask = TaskType.None;
     }
 }

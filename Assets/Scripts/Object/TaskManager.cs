@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class TaskManager
@@ -86,9 +87,8 @@ public class TaskManager
         return entity;
     }
 
-    public void AssignTask(TaskType task, HexaMapNode target)
+    public void AssignTask(TaskType task, HexaMapNode targetNode)
     {
-        nodePos = target.GetWorldPos();
         entity = FindEntity(TaskType.None);
 
         if (!entity)
@@ -96,18 +96,22 @@ public class TaskManager
             Debug.Log("There's No Idle Entity");
             return;
         }
+
+        nodePos = targetNode.GetWorldPos();
+        Vector2Int gridPos = targetNode.GetGridPos();
+
         HexaMapNode start = MapManager.Map.UnderGrid.GetNode(entity.transform.position);
-        //List<Vector3> path = MapManager.Map.PathFinder.PathFinding(start, target);
-        List<Vector3> path = MapManager.Map.PathFinder.ReachWallPathFinding(start, target); //대상이 벽일 경우ㄴ 이전 노드까지 탐색
+        //List<Vector3> path = MapManager.Map.PathFinder.PathFinding(start, targetNode);
+        List<Vector3> path = MapManager.Map.PathFinder.ReachWallPathFinding(start, targetNode); //대상이 벽일 경우 이전 노드까지 탐색
          
         switch (task)
         {
             case TaskType.Gather:
                 //target.GetComponent<ResourceNode>().ChangeCurrentWorker(1);
-                entity.GetComponent<Worker>().GetTask(path, task);
+                entity.GetComponent<Worker>().GetTask(targetNode, path, task);
                 break;
             case TaskType.Build:
-                entity.GetComponent<Worker>().GetTask(path, task);
+                entity.GetComponent<Worker>().GetTask(targetNode, path, task);
                 break;
         }
         
