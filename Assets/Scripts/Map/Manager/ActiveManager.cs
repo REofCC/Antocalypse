@@ -50,7 +50,7 @@ public class ActiveManager : MonoBehaviour
     }
     public void BreakTile()
     {
-        if (node == null || !MapManager.Map.UnderGrid.IsBreakable(node)) return;
+        if (node == null || !node.GetBreakable()) return;
 
         Vector2Int gridPos = node.GetGridPos();
         MapManager.Map.UnderGrid.SwapNode(gridPos.x, gridPos.y, "Path", true);
