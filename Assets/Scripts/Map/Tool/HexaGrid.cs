@@ -276,12 +276,10 @@ public class HexaGrid : MonoBehaviour
         node.SetNodePosition(prevNode);
         SetNode(x, y, node);
         tilemap.SetTile(node.GetCellPos(), tileFactory.GetTile(((int)node.GetTileType())));
-        /*
         if (is_pass && !door.IsConnected())
         {
             door.SetConnect(CheckDoorConnect(node));
         }
-        */
         return node;
     }
     #endregion

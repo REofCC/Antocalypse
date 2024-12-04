@@ -107,17 +107,24 @@ public class ActiveManager : MonoBehaviour
         List<Vector3> route = MapManager.Map.PathFinder.PathFinding(start, GetCurrentNode());
         Debug.Log(route);
     }
-
     public void PathFindWall()
     {
         HexaMapNode start = MapManager.Map.UnderGrid.GetNode(15, 15);
         List<Vector3> route = MapManager.Map.PathFinder.ReachWallPathFinding(start, GetCurrentNode());
         Debug.Log(route);
     }
-
     public void MakeMap()
     {
         MapManager.Map.MapMaker.MapMaking();
+    }
+    public HexaMapNode GetRandomWalkableNode(HexaMapNode node)
+    {
+        Vector2Int pos = node.GetGridPos();
+        List<HexaMapNode> list = MapManager.Map.UnderGrid.GetNeighborWalkableNode(pos.x, pos.y);
+
+        int idx = Random.Range(0, list.Count);
+
+        return list[idx];
     }
     #endregion
 

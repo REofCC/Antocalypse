@@ -85,8 +85,8 @@ public class MapMaker : MonoBehaviour
     public void MapMaking()
     {
         MakeBase();
-        MakeStartPos();
         MakeDoorNode();
+        MakeStartPos();
         MakeResource();
     }
     #endregion
