@@ -163,33 +163,6 @@ public class HexaGrid : MonoBehaviour
         }
         return false;
     }
-    public bool IsBreakable(HexaMapNode node)
-    {
-        int cnt = 0;
-        if (!node.GetBreakable())
-        {
-            return false;
-        }
-        List<HexaMapNode> list = GetNeighborNode(node.GetCellPos().x, node.GetCellPos().y, 1);
-        for (int i = 0; i < list.Count; i++)
-        {
-            if (list[i].GetTileType() == TileType.Path)
-            {
-                cnt++;
-                if (cnt == 2)
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                cnt = 0;
-            }
-        }
-        if (cnt == 1 || list[0].GetTileType() == TileType.Path)
-            return false;
-        return true;
-    }
     private bool CheckDoorConnect(HexaMapNode node)
     {
         Vector2Int gridPos = node.GetGridPos();

@@ -96,8 +96,6 @@ public class ResourceFactory : MonoBehaviour
     {
         resource.SetResourceData(data);
         node.SetBuildable(data.Buildable);
-        node.SetBreakable(false);
-        node.SetWalkable(false);
     }
     public void MakeResource(HexaMapNode node, float distance, float cellSize)
     {
