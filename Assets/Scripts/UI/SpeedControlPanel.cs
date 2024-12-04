@@ -8,6 +8,7 @@ public class SpeedControlPanel : MonoBehaviour
     [SerializeField] Button pauseButton;
     [SerializeField] Button playButton;
     [SerializeField] Button fastForwardButton;
+    [SerializeField] Image pauseImage;
 
     private void Start()
     {
@@ -19,5 +20,13 @@ public class SpeedControlPanel : MonoBehaviour
     void SetGameSpeed(float speed)
     {
         Time.timeScale = speed;
+        if (speed == 0)
+        {
+            pauseImage.gameObject.SetActive(true);
+        }
+        else
+        {
+            pauseImage.gameObject.SetActive(false);
+        }
     }
 }
