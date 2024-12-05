@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class UnderGroundNodeFactory : MonoBehaviour
+public class NodeFactory : MonoBehaviour
 {
     #region Attribute
     readonly Dictionary<string, Func<HexaMapNode>> nodeDict = new()
@@ -13,6 +14,7 @@ public class UnderGroundNodeFactory : MonoBehaviour
         { "RoomCenter", ()=>new RoomCenter() },
         { "RoomNode", ()=>new RoomNode() },
         {"DoorNode", ()=>new DoorNode() },
+        { "TravelNode", ()=>new TravelNode()}
     };
     [SerializeField]
     List<TileBase> tileDict = new();

@@ -1157,7 +1157,6 @@ GameObject:
   - component: {fileID: 1081953945}
   - component: {fileID: 1081953944}
   - component: {fileID: 1081953943}
-  - component: {fileID: 1081953942}
   m_Layer: 0
   m_Name: GroundTool
   m_TagString: Untagged
@@ -1165,18 +1164,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1081953942
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1081953941}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6b56e70422daac428790114cb0fb0e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1081953943
 MonoBehaviour:
   m_ObjectHideFlags: 0
