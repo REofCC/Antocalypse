@@ -15,6 +15,14 @@ public class BlackMask : MonoBehaviour
     #endregion
 
     #region Getter
+    public bool CheckMask(Vector3Int pos)
+    {
+        if (tilemap.GetTile(pos)!= null)
+        {
+            return false;
+        }
+        return true;
+    }
     #endregion
 
     #region Function
