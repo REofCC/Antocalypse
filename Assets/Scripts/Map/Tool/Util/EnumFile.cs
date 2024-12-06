@@ -32,6 +32,7 @@ public enum Resourcetype
 
 public enum EventType 
 {
+    Question,
     Battle,
     Resource,
 

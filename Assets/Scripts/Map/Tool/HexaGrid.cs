@@ -9,7 +9,7 @@ public class HexaGrid : MonoBehaviour
     CellPositionCalc cellPositionCalc;
     [SerializeField]
     Tilemap tilemap;
-    UnderGroundNodeFactory tileFactory;
+    NodeFactory tileFactory;
 
     HexaMapNode[,] hexgrid;
 
@@ -188,11 +188,12 @@ public class HexaGrid : MonoBehaviour
         CalcMapSize();
         hexgrid = new HexaMapNode[GetMapSizeX(), GetMapSizeY()];
         Vector2Int offset = cellPositionCalc.GetOffset();
+        int z = tilemap.cellBounds.zMax-1;
         for (int x = tilemap.cellBounds.xMin; x <= tilemap.cellBounds.xMax; x++)
         {
             for (int y = tilemap.cellBounds.yMin; y <= tilemap.cellBounds.yMax; y++)
             {
-                Vector3Int pos = new(x, y, 0);
+                Vector3Int pos = new(x, y, z);
                 if (tilemap.GetTile(pos) != null)
                 {
                     string name = tilemap.GetTile(pos).name;
@@ -285,13 +286,13 @@ public class HexaGrid : MonoBehaviour
     #endregion
     #endregion
     #region Unity Function
-    public void OnAwake()
+    public void OnAwake(Tilemap tilemap, CellPositionCalc calc)
     {
         SetDirection();
-        cellPositionCalc = MapManager.Map.PositionCalc;
+        cellPositionCalc = calc;
 
-        tileFactory = MapManager.Map.UnderNodeFactory;
-        tilemap = MapManager.Map.UnderTileMap;
+        tileFactory = MapManager.Map.NodeFactory;
+        this.tilemap = tilemap;
     }
     #endregion
 }

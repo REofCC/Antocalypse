@@ -5,31 +5,17 @@ using UnityEngine.Tilemaps;
 public class MapMaker : MonoBehaviour
 {
     #region Attribute
-    Tilemap tilemap;
-    UnderGroundNodeFactory nodeFactory;
+    Tilemap underTilemap;
+    HexaGrid underGrid;
+
+    Tilemap upTilemap;
+    HexaGrid upGrid;
+
+    NodeFactory nodeFactory;
     ResourceFactory resourceFactory;
     RoomFactory roomFactory;
-    HexaGrid grid;
+    
     int mapSize;
-    #endregion
-
-    #region Getter & Setter
-    public Tilemap GetTileMap()
-    {
-        return tilemap;
-    }
-    public UnderGroundNodeFactory GetNodeFactory()
-    {
-        return nodeFactory;
-    }
-    public ResourceFactory GetResourceFactory()
-    {
-        return resourceFactory;
-    }
-    public HexaGrid GetGrid()
-    {
-        return grid;
-    }
     #endregion
 
     #region Function
@@ -39,46 +25,51 @@ public class MapMaker : MonoBehaviour
         {
             for (int y = 0; y < mapSize; y++)
             {
-                tilemap.SetTile(new Vector3Int(x, y, 0), nodeFactory.GetTile(0));
+                underTilemap.SetTile(new Vector3Int(x, y, 0), nodeFactory.GetTile(0));
+                upTilemap.SetTile(new Vector3Int(x,y,100), nodeFactory.GetTile(5));
             }
         }
-        grid.MakeGrid();
+        upGrid.MakeGrid();
+        underGrid.MakeGrid();
+        
     }
     private void MakeStartPos()
     {
-        HexaMapNode node = grid.GetNode(15, 15);
+        HexaMapNode node = underGrid.GetNode(15, 15);
         roomFactory.MakeRoom(node);
     }
     private void MakeDoorNode()
     {
         float distance = 0;
-        float standard = tilemap.cellSize.x * 5f;
-        float standard2 = tilemap.cellSize.x * 10f;
+        float standard = underTilemap.cellSize.x * 5f;
+        float standard2 = underTilemap.cellSize.x * 10f;
         int posx = 0;
         int posy = 0;
         do
         {
             posx = Random.Range(0, mapSize);
             posy = Random.Range(0, mapSize);
-            Vector3 StartPos = grid.GetNode(15, 15).GetWorldPos();
-            Vector3 pos = grid.GetNode(posx, posy).GetWorldPos();
+            Vector3 StartPos = underGrid.GetNode(15, 15).GetWorldPos();
+            Vector3 pos = underGrid.GetNode(posx, posy).GetWorldPos();
             distance = Vector3.Distance(StartPos, pos);
         } while (distance <= standard && distance >= standard2);
 
-        DoorNode node = (DoorNode)grid.SwapNode(posx, posy, "DoorNode", false);
-        grid.SetDoorPos(node);
+        DoorNode node = (DoorNode)underGrid.SwapNode(posx, posy, "DoorNode", false);
+        underGrid.SetDoorPos(node);
+        node = (DoorNode)upGrid.SwapNode(posx, posy, "DoorNode", false);
+        upGrid.SetDoorPos(node);
     }
     private void MakeResource()
     {
-        HexaMapNode[,] hexgrid = grid.GetGrid();
-        Vector3 startPos = grid.GetNode(15, 15).GetWorldPos();
+        HexaMapNode[,] hexgrid = underGrid.GetGrid();
+        Vector3 startPos = underGrid.GetNode(15, 15).GetWorldPos();
         for (int x = 0; x < mapSize; x++)
         {
             for (int y = 0; y < mapSize; y++)
             {
-                HexaMapNode node = grid.GetNode(x, y);
+                HexaMapNode node = underGrid.GetNode(x, y);
                 float distance = Vector3.Distance(startPos, node.GetWorldPos());
-                resourceFactory.MakeResource(node, distance, tilemap.cellSize.x);
+                resourceFactory.MakeResource(node, distance, underTilemap.cellSize.x);
             }
         }
     }
@@ -94,9 +85,13 @@ public class MapMaker : MonoBehaviour
     #region Unity Function
     public void OnAwake(int mapSize)
     {
-        tilemap = MapManager.Map.UnderTileMap;
-        grid = MapManager.Map.UnderGrid;
-        nodeFactory = MapManager.Map.UnderNodeFactory;
+        underTilemap = MapManager.Map.UnderTileMap;
+        underGrid = MapManager.Map.UnderGrid;
+
+        upTilemap = MapManager.Map.UpTileMap;
+        upGrid = MapManager.Map.UpGrid;
+
+        nodeFactory = MapManager.Map.NodeFactory;
         resourceFactory = MapManager.Map.ResourceFactory;
         roomFactory = MapManager.Map.RoomFactory;
         this.mapSize = mapSize;

@@ -9,16 +9,21 @@ public class BuildingFactory : MonoBehaviour
     [SerializeField]
     List<BuildData> buildResources = new();
     #endregion
-    #region Function
-    private BuildData GetBuildData(string buildingName)
+    #region Getter
+    public List<BuildData> GetBuildDatas() 
     {
-        BuildingType buildingType = (BuildingType)Enum.Parse(typeof(BuildingType), buildingName);
-        return buildResources[(int)buildingType];
+        return buildResources; 
+    } 
+
+    #endregion
+    #region Function
+    private BuildData GetBuildData(BuildingType type)
+    {
+        return buildResources[(int)type];
     }
     #region Resource
-    private bool UseBuildResource(string buildName, int phase = 0)
+    private bool UseBuildResource(BuildData info, int phase = 0)
     {
-        BuildData info = GetBuildData(buildName);
         int leaf = info.Leaf[phase];
         int wood = info.Wood[phase];
         ResourceManager state = Managers.Resource;
@@ -32,9 +37,8 @@ public class BuildingFactory : MonoBehaviour
     }
     #endregion
     #region Build
-    private bool CheckBuilding(RoomNode node, string buildingName)
+    private bool CheckBuilding(RoomNode node, BuildData info)
     {
-        BuildData info = GetBuildData(buildingName);
         bool buildable = false;
         for(int i = 0; i < info.Tiles.Count; i++)
         {
@@ -63,30 +67,32 @@ public class BuildingFactory : MonoBehaviour
         node.SetBuilding(building.GetComponent<BaseBuilding>());
 
     }
-    public bool BuildStart(RoomNode node, string buildingName)
+    private bool BuildStart(RoomNode node, BuildData info)
     {
-        if (!CheckBuilding(node, buildingName))
+        if (!CheckBuilding(node, info))
             return false;
-        if (!UseBuildResource(buildingName))
+        if (!UseBuildResource(info))
             return false;
         return true;
     }
-    private bool BuildEnd(RoomNode node, string buildingName)
+    private bool BuildEnd(RoomNode node, BuildData info)
     {
-        GameObject building = InstantiateBuilding(buildingName);
+        GameObject building = InstantiateBuilding(info.BuildingName);
         if (building == null)
             return false;
         SetBuildingPosition(building, node);
         return true;
     }
-    public void Build(RoomNode node, string buildingName, float time)
+    public void Build(RoomNode node, BuildingType type)
     {
-        StartCoroutine(BuildingCoroutine(node, buildingName, time));
+        BuildData info = GetBuildData(type);
+        StartCoroutine(BuildingCoroutine(node, info));
     }
     public bool Upgrade(BaseBuilding building)
     {
         int phase = building.GetBuildingLevel();
-        if(UseBuildResource(building.GetBuildingType().ToString(), phase))
+        BuildData info = GetBuildData(building.GetBuildingType());
+        if(UseBuildResource(info, phase))
         {
             building.UpgradeBuilding();
             return true;
@@ -110,14 +116,14 @@ public class BuildingFactory : MonoBehaviour
     #endregion
     #endregion
     #region Coroutine Time
-    IEnumerator BuildingCoroutine(RoomNode node, string buildingName, float time)
+    IEnumerator BuildingCoroutine(RoomNode node, BuildData info)
     {
-        if(!BuildStart(node, buildingName))
+        if(!BuildStart(node, info))
         {
             yield break;
         }
-        yield return new WaitForSeconds(time);
-        BuildEnd(node, buildingName);
+        yield return new WaitForSeconds(info.Time);
+        BuildEnd(node, info);
         yield break;
     }
     #endregion

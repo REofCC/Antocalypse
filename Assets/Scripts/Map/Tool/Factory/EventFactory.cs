@@ -42,5 +42,16 @@ public class EventFactory : MonoBehaviour
         GameObject obj = GenerateEventObject(SelectEvent());
         CombineEventNode(obj, node);
     }
+
+    public void GenerateEvent(TravelNode node, int idx)
+    {
+        if (node == null)
+        {
+            return;
+        }
+        EventData data = eventDict[idx];
+        GameObject obj = GenerateEventObject(data);
+        CombineEventNode(obj, node);
+    }
     #endregion
 }
