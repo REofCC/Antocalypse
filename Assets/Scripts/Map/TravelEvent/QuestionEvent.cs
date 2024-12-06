@@ -12,6 +12,7 @@ public class QuestionEvent : Event
 
     public override void OnComplete()
     {
+        Destroy(this.gameObject);
         return;
     }
 

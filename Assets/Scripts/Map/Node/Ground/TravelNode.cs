@@ -18,5 +18,13 @@ public class TravelNode : HexaMapNode
     {
         travelEvent = null;
     }
+
+    public override void Start()
+    {
+        SetBreakable(false);
+        SetBuildable(false);
+        SetWalkable(false);
+        SetTileType(TileType.TravelNode);
+    }
     #endregion
 }

@@ -109,13 +109,13 @@ public class ActiveManager : MonoBehaviour
     public void PathFind()
     {
         HexaMapNode start = MapManager.Map.UnderGrid.GetNode(15,15);
-        List<Vector3> route = MapManager.Map.PathFinder.PathFinding(start, GetCurrentNode());
+        List<Vector3> route = MapManager.Map.UnderPathFinder.PathFinding(start, GetCurrentNode());
         Debug.Log(route);
     }
     public void PathFindWall()
     {
         HexaMapNode start = MapManager.Map.UnderGrid.GetNode(15, 15);
-        List<Vector3> route = MapManager.Map.PathFinder.ReachWallPathFinding(start, GetCurrentNode());
+        List<Vector3> route = MapManager.Map.UnderPathFinder.ReachWallPathFinding(start, GetCurrentNode());
         Debug.Log(route);
     }
     public void MakeMap()

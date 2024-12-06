@@ -168,9 +168,9 @@ public class HexaPathFinder : MonoBehaviour
     #endregion
 
     #region Unity Function
-    public void OnAwake()
+    public void OnAwake(HexaGrid grid)
     {
-        grid = MapManager.Map.UnderGrid;
+        this.grid = grid;
     }
     #endregion
 }
