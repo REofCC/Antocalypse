@@ -35,6 +35,7 @@ public class MapManager : MonoBehaviour
     HexaPathFinder upPathFinder;
     CellPositionCalc upPosCalc;
     CellPositionCalc underPosCalc;
+    BlackMask blackMask;
 
     #endregion
 
@@ -54,6 +55,7 @@ public class MapManager : MonoBehaviour
     public HexaPathFinder UpPathFinder { get { return upPathFinder; } }
     public CellPositionCalc UpPosCalc { get { return UpPosCalc; } }
     public CellPositionCalc UnderPosCalc {  get { return underPosCalc; } }
+    public BlackMask BlackMask { get { return blackMask; } }
     #endregion
 
     #region Function
@@ -75,6 +77,7 @@ public class MapManager : MonoBehaviour
         GameObject go = GameObject.Find("MapTool");
         underPathFinder = go.GetComponent<HexaPathFinder>();
         mapMaker = go.GetComponent<MapMaker>();
+        blackMask = go.GetComponent<BlackMask>();
         go = GameObject.Find("GroundTool");
         upPathFinder = go.GetComponent<HexaPathFinder>();
 
@@ -103,6 +106,7 @@ public class MapManager : MonoBehaviour
         mapMaker.OnAwake(mapSize);
         ResourceFactory.OnAwake(mapSize);
         RoomFactory.OnAwake();
+        BlackMask.OnAwake();
 
         return true;
     }

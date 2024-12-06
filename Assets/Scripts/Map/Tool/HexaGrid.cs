@@ -281,6 +281,10 @@ public class HexaGrid : MonoBehaviour
         {
             door.SetConnect(CheckDoorConnect(node));
         }
+        if (is_pass)
+        {
+            MapManager.Map.BlackMask.EraseNeighborNode(x, y);
+        }
         return node;
     }
     #endregion
