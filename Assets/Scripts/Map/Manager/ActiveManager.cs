@@ -4,6 +4,11 @@ using UnityEngine.EventSystems;
 
 public class ActiveManager : MonoBehaviour
 {
+    #region SingleTon
+    private static ActiveManager activeManager;
+    public static ActiveManager Active { get { return activeManager; } }
+    #endregion
+
     #region Attribute
     HexaMapNode node;
     BaseBuilding building;
@@ -74,14 +79,14 @@ public class ActiveManager : MonoBehaviour
 
         MapManager.Map.RoomFactory.ExpandRoom((RoomCenter)node);
     }
-    public void BuildBuilding()
+    public void BuildBuilding(BuildingType type)
     {
         if (node == null)
         {
             Debug.Log("current node is null");
             return;
         }
-        MapManager.Map.BuildingFactory.Build((RoomNode)node, "BaseBuilding", 1.0f);
+        MapManager.Map.BuildingFactory.Build((RoomNode)node, type);
     }
     public void UpgradeBuilding()
     {

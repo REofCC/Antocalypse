@@ -13,6 +13,8 @@ public class BuildData : ScriptableObject
     int[] wood = { };
     [SerializeField]
     List<TileType> tiles = new();
+    [SerializeField]
+    float time;
     #endregion
 
     #region Function
@@ -20,6 +22,7 @@ public class BuildData : ScriptableObject
     public int[] Leaf { get { return leaf; } }
     public int[] Wood { get { return wood; } }
     public List<TileType> Tiles { get { return tiles; } }
+    public float Time { get { return time; } }
     #endregion
 
 }
