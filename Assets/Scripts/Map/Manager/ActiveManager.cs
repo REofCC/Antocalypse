@@ -14,6 +14,19 @@ public class ActiveManager : MonoBehaviour
     BaseBuilding building;
     #endregion
 
+    private void Awake()
+    {
+        //[LSH: building-ui-integration] 인스턴스 초기화 추가
+        if (activeManager == null)
+        {
+            activeManager = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     #region Getter & Setter
     public HexaMapNode GetCurrentNode()
     {
