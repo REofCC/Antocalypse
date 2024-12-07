@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: SolidWareHouse
   m_EditorClassIdentifier: 
   buildingName: SolidWareHouse
-  leaf: 
-  wood: 
+  leaf: 00000000
+  wood: 00000000
   tiles: 0200000003000000
+  time: 0
