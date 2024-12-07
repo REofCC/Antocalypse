@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: ExpeditionAggregation
   m_EditorClassIdentifier: 
   buildingName: ExpeditionAggregation
-  leaf: 00000000
-  wood: 00000000
+  leaf: 
+  wood: 
   tiles: 0200000003000000

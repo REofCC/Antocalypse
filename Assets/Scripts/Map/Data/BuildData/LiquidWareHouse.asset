@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: LiquidWareHouse
   m_EditorClassIdentifier: 
   buildingName: LiquidWareHouse
-  leaf: 00000000
-  wood: 00000000
+  leaf: 
+  wood: 
   tiles: 0200000003000000
