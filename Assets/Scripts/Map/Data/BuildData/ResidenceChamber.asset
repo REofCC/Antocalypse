@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: ResidenceChamber
   m_EditorClassIdentifier: 
   buildingName: ResidenceChamber
-  leaf: 
-  wood: 
+  leaf: 00000000
+  wood: 00000000
   tiles: 0200000003000000

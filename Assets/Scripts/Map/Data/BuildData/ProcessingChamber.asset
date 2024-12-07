@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: ProcessingChamber
   m_EditorClassIdentifier: 
   buildingName: ProcessingChamber
-  leaf: 
-  wood: 
+  leaf: 00000000
+  wood: 00000000
   tiles: 0200000003000000

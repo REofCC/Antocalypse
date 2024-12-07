@@ -7,7 +7,7 @@ public class CameraController : MonoBehaviour
     public float moveSpeed = 20f;
     public float screenEdgeBorderThickness = 100f;
     public float zoomSpeed = 2f;
-    public float minZoom = 5f;
+    public float minZoom = 1f;
     public float maxZoom = 20f;
     float targetZoom;
     float zoomVelocity;

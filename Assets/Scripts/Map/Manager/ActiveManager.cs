@@ -7,6 +7,18 @@ public class ActiveManager : MonoBehaviour
     #region SingleTon
     private static ActiveManager activeManager;
     public static ActiveManager Active { get { return activeManager; } }
+
+    private void Awake()
+    {
+        if (activeManager == null)
+        {
+            activeManager = this;
+        }
+        else if (activeManager != this)
+        {
+            Destroy(gameObject);
+        }
+    }
     #endregion
 
     #region Attribute
