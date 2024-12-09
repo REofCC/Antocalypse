@@ -26,6 +26,7 @@ public class Worker : MonoBehaviour
     HexaMapNode targetNode;
     List<Vector3> path;
     int pathIndex;
+    string buildingName;
 
     public float buildTime = 2f;    //임시 건설시간
     // ToDo : 건설 명령 받을 때 건설시간 받아야 함
@@ -268,11 +269,37 @@ public class Worker : MonoBehaviour
                 break;
             case TaskType.Build:
                 currentTask = type;
+                buildingName = "Path";
                 //nextState = State.Build;
                 break;
         }
     }
-    
+    public void GetTask(HexaMapNode targetNode, List<Vector3> path, TaskType type, string _buildingName)
+    {
+        Debug.Log("Task Confirmed");
+        this.path = path;
+        pathIndex = path.Count - 1;
+        targetPos = path[pathIndex];
+        targetGridPos = targetNode.GetGridPos();
+
+        switch (type)
+        {
+            case TaskType.None:
+                currentTask = type;
+                //nextState = State.Idle;
+                break;
+            case TaskType.Gather:
+                currentTask = type;
+                //nextState = State.Gather;
+                break;
+            case TaskType.Build:
+                currentTask = type;
+                buildingName = _buildingName;
+                //nextState = State.Build;
+                break;
+        }
+    }
+
     //void Idle()
     //{
     //    // 유휴 행동
@@ -340,7 +367,7 @@ public class Worker : MonoBehaviour
         yield return new WaitForSeconds(buildTime);
         Debug.Log("Build Finish");
         // 작업 완료 전달?
-        MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "Path", true);
+        MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, buildingName, true);
         ChangeState(State.Idle);
         currentTask = TaskType.None;
     }
