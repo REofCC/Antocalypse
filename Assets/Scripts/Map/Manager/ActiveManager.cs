@@ -107,7 +107,7 @@ public class ActiveManager : MonoBehaviour
         {
             node.SetIsWorked(false); //When Complete Work Must be false;
             // ������ - TaskManager ���� �׽�Ʈ
-            Managers.Task.AssignTask(TaskType.Build, node);
+            Managers.Task.RequestTask(node, TaskType.Build);
         }
         //MapManager.Map.UnderGrid.SwapNode(gridPos.x, gridPos.y, "Path", true);
     }

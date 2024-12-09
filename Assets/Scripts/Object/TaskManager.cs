@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -13,72 +14,82 @@ public class TaskManager : MonoBehaviour
     Vector2 nodePos;
     LayerMask antLayer;
     float scanRange;
-    bool isRunning;
+    bool isProcessing;
+    bool isCoroutineRunning;
     public void Init()
     {
         scanRange = 100f;
         antLayer = 1 << LayerMask.NameToLayer("Ant");
 
         workers.AddRange(GameObject.FindGameObjectsWithTag("Worker"));
-        isRunning = false;
+        isProcessing = false;
+        isCoroutineRunning = false;
         //resourceNode.AddRange(GameObject.FindGameObjectsWithTag("resourceNode"));
     }
     void FixedUpdate()  //Managers에서 반복 호출해줄 경우 해당 부분 Managers로 이동 및 MonoBehaviour 상속 해제
     {
-        if (requestQueue.Count > 0 && !isRunning)
-            TryProcessNextRequest();
+        //Debug.Log(requestQueue.Count);
+        if (requestQueue.Count > 0 && !isCoroutineRunning)
+            StartCoroutine(TryProcessNextRequest());
     }
 
     public void RequestTask(HexaMapNode _targetNode, TaskType _taskType)
     {
         TaskRequest newTaskRequest = new TaskRequest(_targetNode, _taskType);
         requestQueue.Enqueue(newTaskRequest);
-        TryProcessNextRequest();
     }
     public void RequestTask(HexaMapNode _targetNode, TaskType _taskType, string _buildingName)
     {
         TaskRequest newTaskRequest = new TaskRequest(_targetNode, _taskType, _buildingName);
         requestQueue.Enqueue(newTaskRequest);
-        TryProcessNextRequest();
     }
-    void TryProcessNextRequest()
+    IEnumerator TryProcessNextRequest()
     {
-        if ( requestQueue.Count > 0 &&!isRunning)
-        {
-            isRunning = true;
-            currentRequest = requestQueue.Dequeue();
+        isCoroutineRunning = true;
 
-            entity = FindEntity(TaskType.None);
-            if (entity==null)   //유휴 개체 없음
+        while (true)
+        {
+            if ( requestQueue.Count > 0)
             {
-                requestQueue.Enqueue(currentRequest);   //다시 큐에 넣고 다음 명령 수행
+                currentRequest = requestQueue.Dequeue();
+
+                entity = FindEntity(TaskType.None);
+                if (entity == null)   //유휴 개체 없음
+                {
+                    requestQueue.Enqueue(currentRequest);   //다시 큐에 넣고 다음 명령 수행
+                }
+                else
+                {
+                    nodePos = currentRequest.targetNode.GetWorldPos();
+                    Vector2Int gridPos = currentRequest.targetNode.GetGridPos();
+
+                    HexaMapNode start = MapManager.Map.UnderGrid.GetNode(entity.transform.position);
+                    switch (currentRequest.taskType)
+                    {
+                        case TaskType.Gather:
+                            break;
+                        case TaskType.Build:
+                            if (currentRequest.buildingName == null)  //벽 파괴
+                            {
+                                List<Vector3> path = MapManager.Map.PathFinder.ReachWallPathFinding(start, currentRequest.targetNode); //대상이 벽일 경우 이전 노드까지 탐색
+                                entity.GetComponent<Worker>().GetTask(currentRequest.targetNode, path, currentRequest.taskType);
+                            }
+                            else   //건물 건설
+                            {
+                                List<Vector3> path = MapManager.Map.PathFinder.PathFinding(start, currentRequest.targetNode); //대상이 벽이 아닌 경우 해당 노드까지 탐색
+                                entity.GetComponent<Worker>().GetTask(currentRequest.targetNode, path, currentRequest.taskType);
+                            }
+                            break;
+                    }
+                 }
             }
             else
             {
-                nodePos = currentRequest.targetNode.GetWorldPos();
-                Vector2Int gridPos = currentRequest.targetNode.GetGridPos();
-
-                HexaMapNode start = MapManager.Map.UnderGrid.GetNode(entity.transform.position);
-                switch (currentRequest.taskType)
-                {
-                    case TaskType.Gather:
-                        break;
-                    case TaskType.Build:
-                        if (currentRequest.buildingName == null)  //벽 파괴
-                        {
-                            List<Vector3> path = MapManager.Map.PathFinder.ReachWallPathFinding(start, currentRequest.targetNode); //대상이 벽일 경우 이전 노드까지 탐색
-                            entity.GetComponent<Worker>().GetTask(currentRequest.targetNode, path, currentRequest.taskType);
-                        }
-                        else   //건물 건설
-                        {
-                            List<Vector3> path = MapManager.Map.PathFinder.PathFinding(start, currentRequest.targetNode); //대상이 벽이 아닌 경우 해당 노드까지 탐색
-                            entity.GetComponent<Worker>().GetTask(currentRequest.targetNode, path, currentRequest.taskType);
-                        }
-                        break;
-                }
+                break;
             }
-            isRunning = false;
+        yield return null;
         }
+        isCoroutineRunning = false;
     }
     public GameObject FindEntity(TaskType task)
     {

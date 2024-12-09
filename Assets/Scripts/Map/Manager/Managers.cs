@@ -30,7 +30,8 @@ public class Managers : MonoBehaviour
 
     private void Start()
     {
-        // 권희준 - task 초기화
+        // 권희준 - task 초기화 및 코루틴 사용을 위해 GameObject에 추가
+        _task = gameObject.AddComponent<TaskManager>();
         _task.Init();
         manager = GetComponent<Managers>();
         DontDestroyOnLoad(manager);
