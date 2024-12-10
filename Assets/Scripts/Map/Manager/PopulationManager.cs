@@ -32,6 +32,7 @@ public class PopulationManager
                 return currentSoldier;
                 break;
         }
+        return -1;
     }
     public int GetMaxPopulation(AntType type)
     {
@@ -47,6 +48,7 @@ public class PopulationManager
                 return maxSoldier;
                 break;
         }
+        return -1;
     }
 
     #endregion
@@ -64,7 +66,7 @@ public class PopulationManager
             case AntType.Worker:
                 if (maxWorker + value < 0)
                 {
-                    Debug.LogError("Can't Reduce MaxCap Below 0");
+                    UnityEngine.Debug.LogError("Can't Reduce MaxCap Below 0");
                     return;
                 }
                 maxWorker += value;
@@ -72,7 +74,7 @@ public class PopulationManager
             case AntType.Scout:
                 if (maxScout + value < 0)
                 {
-                    Debug.LogError("Can't Reduce MaxCap Below 0");
+                    UnityEngine.Debug.LogError("Can't Reduce MaxCap Below 0");
                     return;
                 }
                 maxScout += value;
@@ -80,7 +82,7 @@ public class PopulationManager
             case AntType.Soldier:
                 if (maxSoldier + value < 0)
                 {
-                    Debug.LogError("Can't Reduce MaxCap Below 0");
+                    UnityEngine.Debug.LogError("Can't Reduce MaxCap Below 0");
                     return;
                 }
                 maxSoldier += value;
@@ -94,7 +96,7 @@ public class PopulationManager
             case AntType.Worker:
                 if (currentWorker + value > maxWorker)
                 {
-                    Debug.LogError("Reached MaxCap");
+                    UnityEngine.Debug.LogError("Reached MaxCap");
                     return;
                 }
                 currentWorker += value;
@@ -102,7 +104,7 @@ public class PopulationManager
             case AntType.Scout:
                 if (currentScout + value > maxScout)
                 {
-                    Debug.LogError("Reached MaxCap");
+                    UnityEngine.Debug.LogError("Reached MaxCap");
                     return;
                 }
                 currentScout += value;
@@ -110,7 +112,7 @@ public class PopulationManager
             case AntType.Soldier:
                 if (currentSoldier + value > maxSoldier)
                 {
-                    Debug.LogError("Reached MaxCap");
+                    UnityEngine.Debug.LogError("Reached MaxCap");
                     return;
                 }
                 currentSoldier += value;
