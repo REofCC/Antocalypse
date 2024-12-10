@@ -1,9 +1,13 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 public class ResourceManager
 {
-    
+    #region Event
+    public event Action<ResourceType> OnResourceChange; 
+
+    #endregion
     #region Attribute
     int liquidFood = 0;
     int solidFood = 0;
@@ -38,30 +42,37 @@ public class ResourceManager
     private void SetLiquidFood(int value)
     {
         liquidFood = value;
+        OnResourceChange?.Invoke(ResourceType.LIQUID_FOOD);
     }
     private void SetSolidFood(int value)
     {
         solidFood = value;
+        OnResourceChange?.Invoke(ResourceType.SOLID_FOOD);
     }
     private void SetLeaf(int value)
     {
         leaf = value;
+        OnResourceChange?.Invoke(ResourceType.LEAF);
     }
     private void SetWood(int value)
     {
         wood = value;
+        OnResourceChange?.Invoke(ResourceType.WOOD);
     }
     private void SetGenetic(int value)
     {
         genetic = value;
+        OnResourceChange?.Invoke(ResourceType.GENETIC_MATERIAL);
     }
     private void SetMaxSolidFood(int value)
     {
         maxSolidFood = value;
+        OnResourceChange?.Invoke(ResourceType.SOLID_FOOD);
     }
     private void SetMaxLiquidFood(int value)
     {
         maxLiquidFood = value;
+        OnResourceChange?.Invoke(ResourceType.LIQUID_FOOD);
     }
     public int GetMaxSolidFood()
     {
