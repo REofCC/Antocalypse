@@ -1,3 +1,9 @@
+public enum AntType
+{
+    Worker,
+    Scout,
+    Soldier
+}
 public enum TileType
 {
     Wall,
