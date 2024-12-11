@@ -29,6 +29,11 @@ public class BaseResource : MonoBehaviour
     {
         return currentAmount;
     }
+    //±«»Ò¡ÿ currentWorker Getter
+    public int GetCurrentWorker()
+    {
+        return currentWorker;
+    }
     public Resourcetype GetResourceType()
     {
         return type;
@@ -51,6 +56,7 @@ public class BaseResource : MonoBehaviour
     {
         this.warehouse = warehouse;
     }
+
     #endregion
 
     #region Function
