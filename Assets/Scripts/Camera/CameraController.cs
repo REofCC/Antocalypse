@@ -46,8 +46,8 @@ public class CameraController : MonoBehaviour
             move.x += 1;
         }
         
-        move.Normalize();
-        transform.position += move * moveSpeed * Time.deltaTime;
+        move.Normalize();        
+        transform.position += move * moveSpeed * Time.unscaledDeltaTime;
     }
     
     void HandleZoom()
