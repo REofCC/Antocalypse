@@ -27,12 +27,18 @@ public abstract class Event : MonoBehaviour
     #region Function
     public abstract void SetEvent();
     public abstract bool EventFunction(GameObject traveler);
-    public abstract void OnComplete();
+    public virtual void OnComplete()
+    {
+        node.OnEventComplete();
+    }
     #endregion
     #region UnityFunction
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        EventFunction(collision.gameObject);
+        if (EventFunction(collision.gameObject))
+        {
+            OnComplete();
+        }
     }
     #endregion
 }

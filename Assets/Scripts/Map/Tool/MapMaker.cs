@@ -14,7 +14,8 @@ public class MapMaker : MonoBehaviour
     NodeFactory nodeFactory;
     ResourceFactory resourceFactory;
     RoomFactory roomFactory;
-    
+    EventFactory eventFactory;
+
     int mapSize;
     #endregion
 
@@ -29,6 +30,7 @@ public class MapMaker : MonoBehaviour
                 upTilemap.SetTile(new Vector3Int(x,y,100), nodeFactory.GetTile(5));
             }
         }
+        MapManager.Map.BlackMask.FillMask(mapSize);
         upGrid.MakeGrid();
         underGrid.MakeGrid();
         

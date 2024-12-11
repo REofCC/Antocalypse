@@ -15,6 +15,8 @@ public class BuildData : ScriptableObject
     List<TileType> tiles = new();
     [SerializeField]
     float time;
+    [SerializeField]
+    BuildingType type;
     #endregion
 
     #region Function
@@ -23,6 +25,7 @@ public class BuildData : ScriptableObject
     public int[] Wood { get { return wood; } }
     public List<TileType> Tiles { get { return tiles; } }
     public float Time { get { return time; } }
+    public BuildingType Type { get { return type; } }
     #endregion
 
 }

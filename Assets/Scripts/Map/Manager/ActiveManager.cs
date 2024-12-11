@@ -122,13 +122,13 @@ public class ActiveManager : MonoBehaviour
     public void PathFind()
     {
         HexaMapNode start = MapManager.Map.UnderGrid.GetNode(15,15);
-        List<Vector3> route = MapManager.Map.PathFinder.PathFinding(start, GetCurrentNode());
+        List<Vector3> route = MapManager.Map.UnderPathFinder.PathFinding(start, GetCurrentNode());
         Debug.Log(route);
     }
     public void PathFindWall()
     {
         HexaMapNode start = MapManager.Map.UnderGrid.GetNode(15, 15);
-        List<Vector3> route = MapManager.Map.PathFinder.ReachWallPathFinding(start, GetCurrentNode());
+        List<Vector3> route = MapManager.Map.UnderPathFinder.ReachWallPathFinding(start, GetCurrentNode());
         Debug.Log(route);
     }
     public void MakeMap()
@@ -144,6 +144,12 @@ public class ActiveManager : MonoBehaviour
 
         return list[idx];
     }
+
+    private bool CheckMask(HexaMapNode node)
+    {
+        Vector3Int pos = node.GetCellPos();
+        return MapManager.Map.BlackMask.CheckMask(pos);
+    }
     #endregion
 
     #region Unity Function
@@ -154,15 +160,19 @@ public class ActiveManager : MonoBehaviour
         {
             if (!EventSystem.current.IsPointerOverGameObject())
             {
-                SetCurrentNode(ClickTile(Input.mousePosition));
-                ClickBuilding();
-                if(building == null)
+                HexaMapNode node = ClickTile(Input.mousePosition);
+                if (CheckMask(node))
                 {
-                    Debug.Log(node);
-                }
-                else
-                {
-                    Debug.Log(building);
+                    SetCurrentNode(node);
+                    ClickBuilding();
+                    if (building == null)
+                    {
+                        Debug.Log(node);
+                    }
+                    else
+                    {
+                        Debug.Log(building);
+                    }
                 }
             }
         }

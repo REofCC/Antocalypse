@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class BuildingFactory : MonoBehaviour
@@ -8,13 +9,22 @@ public class BuildingFactory : MonoBehaviour
     #region Attribute
     [SerializeField]
     List<BuildData> buildResources = new();
+    int[] currentBuild;
     #endregion
     #region Getter
     public List<BuildData> GetBuildDatas() 
     {
         return buildResources; 
     } 
-
+    
+    public int[] GetCurrentBuildArray()
+    {
+        return currentBuild;
+    }
+    public int GetCurrentBuild(BuildingType type)
+    {
+        return currentBuild[(int)type];
+    }
     #endregion
     #region Function
     private BuildData GetBuildData(BuildingType type)
@@ -124,7 +134,18 @@ public class BuildingFactory : MonoBehaviour
         }
         yield return new WaitForSeconds(info.Time);
         BuildEnd(node, info);
+        currentBuild[(int)info.Type]++;
         yield break;
+    }
+    #endregion
+    #region Unity Function
+    private void Start()
+    {
+        currentBuild = new int[buildResources.Count];
+        for(int i = 0; i < currentBuild.Length; i++)
+        {
+            currentBuild[i] = 0;
+        }
     }
     #endregion
 }

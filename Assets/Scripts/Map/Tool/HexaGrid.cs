@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -188,7 +189,7 @@ public class HexaGrid : MonoBehaviour
         CalcMapSize();
         hexgrid = new HexaMapNode[GetMapSizeX(), GetMapSizeY()];
         Vector2Int offset = cellPositionCalc.GetOffset();
-        int z = tilemap.cellBounds.zMax-1;
+        int z = tilemap.cellBounds.zMax - 1;
         for (int x = tilemap.cellBounds.xMin; x <= tilemap.cellBounds.xMax; x++)
         {
             for (int y = tilemap.cellBounds.yMin; y <= tilemap.cellBounds.yMax; y++)
@@ -226,7 +227,7 @@ public class HexaGrid : MonoBehaviour
     public List<HexaMapNode> GetNeighborWalkableNode(int x, int y)
     {
         List<HexaMapNode> result = new();
-        List<HexaMapNode> neighbors = GetNeighborNode(x,y,1);
+        List<HexaMapNode> neighbors = GetNeighborNode(x, y, 1);
         for (int i = 0; i < neighbors.Count; i++)
         {
             if (neighbors[i].GetWalkable())
@@ -281,7 +282,23 @@ public class HexaGrid : MonoBehaviour
         {
             door.SetConnect(CheckDoorConnect(node));
         }
+        if (is_pass)
+        {
+            EraseMask(x, y);
+        }
         return node;
+    }
+    private void EraseMask(int x, int y)
+    {
+        MapManager.Map.BlackMask.EraseNeighborNode(x, y);
+        /*
+        List<HexaMapNode> list = GetNeighborWalkableNode(x, y);
+        for (int i = 0; i < list.Count; i++)
+        {
+            Vector3Int pos = list[i].GetCellPos();
+            EraseMask(pos.x, pos.y);
+        }
+        */
     }
     #endregion
     #endregion

@@ -31,9 +31,11 @@ public class MapManager : MonoBehaviour
     EventFactory eventFactory;
 
     //Tool
-    HexaPathFinder pathFinder;
+    HexaPathFinder underPathFinder;
+    HexaPathFinder upPathFinder;
     CellPositionCalc upPosCalc;
     CellPositionCalc underPosCalc;
+    BlackMask blackMask;
 
     #endregion
 
@@ -49,9 +51,11 @@ public class MapManager : MonoBehaviour
     public RoomFactory RoomFactory { get { return roomFactory; } }
     public EnemyFactory EnemyFactory { get {return enemyFactory;} }
     public EventFactory EventFactory { get {return eventFactory; } }
-    public HexaPathFinder PathFinder { get { return pathFinder; } }
+    public HexaPathFinder UnderPathFinder { get { return underPathFinder; } }
+    public HexaPathFinder UpPathFinder { get { return upPathFinder; } }
     public CellPositionCalc UpPosCalc { get { return UpPosCalc; } }
     public CellPositionCalc UnderPosCalc {  get { return underPosCalc; } }
+    public BlackMask BlackMask { get { return blackMask; } }
     #endregion
 
     #region Function
@@ -71,8 +75,11 @@ public class MapManager : MonoBehaviour
     private bool SetTools()
     {
         GameObject go = GameObject.Find("MapTool");
-        pathFinder = go.GetComponent<HexaPathFinder>();
+        underPathFinder = go.GetComponent<HexaPathFinder>();
         mapMaker = go.GetComponent<MapMaker>();
+        blackMask = go.GetComponent<BlackMask>();
+        go = GameObject.Find("GroundTool");
+        upPathFinder = go.GetComponent<HexaPathFinder>();
 
         return true;
     }
@@ -94,10 +101,12 @@ public class MapManager : MonoBehaviour
     {
         underGrid.OnAwake(undermap, underPosCalc);
         upGrid.OnAwake(upmap, upPosCalc);
-        pathFinder.OnAwake();
+        underPathFinder.OnAwake(underGrid);
+        upPathFinder.OnAwake(upGrid);
         mapMaker.OnAwake(mapSize);
         ResourceFactory.OnAwake(mapSize);
         RoomFactory.OnAwake();
+        BlackMask.OnAwake();
 
         return true;
     }

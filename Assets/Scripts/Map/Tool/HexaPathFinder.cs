@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HexaPathFinder : MonoBehaviour
 {
-    #region 
+    #region Attribute
     HexaMapNode start;
     HexaMapNode end;
     HexaMapNode current;
@@ -168,9 +168,9 @@ public class HexaPathFinder : MonoBehaviour
     #endregion
 
     #region Unity Function
-    public void OnAwake()
+    public void OnAwake(HexaGrid grid)
     {
-        grid = MapManager.Map.UnderGrid;
+        this.grid = grid;
     }
     #endregion
 }

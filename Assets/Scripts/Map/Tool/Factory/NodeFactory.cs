@@ -14,7 +14,9 @@ public class NodeFactory : MonoBehaviour
         { "RoomCenter", ()=>new RoomCenter() },
         { "RoomNode", ()=>new RoomNode() },
         {"DoorNode", ()=>new DoorNode() },
-        { "TravelNode", ()=>new TravelNode()}
+        { "TravelNode", ()=>new TravelNode()},
+        {"ResourceNode", ()=>new ResourceNode2()},
+        {"TraveledNode", ()=>new TraveledNode() }
     };
     [SerializeField]
     List<TileBase> tileDict = new();

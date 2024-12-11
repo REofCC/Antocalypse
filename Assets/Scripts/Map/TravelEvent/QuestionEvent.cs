@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class QuestionEvent : Event
@@ -12,6 +10,7 @@ public class QuestionEvent : Event
 
     public override void OnComplete()
     {
+        Destroy(this.gameObject);
         return;
     }
 

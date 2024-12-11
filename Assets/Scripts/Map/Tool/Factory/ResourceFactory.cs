@@ -19,7 +19,11 @@ public class ResourceFactory : MonoBehaviour
     #endregion
 
     #region Function
-    
+    private ResourceNode2 SwapNode(HexaMapNode prev)
+    {
+        Vector3Int cellPos = prev.GetCellPos();
+        return grid.SwapNode(cellPos.x, cellPos.y, "ResourceNode", false) as ResourceNode2;
+    }
     private void SetEnable(HexaMapNode node, int phase)
     {
         Vector2Int pos = node.GetGridPos();
@@ -92,10 +96,13 @@ public class ResourceFactory : MonoBehaviour
         }
         return Instantiate(resource, resources.transform);
     }
-    private void SetResource(BaseResource resource, HexaMapNode node, ResourceData data)
+    private void SetResource(BaseResource resource, ResourceNode2 node, ResourceData data)
     {
         resource.SetResourceData(data);
+        resource.SetNode(node);
         node.SetBuildable(data.Buildable);
+        node.SetResource(resource);
+        
     }
     public void MakeResource(HexaMapNode node, float distance, float cellSize)
     {
@@ -121,8 +128,8 @@ public class ResourceFactory : MonoBehaviour
         {
             return;
         }
-
-        SetResource(obj.GetComponent<BaseResource>(), node, info);
+        node = SwapNode(node);
+        SetResource(obj.GetComponent<BaseResource>(), node as ResourceNode2, info);
         obj.transform.position = node.GetWorldPos();
         SetEnable(node, phase);
     }
