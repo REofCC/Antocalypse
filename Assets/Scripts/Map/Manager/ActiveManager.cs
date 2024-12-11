@@ -153,17 +153,17 @@ public class ActiveManager : MonoBehaviour
     // ������ - ��ü ���� �ڵ� �߰�
     public void SpwanWorker()
     {
-        //SpawnManager.SpawnAnt("Worker");
+        Managers.SpawnManager.SpawnEgg(AntType.Worker);
         return;
     }
     public void SpwanScout()
     {
-        //SpawnManager.SpawnAnt("Scout");
+        Managers.SpawnManager.SpawnEgg(AntType.Scout);
         return;
     }
     public void SpwanSoldier()
     {
-        //SpawnManager.SpawnAnt("Soldier");
+        Managers.SpawnManager.SpawnEgg(AntType.Soldier);
         return;
     }
     // ������ ------

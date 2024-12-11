@@ -2,30 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpwanManager : MonoBehaviour
+public class SpawnManager : MonoBehaviour
 {
+    AntType antType;
     float spawnTime;
-    GameObject ant;
-    public void SpawnAnt(string antType)
+    GameObject egg;
+    public void SpawnEgg(AntType _antType)
     {
-        switch (antType)
+        antType = _antType;
+        switch (_antType)
         {
-            case "Worker":
+            case AntType.Worker:
                 // if(cost > currentResource)자원 소비 체크
                 // break;
                 // else
                 //  currentResource -=cost
                 spawnTime = 5.0f; //스폰 시간 추가
-                ant = Resources.Load<GameObject>("Prefabs/Ant/Worker");
                 break;
-            case "Scout":
+            case AntType.Scout:
                 // if(cost > currentResource)자원 소비 체크
                 // break;
                 // else
                 //  currentResource -=cost
                 spawnTime = 8.0f; //스폰 시간 추가
                 break;
-            case "Soldier":
+            case AntType.Soldier:
                 // if(cost > currentResource)자원 소비 체크
                 // break;
                 // else
@@ -33,18 +34,8 @@ public class SpwanManager : MonoBehaviour
                 spawnTime = 10.0f; //스폰 시간 추가
                 break;
         }
-        StartCoroutine(StartSpawn(spawnTime, ant));
-    }
-
-    IEnumerator StartSpawn(float timer, GameObject ant)
-    {
-        float t = 0; 
-        while (t <= timer)
-        {
-            t += Time.deltaTime;
-            yield return null;
-        }
-       
-        Instantiate(ant, Vector3.zero, Quaternion.identity);    //스폰 위치 변경 추가
+        egg = Resources.Load<GameObject>("Prefabs/Ant/Egg");
+        egg = Instantiate(egg, Vector3.zero, Quaternion.identity);    //Todo 스폰 위치
+        egg.GetComponent<Egg>().SetValue(antType, spawnTime);
     }
 }
