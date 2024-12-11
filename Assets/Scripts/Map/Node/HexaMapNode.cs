@@ -6,6 +6,7 @@ public class HexaMapNode
     bool buildable;
     bool walkable;
     bool breakable;
+    bool isWorked = false;
     TileType type;
 
     Vector2Int gridPos;
@@ -97,6 +98,14 @@ public class HexaMapNode
     public TileType GetTileType()
     {
         return type;
+    }
+    public bool GetIsWorked()
+    {
+        return isWorked;
+    }
+    public void SetIsWorked(bool isWorked)
+    {
+        this.isWorked = isWorked;
     }
     #endregion
 

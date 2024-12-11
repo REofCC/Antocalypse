@@ -17,6 +17,8 @@ public class TravelNode : HexaMapNode
     public void OnEventComplete()
     {
         travelEvent = null;
+        Vector3Int pos = this.GetCellPos();
+        MapManager.Map.UpGrid.SwapNode(pos.x, pos.y, "TraveledNode", true);
     }
 
     public override void Start()

@@ -14,7 +14,8 @@ public class MapMaker : MonoBehaviour
     NodeFactory nodeFactory;
     ResourceFactory resourceFactory;
     RoomFactory roomFactory;
-    
+    EventFactory eventFactory;
+
     int mapSize;
     #endregion
 

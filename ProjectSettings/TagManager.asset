@@ -47,6 +47,9 @@ TagManager:
   - name: GameMap
     uniqueID: 498424555
     locked: 0
+  - name: Resource
+    uniqueID: 1625736227
+    locked: 0
   - name: Mask
     uniqueID: 4101568235
     locked: 0
