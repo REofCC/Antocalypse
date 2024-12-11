@@ -53,3 +53,6 @@ TagManager:
   - name: Mask
     uniqueID: 4101568235
     locked: 0
+  - name: Highlight
+    uniqueID: 177628035
+    locked: 0

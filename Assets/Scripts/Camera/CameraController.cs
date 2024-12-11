@@ -29,19 +29,19 @@ public class CameraController : MonoBehaviour
     {
         Vector3 move = Vector3.zero;
         
-        if (Input.GetKey(KeyCode.W) || Input.mousePosition.y >= Screen.height - screenEdgeBorderThickness)
+        if (Input.GetKey(KeyCode.W))// || Input.mousePosition.y >= Screen.height - screenEdgeBorderThickness)
         {
             move.y += 1;
         }
-        if (Input.GetKey(KeyCode.S) || Input.mousePosition.y <= screenEdgeBorderThickness)
+        if (Input.GetKey(KeyCode.S))// || Input.mousePosition.y <= screenEdgeBorderThickness)
         {
             move.y -= 1;
         }
-        if (Input.GetKey(KeyCode.A) || Input.mousePosition.x <= screenEdgeBorderThickness)
+        if (Input.GetKey(KeyCode.A))// || Input.mousePosition.x <= screenEdgeBorderThickness)
         {
             move.x -= 1;
         }
-        if (Input.GetKey(KeyCode.D) || Input.mousePosition.x >= Screen.width - screenEdgeBorderThickness)
+        if (Input.GetKey(KeyCode.D))// || Input.mousePosition.x >= Screen.width - screenEdgeBorderThickness)
         {
             move.x += 1;
         }
