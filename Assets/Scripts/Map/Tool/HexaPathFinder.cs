@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HexaPathFinder : MonoBehaviour
 {
-    #region 
+    #region Attribute
     HexaMapNode start;
     HexaMapNode end;
     HexaMapNode current;

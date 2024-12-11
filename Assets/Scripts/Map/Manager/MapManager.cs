@@ -101,8 +101,8 @@ public class MapManager : MonoBehaviour
     {
         underGrid.OnAwake(undermap, underPosCalc);
         upGrid.OnAwake(upmap, upPosCalc);
-        underPathFinder.OnAwake(upGrid);
-        upPathFinder.OnAwake(underGrid);
+        underPathFinder.OnAwake(underGrid);
+        upPathFinder.OnAwake(upGrid);
         mapMaker.OnAwake(mapSize);
         ResourceFactory.OnAwake(mapSize);
         RoomFactory.OnAwake();
