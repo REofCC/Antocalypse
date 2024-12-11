@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EvoManager : MonoBehaviour
 {
+    // ToDo : 공통 버프를 빼고, 버프 적용 병종에 따라 기본 클래스를 상속받아 사용, 어떤 버프인지 Enum을 이용해 (Enumtype.버프명) 호출 시 버프 수치 반환 함수
     AntType buffTargetType;
     int evoCount;
     // 공통 버프
