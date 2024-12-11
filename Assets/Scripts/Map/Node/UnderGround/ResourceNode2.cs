@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class ResourceNode2 : HexaMapNode
 {
     #region Attribute

@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-
 public class MapMaker : MonoBehaviour
 {
     #region Attribute
@@ -17,9 +16,14 @@ public class MapMaker : MonoBehaviour
     EventFactory eventFactory;
 
     int mapSize;
+    HexaMapNode startPos;
     #endregion
 
     #region Function
+    public HexaMapNode GetStartPos()
+    {
+        return startPos;
+    }
     private void MakeBase()
     {
         for (int x = 0; x < mapSize; x++)
@@ -37,8 +41,8 @@ public class MapMaker : MonoBehaviour
     }
     private void MakeStartPos()
     {
-        HexaMapNode node = underGrid.GetNode(15, 15);
-        roomFactory.MakeRoom(node);
+        startPos = underGrid.GetNode(mapSize / 2 + 1, mapSize / 2 + 1);
+        roomFactory.MakeRoom(startPos);
     }
     private void MakeDoorNode()
     {

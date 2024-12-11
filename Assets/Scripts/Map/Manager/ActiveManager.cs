@@ -14,19 +14,6 @@ public class ActiveManager : MonoBehaviour
     BaseBuilding building;
     #endregion
 
-    private void Awake()
-    {
-        //[LSH: building-ui-integration] 인스턴스 초기화 추가
-        if (activeManager == null)
-        {
-            activeManager = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
     #region Getter & Setter
     public HexaMapNode GetCurrentNode()
     {
@@ -41,6 +28,12 @@ public class ActiveManager : MonoBehaviour
     public void SetBuilding(BaseBuilding building)
     {
         this.building = building;
+    }
+
+    public Vector3 GetStartWorlePos()
+    {
+        HexaMapNode startNode = MapManager.Map.MapMaker.GetStartPos();
+        return startNode.GetWorldPos();
     }
     #endregion
 
@@ -71,7 +64,18 @@ public class ActiveManager : MonoBehaviour
         if (node == null || !node.GetBreakable()) return;
 
         Vector2Int gridPos = node.GetGridPos();
-        MapManager.Map.UnderGrid.SwapNode(gridPos.x, gridPos.y, "Path", true);
+        node.SetIsWorked(true);
+        Wall Node = (Wall)node;
+        if (Node.GetResource() != null)
+        {
+            HexaMapNode resNode = MapManager.Map.UnderGrid.SwapNode(gridPos.x, gridPos.y, "ResourceNode", true);
+            MapManager.Map.ResourceFactory.SetResource(Node, resNode as ResourceNode2);
+        }
+        else
+        {
+            MapManager.Map.UnderGrid.SwapNode(gridPos.x, gridPos.y, "Path", true);
+        }
+        node.SetIsWorked(false); //When Complete Work Must be false;
     }
     public void MakeRoom()
     {
@@ -119,21 +123,18 @@ public class ActiveManager : MonoBehaviour
         }
         MapManager.Map.BuildingFactory.Demolition(building.gameObject);
     }
-    public void PathFind()
+    public List<Vector3> PathFind()
     {
         HexaMapNode start = MapManager.Map.UnderGrid.GetNode(15,15);
         List<Vector3> route = MapManager.Map.UnderPathFinder.PathFinding(start, GetCurrentNode());
+        if(route != null)
+        {
+            Debug.Log(route);
+            return route;
+        }
+        route = MapManager.Map.UnderPathFinder.ReachWallPathFinding(start, GetCurrentNode());
         Debug.Log(route);
-    }
-    public void PathFindWall()
-    {
-        HexaMapNode start = MapManager.Map.UnderGrid.GetNode(15, 15);
-        List<Vector3> route = MapManager.Map.UnderPathFinder.ReachWallPathFinding(start, GetCurrentNode());
-        Debug.Log(route);
-    }
-    public void MakeMap()
-    {
-        MapManager.Map.MapMaker.MapMaking();
+        return route;
     }
     public HexaMapNode GetRandomWalkableNode(HexaMapNode node)
     {
@@ -144,7 +145,6 @@ public class ActiveManager : MonoBehaviour
 
         return list[idx];
     }
-
     private bool CheckMask(HexaMapNode node)
     {
         Vector3Int pos = node.GetCellPos();
@@ -153,7 +153,18 @@ public class ActiveManager : MonoBehaviour
     #endregion
 
     #region Unity Function
-
+    private void Awake()
+    {
+        //[LSH: building-ui-integration] 인스턴스 초기화 추가
+        if (activeManager == null)
+        {
+            activeManager = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -163,16 +174,17 @@ public class ActiveManager : MonoBehaviour
                 HexaMapNode node = ClickTile(Input.mousePosition);
                 if (CheckMask(node))
                 {
-                    SetCurrentNode(node);
+                    if(!node.GetIsWorked())
+                        SetCurrentNode(node);
                     ClickBuilding();
-                    if (building == null)
-                    {
-                        Debug.Log(node);
-                    }
-                    else
-                    {
-                        Debug.Log(building);
-                    }
+                    //if (building == null)
+                    //{
+                    //    Debug.Log(node);
+                    //}
+                    //else
+                    //{
+                    //    Debug.Log(building);
+                    //}
                 }
             }
         }
