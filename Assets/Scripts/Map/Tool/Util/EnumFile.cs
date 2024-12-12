@@ -15,6 +15,7 @@ public enum TileType
     TravelNode,
     ResourceNode,
     TraveledNode,
+    BattleNode,
     None
 }
 public enum BuildingType
@@ -46,4 +47,10 @@ public enum EventType
     Battle,
     Resource,
 
+}
+
+public enum LayerType
+{
+    Ground,
+    Underground
 }
