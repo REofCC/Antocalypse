@@ -16,6 +16,19 @@ public class ActiveManager : MonoBehaviour
     bool isGround = false;
     #endregion
 
+    private void Awake()
+    {
+        //[LSH: building-ui-integration] �ν��Ͻ� �ʱ�ȭ �߰�
+        if (activeManager == null)
+        {
+            activeManager = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     #region Getter & Setter
     public HexaMapNode GetCurrentNode()
     {
@@ -59,7 +72,7 @@ public class ActiveManager : MonoBehaviour
         if (isGround)
         {
             Vector2Int Pos = MapManager.Map.UpPosCalc.CalcGridPos(mouseWorldPos);
-            
+
             return MapManager.Map.UpGrid.GetNode(mouseWorldPos);
         }
         Vector2Int gridPos = MapManager.Map.UnderPosCalc.CalcGridPos(mouseWorldPos);
@@ -202,12 +215,19 @@ public class ActiveManager : MonoBehaviour
             Camera.main.transform.position += Pos;
         }
     }
+    // ������ - ��ü ���� �ڵ� �߰�
+    public void SpwanEgg(AntType type)
+    {
+        Managers.SpawnManager.SpawnEgg(type);
+        return;
+    }
+    // ������ ------
     #endregion
 
     #region Unity Function
     private void Awake()
     {
-        //[LSH: building-ui-integration] �ν��Ͻ� �ʱ�ȭ �߰�
+        //[LSH: building-ui-integration] �ν��Ͻ� �ʱ�ȭ �߰�
         if (activeManager == null)
         {
             activeManager = this;

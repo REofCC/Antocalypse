@@ -38,6 +38,8 @@ public class MapManager : MonoBehaviour
     BlackMask underBlackMask;
     BlackMask upBlackMask;
 
+    //Layer
+    LayerType layerType;
     #endregion
 
     #region Getter
@@ -101,6 +103,12 @@ public class MapManager : MonoBehaviour
         return true;
     }
 
+    //[LSH:CODE] [node-order-ui] ������ ���� ������ ���� �߰�
+    public void SetLayerType(LayerType _layerType)
+    {
+        layerType = _layerType;
+    }
+
     private bool OnAwake()
     {
         underGrid.OnAwake(undermap, underPosCalc, underBlackMask);
@@ -143,4 +151,3 @@ public class MapManager : MonoBehaviour
     }
     #endregion
 }
-

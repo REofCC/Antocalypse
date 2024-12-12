@@ -21,6 +21,7 @@ public class Worker : MonoBehaviour
     Vector2 targetPos;
 
     public float buildTime = 2f;    //임시 건설시간
+    // ToDo : 건설 명령 받을 때 건설시간 받아야 함
     private void Awake()
     {
         entityData = GetComponent<EntityData>();

@@ -1,3 +1,10 @@
+public enum AntType
+{
+    Worker,
+    Scout,
+    Soldier,
+    Queen,
+}
 public enum TileType
 {
     Wall,
@@ -8,6 +15,7 @@ public enum TileType
     TravelNode,
     ResourceNode,
     TraveledNode,
+    BattleNode,
     None
 }
 public enum BuildingType
@@ -41,4 +49,10 @@ public enum EventType
     Battle,
     Resource,
 
+}
+
+public enum LayerType
+{
+    Ground,
+    Underground
 }

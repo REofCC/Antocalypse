@@ -6,7 +6,13 @@ using static UIEnums;
 
 public abstract class TooltipSpawner : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    public enum TooltipPositionMode { Auto, Manual }
+    public enum TooltipDirection { TopLeft, TopRight, BottomLeft, BottomRight }
+
     [SerializeField] GameObject tooltipPrefab = null;
+    [SerializeField] TooltipPositionMode positionMode = TooltipPositionMode.Auto;
+    [SerializeField] TooltipDirection manualDirection = TooltipDirection.TopLeft;
+
     GameObject tooltip = null;
 
     public abstract void UpdateTooltip(GameObject tooltip);
@@ -26,17 +32,17 @@ public abstract class TooltipSpawner : MonoBehaviour, IPointerEnterHandler, IPoi
     {
         Canvas parentCanvas = GetComponentInParent<Canvas>();
 
-        if(tooltip && !CanCreateTooltip())
+        if (tooltip && !CanCreateTooltip())
         {
-            ClearTooltip();            
+            ClearTooltip();
         }
 
-        if(!tooltip && CanCreateTooltip())
+        if (!tooltip && CanCreateTooltip())
         {
-            tooltip = Instantiate(tooltipPrefab, parentCanvas.transform);            
+            tooltip = Instantiate(tooltipPrefab, parentCanvas.transform);
         }
 
-        if(tooltip)
+        if (tooltip)
         {
             UpdateTooltip(tooltip);
             PositionTooltip();
@@ -57,21 +63,55 @@ public abstract class TooltipSpawner : MonoBehaviour, IPointerEnterHandler, IPoi
         Vector3[] slotCorners = new Vector3[4];
         GetComponent<RectTransform>().GetWorldCorners(slotCorners);
 
-        bool below = transform.position.y > Screen.height / 2;
-        bool right = transform.position.x <= Screen.width / 2;
+        int slotCorner, tooltipCorner;
 
-        int slotCorner = GetCornerIndex(below, right);
-        int tooltipCorner = GetCornerIndex(!below, !right);
+        if (positionMode == TooltipPositionMode.Auto)
+        {
+            bool below = transform.position.y > Screen.height / 2;
+            bool right = transform.position.x <= Screen.width / 2;
+
+            slotCorner = GetCornerIndex(below, right);
+            tooltipCorner = GetCornerIndex(!below, !right);
+        }
+        else
+        {
+            slotCorner = GetManualCornerIndex(manualDirection);
+            tooltipCorner = GetManualCornerIndex(GetOppositeDirection(manualDirection));
+        }
 
         tooltip.transform.position = slotCorners[slotCorner] - tooltipCorners[tooltipCorner] + tooltip.transform.position;
     }
 
     int GetCornerIndex(bool below, bool right)
     {
-        if(below && !right) return 0;       
-        else if (!below && !right) return 1;        
-        else if (!below && right) return 2;        
-        else return 3;    
+        if (below && !right) return 0;
+        else if (!below && !right) return 1;
+        else if (!below && right) return 2;
+        else return 3;
+    }
+
+    int GetManualCornerIndex(TooltipDirection direction)
+    {
+        switch (direction)
+        {
+            case TooltipDirection.TopLeft: return 1;
+            case TooltipDirection.TopRight: return 2;
+            case TooltipDirection.BottomLeft: return 0;
+            case TooltipDirection.BottomRight: return 3;
+            default: return 0;
+        }
+    }
+
+    TooltipDirection GetOppositeDirection(TooltipDirection direction)
+    {
+        switch (direction)
+        {
+            case TooltipDirection.TopLeft: return TooltipDirection.BottomRight;
+            case TooltipDirection.TopRight: return TooltipDirection.BottomLeft;
+            case TooltipDirection.BottomLeft: return TooltipDirection.TopRight;
+            case TooltipDirection.BottomRight: return TooltipDirection.TopLeft;
+            default: return TooltipDirection.TopLeft;
+        }
     }
 
     void ClearTooltip()
