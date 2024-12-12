@@ -37,6 +37,8 @@ public class MapManager : MonoBehaviour
     CellPositionCalc underPosCalc;
     BlackMask blackMask;
 
+    //Layer
+    LayerType layerType;
     #endregion
 
     #region Getter
@@ -56,6 +58,8 @@ public class MapManager : MonoBehaviour
     public CellPositionCalc UpPosCalc { get { return UpPosCalc; } }
     public CellPositionCalc UnderPosCalc {  get { return underPosCalc; } }
     public BlackMask BlackMask { get { return blackMask; } }
+
+    public LayerType LayerType { get { return layerType; } }
     #endregion
 
     #region Function
@@ -95,6 +99,12 @@ public class MapManager : MonoBehaviour
         upGrid = go.GetComponent<HexaGrid>();
 
         return true;
+    }
+
+    //[LSH:CODE] [node-order-ui] 지상과 지하 구분을 위해 추가
+    public void SetLayerType(LayerType _layerType)
+    {
+        layerType = _layerType;
     }
 
     private bool OnAwake()
