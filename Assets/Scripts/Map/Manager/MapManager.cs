@@ -60,6 +60,8 @@ public class MapManager : MonoBehaviour
     public CellPositionCalc UnderPosCalc {  get { return underPosCalc; } }
     public BlackMask UnderBlackMask { get { return underBlackMask; } }
     public BlackMask UpBlackMask { get { return upBlackMask; } }
+    public LayerType LayerType { get { return layerType; } }
+
     #endregion
 
     #region Function
