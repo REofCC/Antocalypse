@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HatchInfoTooltipSpawner : TooltipSpawner
 {
-    [SerializeField] TempAntType antType;
+    [SerializeField] AntType antType;
     public override bool CanCreateTooltip()
     {
         return true;
