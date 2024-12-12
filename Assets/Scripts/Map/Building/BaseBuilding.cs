@@ -36,9 +36,5 @@ public class BaseBuilding : MonoBehaviour
     #endregion
 
     #region Function
-    public virtual bool UpgradeBuilding()
-    {
-        return true;
-    }
     #endregion
 }

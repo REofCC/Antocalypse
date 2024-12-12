@@ -76,9 +76,9 @@ public class BlackMask : MonoBehaviour
     }
     #endregion
 
-    public void OnAwake()
+    public void OnAwake(string grid)
     {
-        GameObject go = GameObject.Find("Grid").transform.GetChild(2).gameObject;
+        GameObject go = GameObject.Find(grid).transform.GetChild(1).gameObject;
         tilemap = go.GetComponent<Tilemap>();
     }
 }

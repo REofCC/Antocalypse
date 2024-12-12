@@ -12,6 +12,10 @@ public class EventData : ScriptableObject
     int dropLiquid;
     [SerializeField]
     int dropSolid;
+    [SerializeField]
+    int dropLeaf;
+    [SerializeField]
+    int dropWood;
 
     #endregion
 
@@ -19,5 +23,7 @@ public class EventData : ScriptableObject
     public string EventName {  get { return eventName; } }
     public int DropLiquid { get { return dropLiquid; } }
     public int DropSolid { get { return dropSolid; } }
+    public int DropLeaf { get { return dropLeaf; } }
+    public int DropWood { get { return dropWood; } }
     #endregion
 }

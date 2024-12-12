@@ -9,10 +9,7 @@ public class SolidFood : BaseResource
     #region Function
     public void SetWareHouse(GameObject warehouse)
     {
-        if (warehouse.GetComponent<SolidWareHouse>() != null)
-        {
-            SetWareHouse(warehouse.GetComponent<SolidWareHouse>());
-        }
+        
     }
     #endregion
 }

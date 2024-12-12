@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using UnityEngine;
 
 public class BuildingFactory : MonoBehaviour
@@ -9,7 +7,8 @@ public class BuildingFactory : MonoBehaviour
     #region Attribute
     [SerializeField]
     List<BuildData> buildResources = new();
-    int[] currentBuild;
+    bool[] buildConstraints; //idx = BuildingType | Modify True when Process complete
+    int[] currentBuild; // idx = Bulding Type | Entire Map's Buliding Count
     #endregion
     #region Getter
     public List<BuildData> GetBuildDatas() 
@@ -24,6 +23,15 @@ public class BuildingFactory : MonoBehaviour
     public int GetCurrentBuild(BuildingType type)
     {
         return currentBuild[(int)type];
+    }
+
+    public void SetBuildingConstaint(BuildingType type, bool permission = true)
+    {
+        buildConstraints[(int)type] = permission;
+    }
+    public bool GetBuildingConstraint(BuildingType type)
+    {
+        return buildConstraints[(int)type];
     }
     #endregion
     #region Function
@@ -49,15 +57,12 @@ public class BuildingFactory : MonoBehaviour
     #region Build
     private bool CheckBuilding(RoomNode node, BuildData info)
     {
-        bool buildable = false;
+        if (!GetBuildingConstraint(info.Type))
+            return false;
         for(int i = 0; i < info.Tiles.Count; i++)
         {
-            if (info.Tiles[i] == node.GetTileType())
-                buildable = true;
-        }
-        if (buildable)
-        {
-            return node.GetBuildable();
+            if (info.Tiles[i] == node.GetTileType()) // check buildable node type
+                return node.GetBuildable(); // check already building on node
         }
         return false;
     }
@@ -98,6 +103,7 @@ public class BuildingFactory : MonoBehaviour
         BuildData info = GetBuildData(type);
         StartCoroutine(BuildingCoroutine(node, info));
     }
+    /*
     public bool Upgrade(BaseBuilding building)
     {
         int phase = building.GetBuildingLevel();
@@ -109,6 +115,7 @@ public class BuildingFactory : MonoBehaviour
         }
         return false;
     }
+    */
     #endregion
     #region Demolition
     public bool Demolition(GameObject building)
@@ -116,7 +123,7 @@ public class BuildingFactory : MonoBehaviour
         if (building == null) return false;
         BaseBuilding info = building.GetComponent<BaseBuilding>();
         if (info == null) return false;
-
+        currentBuild[(int)info.GetBuildingType()]--;
         RoomNode pos = (RoomNode)info.GetBuildedPos();
         pos.Demolition();
 
@@ -142,9 +149,11 @@ public class BuildingFactory : MonoBehaviour
     private void Start()
     {
         currentBuild = new int[buildResources.Count];
-        for(int i = 0; i < currentBuild.Length; i++)
+        buildConstraints = new bool[buildResources.Count];
+        for (int i = 0; i < currentBuild.Length; i++)
         {
             currentBuild[i] = 0;
+            buildConstraints[i] = false;
         }
     }
     #endregion

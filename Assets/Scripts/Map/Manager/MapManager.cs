@@ -24,7 +24,7 @@ public class MapManager : MonoBehaviour
     BuildingFactory buildingFactory;
     ResourceFactory resourceFactory;
     NodeFactory nodeFactory;
-    RoomFactory roomFactory;
+    //RoomFactory roomFactory;
 
     //Ground Factory
     EnemyFactory enemyFactory;
@@ -35,7 +35,8 @@ public class MapManager : MonoBehaviour
     HexaPathFinder upPathFinder;
     CellPositionCalc upPosCalc;
     CellPositionCalc underPosCalc;
-    BlackMask blackMask;
+    BlackMask underBlackMask;
+    BlackMask upBlackMask;
 
     //Layer
     LayerType layerType;
@@ -50,16 +51,17 @@ public class MapManager : MonoBehaviour
     public BuildingFactory BuildingFactory { get { return buildingFactory; } }
     public ResourceFactory ResourceFactory { get {return resourceFactory; } }
     public NodeFactory NodeFactory { get { return nodeFactory;} }
-    public RoomFactory RoomFactory { get { return roomFactory; } }
+    //ublic RoomFactory RoomFactory { get { return roomFactory; } }
     public EnemyFactory EnemyFactory { get {return enemyFactory;} }
     public EventFactory EventFactory { get {return eventFactory; } }
     public HexaPathFinder UnderPathFinder { get { return underPathFinder; } }
     public HexaPathFinder UpPathFinder { get { return upPathFinder; } }
-    public CellPositionCalc UpPosCalc { get { return UpPosCalc; } }
+    public CellPositionCalc UpPosCalc { get { return upPosCalc; } }
     public CellPositionCalc UnderPosCalc {  get { return underPosCalc; } }
-    public BlackMask BlackMask { get { return blackMask; } }
-
+    public BlackMask UnderBlackMask { get { return underBlackMask; } }
+    public BlackMask UpBlackMask { get { return upBlackMask; } }
     public LayerType LayerType { get { return layerType; } }
+
     #endregion
 
     #region Function
@@ -69,7 +71,7 @@ public class MapManager : MonoBehaviour
         buildingFactory = go.GetComponent<BuildingFactory>();
         resourceFactory = go.GetComponent<ResourceFactory>();
         nodeFactory = go.GetComponent<NodeFactory>();
-        roomFactory = go.GetComponent<RoomFactory>();
+        //roomFactory = go.GetComponent<RoomFactory>();
         enemyFactory = go.GetComponent<EnemyFactory>();
         eventFactory = go.GetComponent<EventFactory>();
 
@@ -81,18 +83,20 @@ public class MapManager : MonoBehaviour
         GameObject go = GameObject.Find("MapTool");
         underPathFinder = go.GetComponent<HexaPathFinder>();
         mapMaker = go.GetComponent<MapMaker>();
-        blackMask = go.GetComponent<BlackMask>();
+        underBlackMask = go.GetComponent<BlackMask>();
         go = GameObject.Find("GroundTool");
         upPathFinder = go.GetComponent<HexaPathFinder>();
+        upBlackMask = go.GetComponent<BlackMask>();
 
         return true;
     }
 
     private bool SetGrid()
     {
-        GameObject go = GameObject.Find("Grid");
+        GameObject go = GameObject.Find("UnderGroundGrid");
         undermap = go.transform.GetChild(0).GetComponent<Tilemap>();
-        upmap = go.transform.GetChild(1).GetComponent<Tilemap>();
+        go = GameObject.Find("GroundGrid");
+        upmap = go.transform.GetChild(0).GetComponent<Tilemap>();
         go = GameObject.Find("MapTool");
         underGrid = go.GetComponent<HexaGrid>();
         go = GameObject.Find("GroundTool");
@@ -101,7 +105,7 @@ public class MapManager : MonoBehaviour
         return true;
     }
 
-    //[LSH:CODE] [node-order-ui] Áö»ó°ú ÁöÇÏ ±¸ºÐÀ» À§ÇØ Ãß°¡
+    //[LSH:CODE] [node-order-ui] ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
     public void SetLayerType(LayerType _layerType)
     {
         layerType = _layerType;
@@ -109,14 +113,15 @@ public class MapManager : MonoBehaviour
 
     private bool OnAwake()
     {
-        underGrid.OnAwake(undermap, underPosCalc);
-        upGrid.OnAwake(upmap, upPosCalc);
+        underGrid.OnAwake(undermap, underPosCalc, underBlackMask);
+        upGrid.OnAwake(upmap, upPosCalc, upBlackMask);
         underPathFinder.OnAwake(underGrid);
         upPathFinder.OnAwake(upGrid);
         mapMaker.OnAwake(mapSize);
         ResourceFactory.OnAwake(mapSize);
-        RoomFactory.OnAwake();
-        BlackMask.OnAwake();
+        //RoomFactory.OnAwake();
+        UnderBlackMask.OnAwake("UnderGroundGrid");
+        UpBlackMask.OnAwake("GroundGrid");
 
         return true;
     }
@@ -148,4 +153,3 @@ public class MapManager : MonoBehaviour
     }
     #endregion
 }
-

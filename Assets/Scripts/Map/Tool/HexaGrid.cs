@@ -11,6 +11,7 @@ public class HexaGrid : MonoBehaviour
     [SerializeField]
     Tilemap tilemap;
     NodeFactory tileFactory;
+    BlackMask mask;
 
     HexaMapNode[,] hexgrid;
 
@@ -288,9 +289,9 @@ public class HexaGrid : MonoBehaviour
         }
         return node;
     }
-    private void EraseMask(int x, int y)
+    public void EraseMask(int x, int y)
     {
-        MapManager.Map.BlackMask.EraseNeighborNode(x, y);
+        mask.EraseNeighborNode(x, y);
         /*
         List<HexaMapNode> list = GetNeighborWalkableNode(x, y);
         for (int i = 0; i < list.Count; i++)
@@ -303,13 +304,14 @@ public class HexaGrid : MonoBehaviour
     #endregion
     #endregion
     #region Unity Function
-    public void OnAwake(Tilemap tilemap, CellPositionCalc calc)
+    public void OnAwake(Tilemap tilemap, CellPositionCalc calc, BlackMask mask)
     {
         SetDirection();
         cellPositionCalc = calc;
 
         tileFactory = MapManager.Map.NodeFactory;
         this.tilemap = tilemap;
+        this.mask = mask;
     }
     #endregion
 }

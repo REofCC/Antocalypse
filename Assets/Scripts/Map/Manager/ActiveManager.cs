@@ -12,6 +12,8 @@ public class ActiveManager : MonoBehaviour
     #region Attribute
     HexaMapNode node;
     BaseBuilding building;
+    BaseResource resource;
+    bool isGround = false;
     #endregion
 
     private void Awake()
@@ -42,6 +44,24 @@ public class ActiveManager : MonoBehaviour
     {
         this.building = building;
     }
+
+    public Vector3 GetStartWorlePos()
+    {
+        HexaMapNode startNode = MapManager.Map.MapMaker.GetStartPos();
+        return startNode.GetWorldPos();
+    }
+    public void SetResource(BaseResource res)
+    {
+        this.resource = res;
+    }
+    public BaseResource GetResource()
+    {
+        return resource;
+    }
+    public BaseBuilding GetBuilding()
+    {
+        return this.building;
+    }
     #endregion
 
     #region Function
@@ -49,7 +69,12 @@ public class ActiveManager : MonoBehaviour
     {
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(pos.x, pos.y, Camera.main.transform.position.z * -1));
         Debug.Log(mouseWorldPos);
+        if (isGround)
+        {
+            Vector2Int Pos = MapManager.Map.UpPosCalc.CalcGridPos(mouseWorldPos);
 
+            return MapManager.Map.UpGrid.GetNode(mouseWorldPos);
+        }
         Vector2Int gridPos = MapManager.Map.UnderPosCalc.CalcGridPos(mouseWorldPos);
         return MapManager.Map.UnderGrid.GetNode(mouseWorldPos);
     }
@@ -64,15 +89,41 @@ public class ActiveManager : MonoBehaviour
                 return;
             }
         }
-        building = null;
+        SetBuilding(null);
+    }
+
+    private void ClickResource()
+    {
+        if (node.GetTileType() == TileType.ResourceNode)
+        {
+            ResourceNode2 resNode = (ResourceNode2)node;
+            if (resNode.GetResource() != null)
+            {
+                SetResource(resNode.GetResource());
+                return;
+            }
+        }
+        SetResource(null);
     }
     public void BreakTile()
     {
         if (node == null || !node.GetBreakable()) return;
 
         Vector2Int gridPos = node.GetGridPos();
-        MapManager.Map.UnderGrid.SwapNode(gridPos.x, gridPos.y, "Path", true);
+        node.SetIsWorked(true);
+        Wall Node = (Wall)node;
+        if (Node.GetResource() != null)
+        {
+            HexaMapNode resNode = MapManager.Map.UnderGrid.SwapNode(gridPos.x, gridPos.y, "ResourceNode", true);
+            MapManager.Map.ResourceFactory.SetResource(Node, resNode as ResourceNode2);
+        }
+        else
+        {
+            MapManager.Map.UnderGrid.SwapNode(gridPos.x, gridPos.y, "Path", true);
+        }
+        node.SetIsWorked(false); //When Complete Work Must be false;
     }
+    /*
     public void MakeRoom()
     {
         if (node == null)
@@ -92,6 +143,7 @@ public class ActiveManager : MonoBehaviour
 
         MapManager.Map.RoomFactory.ExpandRoom((RoomCenter)node);
     }
+    */
     public void BuildBuilding(BuildingType type)
     {
         if (node == null)
@@ -101,6 +153,7 @@ public class ActiveManager : MonoBehaviour
         }
         MapManager.Map.BuildingFactory.Build((RoomNode)node, type);
     }
+    /*
     public void UpgradeBuilding()
     {
         if(building == null)
@@ -110,6 +163,7 @@ public class ActiveManager : MonoBehaviour
         }
         MapManager.Map.BuildingFactory.Upgrade(building);
     }
+    */
     public void DemolitionBuilding()
     {
         if (building == null)
@@ -119,21 +173,18 @@ public class ActiveManager : MonoBehaviour
         }
         MapManager.Map.BuildingFactory.Demolition(building.gameObject);
     }
-    public void PathFind()
+    public List<Vector3> PathFind()
     {
         HexaMapNode start = MapManager.Map.UnderGrid.GetNode(15,15);
         List<Vector3> route = MapManager.Map.UnderPathFinder.PathFinding(start, GetCurrentNode());
+        if(route != null)
+        {
+            Debug.Log(route);
+            return route;
+        }
+        route = MapManager.Map.UnderPathFinder.ReachWallPathFinding(start, GetCurrentNode());
         Debug.Log(route);
-    }
-    public void PathFindWall()
-    {
-        HexaMapNode start = MapManager.Map.UnderGrid.GetNode(15, 15);
-        List<Vector3> route = MapManager.Map.UnderPathFinder.ReachWallPathFinding(start, GetCurrentNode());
-        Debug.Log(route);
-    }
-    public void MakeMap()
-    {
-        MapManager.Map.MapMaker.MapMaking();
+        return route;
     }
     public HexaMapNode GetRandomWalkableNode(HexaMapNode node)
     {
@@ -144,11 +195,25 @@ public class ActiveManager : MonoBehaviour
 
         return list[idx];
     }
-
     private bool CheckMask(HexaMapNode node)
     {
         Vector3Int pos = node.GetCellPos();
-        return MapManager.Map.BlackMask.CheckMask(pos);
+        return MapManager.Map.UnderBlackMask.CheckMask(pos);
+    }
+
+    public void SetMapMode()
+    {
+        Vector3 Pos = new Vector3(100,0,0);
+        if (isGround)
+        {
+            isGround = false;
+            Camera.main.transform.position -= Pos;
+        }
+        else
+        {
+            isGround = true;
+            Camera.main.transform.position += Pos;
+        }
     }
     // ������ - ��ü ���� �ڵ� �߰�
     public void SpwanEgg(AntType type)
@@ -160,7 +225,18 @@ public class ActiveManager : MonoBehaviour
     #endregion
 
     #region Unity Function
-
+    private void Awake()
+    {
+        //[LSH: building-ui-integration] �ν��Ͻ� �ʱ�ȭ �߰�
+        if (activeManager == null)
+        {
+            activeManager = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -170,16 +246,19 @@ public class ActiveManager : MonoBehaviour
                 HexaMapNode node = ClickTile(Input.mousePosition);
                 if (CheckMask(node))
                 {
-                    SetCurrentNode(node);
+                    if(!node.GetIsWorked())
+                        SetCurrentNode(node);
+                    Debug.Log(node);
                     ClickBuilding();
-                    if (building == null)
-                    {
-                        Debug.Log(node);
-                    }
-                    else
-                    {
-                        Debug.Log(building);
-                    }
+                    ClickResource();
+                    //if (building == null)
+                    //{
+                    //    Debug.Log(node);
+                    //}
+                    //else
+                    //{
+                    //    Debug.Log(building);
+                    //}
                 }
             }
         }

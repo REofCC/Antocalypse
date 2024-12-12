@@ -11,6 +11,10 @@ public class TravelNode : HexaMapNode
     {
         this.travelEvent = travelEvent;
     }
+    public Event GetEvent() 
+    { 
+        return this.travelEvent; 
+    }
     #endregion
 
     #region Function
@@ -19,6 +23,7 @@ public class TravelNode : HexaMapNode
         travelEvent = null;
         Vector3Int pos = this.GetCellPos();
         MapManager.Map.UpGrid.SwapNode(pos.x, pos.y, "TraveledNode", true);
+        MapManager.Map.UpBlackMask.EraseNeighborNode(pos.x, pos.y);
     }
 
     public override void Start()
