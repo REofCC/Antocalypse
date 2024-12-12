@@ -35,9 +35,9 @@ public class YearManager : MonoBehaviour
     {
         return timeLimit / currentTime;
     }
-    public int GetRequireResource(Resourcetype resouceType)
+    public int GetRequireResource(Resourcetype resourceType)
     {
-        switch (resouceType)
+        switch (resourceType)
         {
             case Resourcetype.Leaf:
                 return requireLeaf;
