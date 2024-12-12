@@ -4,7 +4,7 @@ public class Path : HexaMapNode
     public override void Start()
     {
         SetBreakable(false);
-        SetBuildable(false);
+        SetBuildable(true);
         SetWalkable(true);
         SetTileType(TileType.Path);
     }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -12,7 +13,7 @@ public class MapMaker : MonoBehaviour
 
     NodeFactory nodeFactory;
     ResourceFactory resourceFactory;
-    RoomFactory roomFactory;
+    //RoomFactory roomFactory;
     EventFactory eventFactory;
 
     int mapSize;
@@ -31,10 +32,11 @@ public class MapMaker : MonoBehaviour
             for (int y = 0; y < mapSize; y++)
             {
                 underTilemap.SetTile(new Vector3Int(x, y, 0), nodeFactory.GetTile(0));
-                upTilemap.SetTile(new Vector3Int(x,y,100), nodeFactory.GetTile(5));
+                upTilemap.SetTile(new Vector3Int(x,y,0), nodeFactory.GetTile(5));
             }
         }
-        MapManager.Map.BlackMask.FillMask(mapSize);
+        MapManager.Map.UnderBlackMask.FillMask(mapSize);
+        MapManager.Map.UpBlackMask.FillMask(mapSize);
         upGrid.MakeGrid();
         underGrid.MakeGrid();
         
@@ -42,7 +44,16 @@ public class MapMaker : MonoBehaviour
     private void MakeStartPos()
     {
         startPos = underGrid.GetNode(mapSize / 2 + 1, mapSize / 2 + 1);
-        roomFactory.MakeRoom(startPos);
+        Vector3Int pos = startPos.GetCellPos();
+        underGrid.SwapNode(pos.x, pos.y, "Path", true);
+        //roomFactory.MakeRoom(startPos);
+        List<HexaMapNode> list = underGrid.GetNeighborNode(mapSize / 2 + 1, mapSize / 2 + 1);
+        for(int idx= 0; idx<list.Count; idx++)
+        {
+            pos = list[idx].GetCellPos();
+            underGrid.SwapNode(pos.x, pos.y, "Path", true);
+        }
+
     }
     private void MakeDoorNode()
     {
@@ -64,6 +75,7 @@ public class MapMaker : MonoBehaviour
         underGrid.SetDoorPos(node);
         node = (DoorNode)upGrid.SwapNode(posx, posy, "DoorNode", false);
         upGrid.SetDoorPos(node);
+        MapManager.Map.UpBlackMask.EraseNeighborNode(posx, posy);
     }
     private void MakeResource()
     {
@@ -99,7 +111,7 @@ public class MapMaker : MonoBehaviour
 
         nodeFactory = MapManager.Map.NodeFactory;
         resourceFactory = MapManager.Map.ResourceFactory;
-        roomFactory = MapManager.Map.RoomFactory;
+        //roomFactory = MapManager.Map.RoomFactory;
         this.mapSize = mapSize;
     }
     #endregion

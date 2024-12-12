@@ -12,6 +12,8 @@ public class ActiveManager : MonoBehaviour
     #region Attribute
     HexaMapNode node;
     BaseBuilding building;
+    BaseResource resource;
+    bool isGround = false;
     #endregion
 
     #region Getter & Setter
@@ -35,6 +37,10 @@ public class ActiveManager : MonoBehaviour
         HexaMapNode startNode = MapManager.Map.MapMaker.GetStartPos();
         return startNode.GetWorldPos();
     }
+    public void SetResource(BaseResource res)
+    {
+        this.resource = res;
+    }
     #endregion
 
     #region Function
@@ -42,7 +48,12 @@ public class ActiveManager : MonoBehaviour
     {
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(pos.x, pos.y, Camera.main.transform.position.z * -1));
         Debug.Log(mouseWorldPos);
-
+        if (isGround)
+        {
+            Vector2Int Pos = MapManager.Map.UpPosCalc.CalcGridPos(mouseWorldPos);
+            
+            return MapManager.Map.UpGrid.GetNode(mouseWorldPos);
+        }
         Vector2Int gridPos = MapManager.Map.UnderPosCalc.CalcGridPos(mouseWorldPos);
         return MapManager.Map.UnderGrid.GetNode(mouseWorldPos);
     }
@@ -57,7 +68,21 @@ public class ActiveManager : MonoBehaviour
                 return;
             }
         }
-        building = null;
+        SetBuilding(null);
+    }
+
+    private void ClickResource()
+    {
+        if (node.GetTileType() == TileType.ResourceNode)
+        {
+            ResourceNode2 resNode = (ResourceNode2)node;
+            if (resNode.GetResource() != null)
+            {
+                SetResource(resNode.GetResource());
+                return;
+            }
+        }
+        SetResource(null);
     }
     public void BreakTile()
     {
@@ -77,6 +102,7 @@ public class ActiveManager : MonoBehaviour
         }
         node.SetIsWorked(false); //When Complete Work Must be false;
     }
+    /*
     public void MakeRoom()
     {
         if (node == null)
@@ -96,6 +122,7 @@ public class ActiveManager : MonoBehaviour
 
         MapManager.Map.RoomFactory.ExpandRoom((RoomCenter)node);
     }
+    */
     public void BuildBuilding(BuildingType type)
     {
         if (node == null)
@@ -148,7 +175,22 @@ public class ActiveManager : MonoBehaviour
     private bool CheckMask(HexaMapNode node)
     {
         Vector3Int pos = node.GetCellPos();
-        return MapManager.Map.BlackMask.CheckMask(pos);
+        return MapManager.Map.UnderBlackMask.CheckMask(pos);
+    }
+
+    public void SetMapMode()
+    {
+        Vector3 Pos = new Vector3(100,0,0);
+        if (isGround)
+        {
+            isGround = false;
+            Camera.main.transform.position -= Pos;
+        }
+        else
+        {
+            isGround = true;
+            Camera.main.transform.position += Pos;
+        }
     }
     #endregion
 
@@ -176,7 +218,9 @@ public class ActiveManager : MonoBehaviour
                 {
                     if(!node.GetIsWorked())
                         SetCurrentNode(node);
+                    Debug.Log(node);
                     ClickBuilding();
+                    ClickResource();
                     //if (building == null)
                     //{
                     //    Debug.Log(node);
