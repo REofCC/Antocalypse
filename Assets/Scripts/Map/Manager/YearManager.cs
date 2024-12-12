@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,17 +16,16 @@ public class YearManager : MonoBehaviour
     int[] requireFoodArray = { 50, 100, 200, 300, 500 };
     int[] requireLeafArray = {50, 100, 200, 300, 500};
     int[] requireWoodArray = {0, 30, 50, 100, 300};
+
+    public event Action OnWinterEvent;
     public void Init()
     {
-        currentYear = 1;
-        requireFood = 100;
-        requireLeaf = 100;
-        requireWood = 0;
-
-        currentTime = 0;
+        currentYear = 0;
         timeLimit = 600;
 
-        StartCoroutine(Timer());
+        SetRequirement();
+
+        StartNextYear();
     }
     public int GetCurrentYear()
     {
@@ -48,17 +48,23 @@ public class YearManager : MonoBehaviour
         }
         return -1;
     }
-    void RequirementEvnet()
+    void RequirementEvnet() //정산 이벤트
     {
+        OnWinterEvent.Invoke();
         return;
     }
-    void NextRequirement()
+    void SetRequirement()
+    {
+        requireFood = requireFoodArray[currentYear];
+        requireLeaf = requireLeafArray[currentYear];
+        requireLeaf = requireWoodArray[currentYear];
+    }
+    public void StartNextYear() //다음 연차 실행
     {
         currentTime = 0;
         currentYear++;
-        requireFood = requireFoodArray[currentYear - 1];
-        requireLeaf = requireLeafArray[currentYear - 1];
-        requireLeaf = requireWoodArray[currentYear - 1];
+        SetRequirement();
+        StartCoroutine(Timer());
     }
     IEnumerator Timer()
     {
