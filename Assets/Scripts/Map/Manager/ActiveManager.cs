@@ -41,6 +41,14 @@ public class ActiveManager : MonoBehaviour
     {
         this.resource = res;
     }
+    public BaseResource GetResource()
+    {
+        return resource;
+    }
+    public BaseBuilding GetBuilding()
+    {
+        return this.building;
+    }
     #endregion
 
     #region Function
@@ -132,6 +140,7 @@ public class ActiveManager : MonoBehaviour
         }
         MapManager.Map.BuildingFactory.Build((RoomNode)node, type);
     }
+    /*
     public void UpgradeBuilding()
     {
         if(building == null)
@@ -141,6 +150,7 @@ public class ActiveManager : MonoBehaviour
         }
         MapManager.Map.BuildingFactory.Upgrade(building);
     }
+    */
     public void DemolitionBuilding()
     {
         if (building == null)

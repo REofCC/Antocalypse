@@ -12,18 +12,20 @@ public enum TileType
 }
 public enum BuildingType
 {
-    //Population
-    ResidenceChamber,
-    SpawningChamber,
-    //Food
-    SolidWareHouse,
-    LiquidWareHouse,
-    ProcessingChamber,
-    //Evolution
+    LeafSaver,
+    WoodSaver,
+    LiquidFoodSaver,
+    SolidFoodSaver,
+    CombineSaver,
+    LargeSaver,
+    SolidProcessor,
+    ResourceExtractor,
+    WorkerSpawner,
+    ScoutSpawner,
+    SoldierSpawner,
     EvolutionChamber,
-    GenCollectChamber,
-    //Travel
-    ExpeditionAggregation
+    ScoutBaseCamp,
+    TravelBaseCamp
 }
 public enum Resourcetype
 {

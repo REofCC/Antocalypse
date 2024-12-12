@@ -103,6 +103,7 @@ public class BuildingFactory : MonoBehaviour
         BuildData info = GetBuildData(type);
         StartCoroutine(BuildingCoroutine(node, info));
     }
+    /*
     public bool Upgrade(BaseBuilding building)
     {
         int phase = building.GetBuildingLevel();
@@ -114,6 +115,7 @@ public class BuildingFactory : MonoBehaviour
         }
         return false;
     }
+    */
     #endregion
     #region Demolition
     public bool Demolition(GameObject building)
