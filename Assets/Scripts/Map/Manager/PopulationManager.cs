@@ -24,13 +24,10 @@ public class PopulationManager
         {
             case AntType.Worker:
                 return currentWorker;
-                break;
             case AntType.Scout:
                 return currentScout;
-                break;
             case AntType.Soldier:
                 return currentSoldier;
-                break;
         }
         return -1;
     }
@@ -40,13 +37,10 @@ public class PopulationManager
         {
             case AntType.Worker:
                 return maxWorker;
-                break;
             case AntType.Scout:
                 return maxScout;
-                break;
             case AntType.Soldier:
                 return maxSoldier;
-                break;
         }
         return -1;
     }

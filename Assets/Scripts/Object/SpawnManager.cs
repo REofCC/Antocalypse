@@ -35,7 +35,7 @@ public class SpawnManager : MonoBehaviour
                 break;
         }
         egg = Resources.Load<GameObject>("Prefabs/Ant/Egg");
-        egg = Instantiate(egg, MapManager.Map.MapMaker.GetStartPos(), Quaternion.identity);    //Todo 스폰 위치 조정
+        egg = Instantiate(egg, MapManager.Map.MapMaker.GetStartPos().GetWorldPos(), Quaternion.identity);    //Todo 스폰 위치 조정
         egg.GetComponent<Egg>().SetValue(antType, spawnTime);
     }
 }

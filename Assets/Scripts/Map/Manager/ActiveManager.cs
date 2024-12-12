@@ -15,20 +15,6 @@ public class ActiveManager : MonoBehaviour
     BaseResource resource;
     bool isGround = false;
     #endregion
-
-    private void Awake()
-    {
-        //[LSH: building-ui-integration] �ν��Ͻ� �ʱ�ȭ �߰�
-        if (activeManager == null)
-        {
-            activeManager = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
     #region Getter & Setter
     public HexaMapNode GetCurrentNode()
     {

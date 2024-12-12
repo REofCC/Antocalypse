@@ -25,6 +25,7 @@ public class MapMaker : MonoBehaviour
     {
         return startPos;
     }
+    
     private void MakeBase()
     {
         for (int x = 0; x < mapSize; x++)
