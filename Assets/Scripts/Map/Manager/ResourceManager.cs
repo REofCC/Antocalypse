@@ -15,6 +15,8 @@ public class ResourceManager
     int wood = 0;
     int genetic = 0;
 
+    int maxLeaf = 0;
+    int maxWood = 0;
     int maxSolidFood = 0;
     int maxLiquidFood = 0;
     #endregion
@@ -81,6 +83,22 @@ public class ResourceManager
     public int GetMaxLiquidFood()
     {
         return maxLiquidFood;
+    }
+    public int GetMaxLeaf()
+    {
+        return maxLeaf;
+    }
+    public int GetMaxWood()
+    {
+        return maxWood;
+    }
+    public void SetMaxLeaf(int value)
+    {
+        maxLeaf = value;
+    }
+    public void SetMaxWood(int value)
+    {
+        maxWood = value;
     }
     #endregion
     #region Check
@@ -161,6 +179,7 @@ public class ResourceManager
         SetGenetic(GetGenetic() - value);
         return true;
     }
+
     #endregion
     #region Function
     public void CalcMaxSolidFood(int value)
@@ -171,21 +190,29 @@ public class ResourceManager
     {
         SetMaxLiquidFood(GetMaxLiquidFood() + value);
     }
-    public bool ChangeFood(int solid, int liquid, float time, float ratio)
+    public void CalcMaxLeaf(int value)
+    {
+        SetMaxLeaf(GetMaxLeaf() + value);
+    }
+    public void CalcMaxWood(int value)
+    {
+        SetMaxWood(GetMaxWood() + value);
+    }
+    public bool ChangeFood(int solid, float time, float ratio)
     {
         if (MinusSolidFood(solid))
         {
-            Managers.Manager.StartCoroutine(ChangeFoodCoroutine(liquid, time, ratio));
+            Managers.Manager.StartCoroutine(ChangeFoodCoroutine(solid, time, ratio));
             return true;
         }
         return false;
     }
     #endregion
     #region Coroutine
-    IEnumerator ChangeFoodCoroutine(int liquid, float time, float ratio)
+    IEnumerator ChangeFoodCoroutine(int solid, float time, float ratio)
     {
         yield return new WaitForSeconds(time);
-        AddLiquidFood(((int)(liquid*ratio)));
+        AddLiquidFood(((int)(solid * ratio)));
         yield break;
     }
     #endregion

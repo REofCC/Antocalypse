@@ -1,10 +1,9 @@
 using UnityEngine;
 
-public class BaseBuilding : MonoBehaviour
+public abstract class BaseBuilding : MonoBehaviour
 {
     #region Attribute
     BuildingType type;
-    int level;
     HexaMapNode buildedPos;
     #endregion
 
@@ -17,14 +16,6 @@ public class BaseBuilding : MonoBehaviour
     {
         this.type = type;
     }
-    public int GetBuildingLevel()
-    {
-        return level;
-    }
-    public void SetBuildingLevel(int level)
-    {
-        this.level = level;
-    }
     public HexaMapNode GetBuildedPos()
     {
         return buildedPos;
@@ -36,5 +27,7 @@ public class BaseBuilding : MonoBehaviour
     #endregion
 
     #region Function
+    public abstract void EventStart();
+    public abstract void EventStop();
     #endregion
 }

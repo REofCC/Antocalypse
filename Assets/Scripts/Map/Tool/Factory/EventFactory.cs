@@ -54,4 +54,8 @@ public class EventFactory : MonoBehaviour
         CombineEventNode(obj, node);
     }
     #endregion
+    public void OnAwake()
+    {
+        eventObjects = GameObject.Find("Events");
+    }
 }

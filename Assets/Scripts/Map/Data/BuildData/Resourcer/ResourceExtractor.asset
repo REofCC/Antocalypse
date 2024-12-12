@@ -17,4 +17,4 @@ MonoBehaviour:
   wood: c8000000
   tiles: 
   time: 60
-  type: 0
+  type: 7

@@ -5,6 +5,7 @@ public abstract class Event : MonoBehaviour
     #region Attribute
     EventType eventType;
     TravelNode node;
+    [SerializeField]
     EventData info;
     #endregion
     #region Setter & Getter

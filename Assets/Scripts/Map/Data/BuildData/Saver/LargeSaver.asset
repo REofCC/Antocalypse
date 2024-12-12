@@ -17,4 +17,4 @@ MonoBehaviour:
   wood: 1e000000
   tiles: 
   time: 30
-  type: 0
+  type: 5
