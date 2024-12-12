@@ -9,26 +9,26 @@ public class HatchInfoTooltip : MonoBehaviour
     [SerializeField] TMP_Text descriptionText;
     [SerializeField] [TextArea] List<string> description = new List<string>();
     //[LSH:TODO] Type 열거형으로 받아야 함
-    public void SetAntTypeText(TempAntType antType)
+    public void SetAntTypeText(AntType antType)
     {
         antTypeText.text = $"{antType.ToString()} Ant";
     }
 
-    public void SetDescriptionText(TempAntType antType)
+    public void SetDescriptionText(AntType antType)
     {
-        if(antType == TempAntType.Worker)
+        if(antType == AntType.Worker)
         {
             descriptionText.text = description[0];
         }
-        else if (antType == TempAntType.Scout)
+        else if (antType == AntType.Scout)
         {
             descriptionText.text = description[1];
         }
-        else if (antType == TempAntType.Soldier)
+        else if (antType == AntType.Soldier)
         {
             descriptionText.text = description[2];
         }
-        else if (antType == TempAntType.Queen)
+        else if (antType == AntType.Queen)
         {
             descriptionText.text = description[3];
         }
