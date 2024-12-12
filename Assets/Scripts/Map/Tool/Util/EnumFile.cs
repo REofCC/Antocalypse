@@ -48,3 +48,9 @@ public enum EventType
     Resource,
 
 }
+
+public enum LayerType
+{
+    Ground,
+    Underground
+}
