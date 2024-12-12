@@ -15,6 +15,7 @@ public enum TileType
     TravelNode,
     ResourceNode,
     TraveledNode,
+    BattleNode,
     None
 }
 public enum BuildingType
