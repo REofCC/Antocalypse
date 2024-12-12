@@ -151,19 +151,9 @@ public class ActiveManager : MonoBehaviour
         return MapManager.Map.BlackMask.CheckMask(pos);
     }
     // ������ - ��ü ���� �ڵ� �߰�
-    public void SpwanWorker()
+    public void SpwanEgg(AntType type)
     {
-        Managers.SpawnManager.SpawnEgg(AntType.Worker);
-        return;
-    }
-    public void SpwanScout()
-    {
-        Managers.SpawnManager.SpawnEgg(AntType.Scout);
-        return;
-    }
-    public void SpwanSoldier()
-    {
-        Managers.SpawnManager.SpawnEgg(AntType.Soldier);
+        Managers.SpawnManager.SpawnEgg(type);
         return;
     }
     // ������ ------
