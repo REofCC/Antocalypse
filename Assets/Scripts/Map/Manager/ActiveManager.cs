@@ -16,7 +16,7 @@ public class ActiveManager : MonoBehaviour
 
     private void Awake()
     {
-        //[LSH: building-ui-integration] ÀÎ½ºÅÏ½º ÃÊ±âÈ­ Ãß°¡
+        //[LSH: building-ui-integration] ï¿½Î½ï¿½ï¿½Ï½ï¿½ ï¿½Ê±ï¿½È­ ï¿½ß°ï¿½
         if (activeManager == null)
         {
             activeManager = this;
@@ -150,6 +150,13 @@ public class ActiveManager : MonoBehaviour
         Vector3Int pos = node.GetCellPos();
         return MapManager.Map.BlackMask.CheckMask(pos);
     }
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½ ï¿½ß°ï¿½
+    public void SpwanEgg(AntType type)
+    {
+        Managers.SpawnManager.SpawnEgg(type);
+        return;
+    }
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ------
     #endregion
 
     #region Unity Function

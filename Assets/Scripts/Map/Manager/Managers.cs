@@ -12,6 +12,9 @@ public class Managers : MonoBehaviour
 
     static PopulationManager population = new();
     public static PopulationManager Population { get { return population; } }
+    // ±«»Ò¡ÿ - spwanManager √ﬂ∞°
+    static SpawnManager spawnManager = new();
+    public static SpawnManager SpawnManager { get { return spawnManager; } }
 
     private void Start()
     {
