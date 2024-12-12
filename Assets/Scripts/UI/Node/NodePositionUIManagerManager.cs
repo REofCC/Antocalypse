@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 public class NodePositionUIManager : MonoBehaviour
 {
     [SerializeField] NodeOutlineHighlighter nodeOutlineHighlighter;
-    [SerializeField] NodeExplorationUI nodeExplorationUI;
+    [SerializeField] NodeOrderPanelUI nodeOrderPanelUI;
 
     private void Update()
     {
@@ -35,22 +35,22 @@ public class NodePositionUIManager : MonoBehaviour
         return false;
     }
 
-
     public void HighlightNode(HexaMapNode node)
     {
         if(!NodeCheck(node.GetTileType()))
         {
+            ClearHighlight();
             return;
         }
 
         nodeOutlineHighlighter.HighlightNode(node);
         Vector3 highlightedNodePosition = node.GetWorldPos();
-        nodeExplorationUI.SetUIPosition(highlightedNodePosition);
+        nodeOrderPanelUI.SetUIPosition(highlightedNodePosition);
     }
 
     public void ClearHighlight()
     {
         nodeOutlineHighlighter.ClearHighlight();
-        nodeExplorationUI.HideUI();
+        nodeOrderPanelUI.HideUI();
     }
 }
