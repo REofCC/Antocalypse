@@ -19,13 +19,16 @@ public class Managers : MonoBehaviour
     static YearManager yearManager;
     public static YearManager YearManager { get { return yearManager; } }
 
+    private void Awake()
+    {
+        yearManager = gameObject.AddComponent<YearManager>();        
+    }
     private void Start()
     {
         manager = GetComponent<Managers>();
         DontDestroyOnLoad(manager);
 
         //연차 초기설정 및 시작
-        yearManager = gameObject.AddComponent<YearManager>();
         yearManager.Init();
     }
 }
