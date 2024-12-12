@@ -36,6 +36,10 @@ public class PopupEventTriggerWorldSpace : MonoBehaviour
                     slidePopup.TogglePopup();
                 }
             }
+            else
+            {
+                slidePopup.ClosePopup();
+            }
         }
 
         if (mouseAction == MouseAction.HOVER)

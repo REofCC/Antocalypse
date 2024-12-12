@@ -20,8 +20,7 @@ public class NodePositionUIManager : MonoBehaviour
 
     private HexaMapNode ClickTile(Vector3 pos)
     {
-        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(pos.x, pos.y, Camera.main.transform.position.z * -1));
-        Debug.Log(mouseWorldPos);
+        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(pos.x, pos.y, Camera.main.transform.position.z * -1));        
 
         Vector2Int gridPos = MapManager.Map.UnderPosCalc.CalcGridPos(mouseWorldPos);
         return MapManager.Map.UnderGrid.GetNode(mouseWorldPos);
