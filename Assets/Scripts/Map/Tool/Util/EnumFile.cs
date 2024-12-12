@@ -2,7 +2,8 @@ public enum AntType
 {
     Worker,
     Scout,
-    Soldier
+    Soldier,
+    Queen,
 }
 public enum TileType
 {
