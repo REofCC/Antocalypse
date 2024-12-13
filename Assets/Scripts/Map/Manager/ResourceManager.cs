@@ -15,6 +15,9 @@ public class ResourceManager
     int wood = 0;
     int genetic = 0;
 
+    int maxLeaf = 0;
+    int maxWood = 0;
+    int maxGenetic = 0;
     int maxSolidFood = 0;
     int maxLiquidFood = 0;
     #endregion
@@ -73,6 +76,18 @@ public class ResourceManager
     {
         maxLiquidFood = value;
         OnResourceChange?.Invoke(ResourceType.LIQUID_FOOD);
+    }
+    public int GetMaxLeaf()
+    {
+        return maxLeaf;
+    }
+    public int GetMaxWood()
+    {
+        return maxWood;
+    }
+    public int GetMaxGenetic()
+    {
+        return maxGenetic;
     }
     public int GetMaxSolidFood()
     {
