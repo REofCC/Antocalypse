@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7474032927647435386}
   - component: {fileID: 5704224603119938894}
   - component: {fileID: 8542958305276128812}
-  - component: {fileID: -4254291797691460582}
+  - component: {fileID: 657225347343576377}
   m_Layer: 0
   m_Name: LargeSaver
   m_TagString: Untagged
@@ -98,7 +98,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-4254291797691460582
+--- !u!114 &657225347343576377
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -110,5 +110,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8982248cbef2cf649a764921ac44ed5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  types: 01000000
-  route: []
+  saveInfo: {fileID: 11400000, guid: 2f301517c8bbbd64bae16d6bab254791, type: 2}

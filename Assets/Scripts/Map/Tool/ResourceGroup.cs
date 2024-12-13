@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ResourceGroup : MonoBehaviour
+public class ResourceGroup
 {
     public List<BaseResource> leafs = new();
     public List<BaseResource> woods = new();

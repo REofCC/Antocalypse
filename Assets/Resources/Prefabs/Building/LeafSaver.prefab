@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4804664682130572062}
   - component: {fileID: 2985751401458602038}
   - component: {fileID: 7497402218211465044}
-  - component: {fileID: 6722481961823328333}
+  - component: {fileID: 1952396721284577473}
   m_Layer: 0
   m_Name: LeafSaver
   m_TagString: Untagged
@@ -98,7 +98,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6722481961823328333
+--- !u!114 &1952396721284577473
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -110,5 +110,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8982248cbef2cf649a764921ac44ed5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  types: 02000000
-  route: []
+  saveInfo: {fileID: 11400000, guid: 96b37465b5eddb2478f8ddf85058556c, type: 2}

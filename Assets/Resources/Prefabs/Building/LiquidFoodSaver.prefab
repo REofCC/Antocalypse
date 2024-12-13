@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7328800180972051012}
   - component: {fileID: 6220368691920934229}
   - component: {fileID: -2208619837872960251}
-  - component: {fileID: -848770330701572182}
+  - component: {fileID: 3596904040050169959}
   m_Layer: 0
   m_Name: LiquidFoodSaver
   m_TagString: Untagged
@@ -98,7 +98,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-848770330701572182
+--- !u!114 &3596904040050169959
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -110,5 +110,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8982248cbef2cf649a764921ac44ed5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  types: 00000000
-  route: []
+  saveInfo: {fileID: 11400000, guid: 4ac9c369c7b65214287364b51ebcea46, type: 2}

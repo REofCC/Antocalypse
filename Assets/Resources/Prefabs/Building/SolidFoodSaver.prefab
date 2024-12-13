@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1034615515204136559}
   - component: {fileID: 2658572830809110727}
   - component: {fileID: 1872119825972761536}
-  - component: {fileID: -7334257862064901629}
+  - component: {fileID: 8884407680833561943}
   m_Layer: 0
   m_Name: SolidFoodSaver
   m_TagString: Untagged
@@ -98,7 +98,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-7334257862064901629
+--- !u!114 &8884407680833561943
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -110,5 +110,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8982248cbef2cf649a764921ac44ed5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  types: 01000000
-  route: []
+  saveInfo: {fileID: 11400000, guid: 44fcb5ca09c6dd846a649474d2c26dec, type: 2}

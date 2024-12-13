@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5613664453104555614}
   - component: {fileID: 503376443292207093}
   - component: {fileID: -103328683772911746}
-  - component: {fileID: 4961645167017789899}
+  - component: {fileID: 5226206408282546390}
   m_Layer: 0
   m_Name: CombineSaver
   m_TagString: Untagged
@@ -98,7 +98,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4961645167017789899
+--- !u!114 &5226206408282546390
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -110,5 +110,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8982248cbef2cf649a764921ac44ed5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  types: 00000000010000000200000003000000
-  route: []
+  saveInfo: {fileID: 11400000, guid: 417a1db78898bda4db48cdedf61d5c41, type: 2}
