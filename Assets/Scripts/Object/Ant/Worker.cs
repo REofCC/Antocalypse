@@ -292,9 +292,45 @@ public class Worker : MonoBehaviour
             path = MapManager.Map.UnderPathFinder.PathFinding(start, targetNode);
         }
     }
-    void FindCargo()
+    void FindCargo(Resourcetype resourceType)
     {
+        LayerMask resourceLayer;    //해당 자원 레이어
+        switch (resourceType)
+        {
+            case Resourcetype.Leaf:
+                //resourceLayer = 
+                break;
+            case Resourcetype.Wood:
+                //resourceLayer = 
+                break;
+            case Resourcetype.Liquid:
+                //resourceLayer = 
+                break;
+            case Resourcetype.Solid:
+                //resourceLayer = 
+                break;
+        }    
+        
+        GameObject obj = null;
 
+        var hits = Physics2D.CircleCastAll(nodePos, Mathf.Infinity, Vector2.zero, Mathf.Infinity, resourceLayer);
+
+        foreach (var hit in hits.OrderBy(distance => Vector2.Distance(nodePos, distance.point)))
+        {
+            if ((hit.collider.GetComponent<건물>().현재저장가능?()))
+            {
+                obj = hit.collider.gameObject;
+                Debug.Log("Found");
+                break;
+            }
+        }
+
+        if (obj == null)
+        {
+            Debug.Log("Can't Find");
+        }
+
+        cargo = obj;
     }
     //void Idle()
     //{
@@ -380,7 +416,7 @@ public class Worker : MonoBehaviour
         entityData.isHolding = true;
         entityData.holdValue = entityData.gatherValue;
 
-        // 경로 반대로
+        //FindCargo(); //저장소 경로 할당
         ChangeState(State.Move);
     }
 }
