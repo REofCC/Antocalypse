@@ -14,8 +14,9 @@ public class QuestionEvent : Event
         return;
     }
 
-    public override void SetEvent()
+    public override void SetEvent(EventData data)
     {
         SetEventType(EventType.Question);
+        SetEventData(data);
     }
 }
