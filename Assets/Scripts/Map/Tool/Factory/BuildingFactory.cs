@@ -85,7 +85,7 @@ public class BuildingFactory : MonoBehaviour
         {
             Debug.Log($"Error : Prefabs/Building/{buildingName} is not exist");
         }
-        return Instantiate(go);
+        return Instantiate(go, buildings.transform);
     }
     private void SetBuildingPosition(GameObject building, Path node)
     {
@@ -158,7 +158,7 @@ public class BuildingFactory : MonoBehaviour
     }
     #endregion
     #region Unity Function
-    private void Start()
+    public void OnAwake()
     {
         currentBuild = new int[buildResources.Count];
         buildConstraints = new bool[buildResources.Count];
@@ -167,6 +167,7 @@ public class BuildingFactory : MonoBehaviour
             currentBuild[i] = 0;
             buildConstraints[i] = false;
         }
+        buildConstraints[(int)BuildingType.Queen] = true;
         buildings = GameObject.Find("Buildings");
 
     }

@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 503376443292207093}
   - component: {fileID: -103328683772911746}
   - component: {fileID: 5226206408282546390}
-  m_Layer: 0
+  - component: {fileID: -4645212958379346015}
+  m_Layer: 13
   m_Name: CombineSaver
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -111,3 +112,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   saveInfo: {fileID: 11400000, guid: 417a1db78898bda4db48cdedf61d5c41, type: 2}
+--- !u!58 &-4645212958379346015
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4394591983931182745}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5

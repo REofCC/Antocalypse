@@ -55,19 +55,30 @@ public class SaverPath : MonoBehaviour
     #region Resource Save
     private void InitCurrentSave()
     {
-        for (int idx = 0; idx < saveInfo.SaveResources.Count; idx++)
+        for (int idx = 0; idx < 4; idx++)
         {
             currentSave.Add(0);
         }
     }
     public bool CheckSaveState(int value, Resourcetype type)
     {
+        if (!CheckResourceType(type))
+            return false;
         int diff = saveInfo.MaxSave[(int)type] - currentSave[(int)type];
         if (diff < value)
         {
             return false;
         }
         return true;
+    }
+    public bool CheckResourceType(Resourcetype type)
+    {
+        for (int i = 0; i < saveInfo.SaveResources.Count; i++)
+        {
+            if (type == saveInfo.SaveResources[i])
+                return true;
+        }
+        return false;
     }
     public int GatherResource(int value, ResourceType type)
     {

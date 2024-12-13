@@ -33,7 +33,8 @@ public enum BuildingType
     SoldierSpawner,
     EvolutionChamber,
     ScoutBaseCamp,
-    TravelBaseCamp
+    TravelBaseCamp,
+    Queen
 }
 public enum Resourcetype
 {
