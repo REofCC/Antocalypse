@@ -37,15 +37,15 @@ public class YearManager : MonoBehaviour
     {
         return  currentTime / timeLimit;
     }
-    public int GetRequireResource(Resourcetype resourceType)
+    public int GetRequireResource(ResourceType resourceType)
     {
         switch (resourceType)
         {
-            case Resourcetype.Leaf:
+            case ResourceType.LEAF:
                 return requireLeaf;
-            case Resourcetype.Wood:
+            case ResourceType.WOOD:
                 return requireWood;
-            case Resourcetype.Liquid:
+            case ResourceType.LIQUID_FOOD:
                 return requireFood;
         }
         return -1;
