@@ -14,6 +14,8 @@ public class BaseResource : MonoBehaviour
     ResourceData info;
     HexaMapNode node;
     BaseBuilding warehouse;
+
+    List<Vector3> route;
     #endregion
 
     #region Getter & Setter
@@ -56,7 +58,14 @@ public class BaseResource : MonoBehaviour
     {
         this.warehouse = warehouse;
     }
-
+    public void SetRoute(List<Vector3> route)
+    {
+        this.route = route;
+    }
+    public List<Vector3> GetRoute()
+    {
+        return route;
+    }
     #endregion
 
     #region Function

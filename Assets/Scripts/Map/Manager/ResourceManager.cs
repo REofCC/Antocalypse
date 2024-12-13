@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ResourceManager
@@ -19,6 +20,8 @@ public class ResourceManager
     int maxWood = 0;
     int maxSolidFood = 0;
     int maxLiquidFood = 0;
+
+    public ResourceGroup resGroup= new();
     #endregion
     #region Getter & Setter
     public int GetLiquidFood()

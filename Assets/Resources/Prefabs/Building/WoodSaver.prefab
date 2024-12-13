@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8013504779698935656}
   - component: {fileID: 5765521065093606459}
   - component: {fileID: 7939521424734169210}
+  - component: {fileID: -6961591915489657468}
   m_Layer: 0
   m_Name: WoodSaver
   m_TagString: Untagged
@@ -97,3 +98,17 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &-6961591915489657468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6082222020435837270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8982248cbef2cf649a764921ac44ed5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  types: 03000000
+  route: []
