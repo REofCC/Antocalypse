@@ -97,19 +97,20 @@ public class ActiveManager : MonoBehaviour
 
         Vector2Int gridPos = node.GetGridPos();
         node.SetIsWorked(true);
-        Wall Node = (Wall)node;
-        if (Node.GetResource() != null)
-        {
-            HexaMapNode resNode = MapManager.Map.UnderGrid.SwapNode(gridPos.x, gridPos.y, "ResourceNode", true);
-            MapManager.Map.ResourceFactory.SetResource(Node, resNode as ResourceNode2);
-        }
-        else
-        {
-            node.SetIsWorked(false); //When Complete Work Must be false;
-            // ������ - TaskManager ���� �׽�Ʈ
-            Managers.Task.RequestTask(node, TaskType.Build);
-        }
-        //MapManager.Map.UnderGrid.SwapNode(gridPos.x, gridPos.y, "Path", true);
+
+        Managers.Task.RequestTask(node, TaskType.Build);
+        //Wall Node = (Wall)node;
+        //if (Node.GetResource() != null)
+        //{
+        //    HexaMapNode resNode = MapManager.Map.UnderGrid.SwapNode(gridPos.x, gridPos.y, "ResourceNode", true);
+        //    MapManager.Map.ResourceFactory.SetResource(Node, resNode as ResourceNode2);
+        //}
+        //else
+        //{
+        //    node.SetIsWorked(false); //When Complete Work Must be false;
+        //    // ������ - TaskManager ���� �׽�Ʈ
+        //    Managers.Task.RequestTask(node, TaskType.Build);
+        //}
     }
     /*
     public void MakeRoom()

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class TaskManager : MonoBehaviour
@@ -53,31 +54,36 @@ public class TaskManager : MonoBehaviour
             {
                 currentRequest = requestQueue.Dequeue();
 
-                entity = FindEntity(TaskType.None);
-                if (entity == null)   //유휴 개체 없음 TODO : 접근 불가능한 경로 일때 추가
+                if (!FindEntity(TaskType.None))   //유휴 개체 없음
                 {
                     requestQueue.Enqueue(currentRequest);   //다시 큐에 넣고 다음 명령 수행
                 }
                 else
                 {
-                    //nodePos = currentRequest.targetNode.GetWorldPos();
-                    //Vector2Int gridPos = currentRequest.targetNode.GetGridPos();
-
-                    //HexaMapNode start = MapManager.Map.UnderGrid.GetNode(entity.transform.position);
-                    switch (currentRequest.taskType)
+                    HexaMapNode start = MapManager.Map.UnderGrid.GetNode(entity.transform.position);
+                    List<Vector3> path = MapManager.Map.UnderPathFinder.ReachWallPathFinding(start, currentRequest.targetNode);
+                    if (path == null)   //경로 없을 시
                     {
-                        case TaskType.Gather:
-                            break;
-                        case TaskType.Build:
-                            if (currentRequest.buildingType == BuildingType.None)  //벽 파괴
-                            {
+                        requestQueue.Enqueue(currentRequest);   //다시 큐에 넣고 다음 명령 수행
+                    }
+                    else
+                    {
+                        switch (currentRequest.taskType)
+                        {
+                            case TaskType.Gather:
                                 entity.GetComponent<Worker>().GetTask(currentRequest.targetNode, currentRequest.taskType);
-                            }
-                            else   //건물 건설
-                            {
-                                entity.GetComponent<Worker>().GetTask(currentRequest.targetNode, currentRequest.taskType, currentRequest.buildingType);
-                            }
-                            break;
+                                break;
+                            case TaskType.Build:
+                                if (currentRequest.buildingType == BuildingType.None)  //벽 파괴
+                                {
+                                    entity.GetComponent<Worker>().GetTask(currentRequest.targetNode, currentRequest.taskType);
+                                }
+                                else   //건물 건설
+                                {
+                                    entity.GetComponent<Worker>().GetTask(currentRequest.targetNode, currentRequest.taskType, currentRequest.buildingType);
+                                }
+                                break;
+                        }
                     }
                  }
             }
@@ -89,17 +95,17 @@ public class TaskManager : MonoBehaviour
         }
         isCoroutineRunning = false;
     }
-    public GameObject FindEntity(TaskType task)
+    public bool FindEntity(TaskType task)
     {
-        GameObject entity = null;
+        entity = null;
 
         var hits = Physics2D.CircleCastAll(nodePos, scanRange, Vector2.zero, Mathf.Infinity, antLayer);
 
         foreach (var hit in hits.OrderBy(distance => Vector2.Distance(nodePos, distance.point)))
         {
-            if ((hit.collider.GetComponent<Worker>().GetCurrentTask() == task))
+            if ((hit.collider.transform.parent.GetComponent<Worker>().GetCurrentTask() == task))
             {
-                entity = hit.collider.gameObject;
+                entity = hit.collider.transform.parent.gameObject;
                 Debug.Log("Found");
                 break;
             }
@@ -108,9 +114,10 @@ public class TaskManager : MonoBehaviour
         if (entity == null)
         {
             Debug.Log("Can't Find");
+            return false;
         }
 
-        return entity;
+        return true;
     }
     public GameObject FindEntity(TaskType task, Vector2 nodePos)
     {
@@ -132,6 +139,7 @@ public class TaskManager : MonoBehaviour
         if (entity == null)
         {
             Debug.Log("Can't Find");
+            return null;
         }
 
         return entity;

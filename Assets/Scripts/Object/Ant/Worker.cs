@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static UnityEngine.EventSystems.EventTrigger;
@@ -292,87 +293,47 @@ public class Worker : MonoBehaviour
             path = MapManager.Map.UnderPathFinder.PathFinding(start, targetNode);
         }
     }
-    void FindCargo(Resourcetype resourceType)
-    {
-        LayerMask resourceLayer;    //해당 자원 레이어
-        switch (resourceType)
-        {
-            case Resourcetype.Leaf:
-                //resourceLayer = 
-                break;
-            case Resourcetype.Wood:
-                //resourceLayer = 
-                break;
-            case Resourcetype.Liquid:
-                //resourceLayer = 
-                break;
-            case Resourcetype.Solid:
-                //resourceLayer = 
-                break;
-        }    
+    //void FindCargo(Resourcetype resourceType)
+    //{
+    //    LayerMask resourceLayer;    //해당 자원 레이어
+    //    switch (resourceType)
+    //    {
+    //        case Resourcetype.Leaf:
+    //            //resourceLayer = 
+    //            break;
+    //        case Resourcetype.Wood:
+    //            //resourceLayer = 
+    //            break;
+    //        case Resourcetype.Liquid:
+    //            //resourceLayer = 
+    //            break;
+    //        case Resourcetype.Solid:
+    //            //resourceLayer = 
+    //            break;
+    //    }    
         
-        GameObject obj = null;
+    //    GameObject obj = null;
 
-        var hits = Physics2D.CircleCastAll(nodePos, Mathf.Infinity, Vector2.zero, Mathf.Infinity, resourceLayer);
+    //    var hits = Physics2D.CircleCastAll(nodePos, Mathf.Infinity, Vector2.zero, Mathf.Infinity, resourceLayer);
 
-        foreach (var hit in hits.OrderBy(distance => Vector2.Distance(nodePos, distance.point)))
-        {
-            if ((hit.collider.GetComponent<건물>().현재저장가능?()))
-            {
-                obj = hit.collider.gameObject;
-                Debug.Log("Found");
-                break;
-            }
-        }
+    //    foreach (var hit in hits.OrderBy(distance => Vector2.Distance(nodePos, distance.point)))
+    //    {
+    //        if ((hit.collider.GetComponent<건물>().현재저장가능?()))
+    //        {
+    //            obj = hit.collider.gameObject;
+    //            Debug.Log("Found");
+    //            break;
+    //        }
+    //    }
 
-        if (obj == null)
-        {
-            Debug.Log("Can't Find");
-        }
+    //    if (obj == null)
+    //    {
+    //        Debug.Log("Can't Find");
+    //    }
 
-        cargo = obj;
-    }
-    //void Idle()
-    //{
-    //    // 유휴 행동
+    //    cargo = obj;
     //}
 
-    //bool FoodCheck()
-    //{
-    //    if (entityData.kcal < 50)
-    //    {
-    //        return true;
-    //    }
-    //    else
-    //    {
-    //        return false;
-    //    }
-    //}
-
-    //void GatherResouce()
-    //{
-    //    Debug.Log("Gathering Resouces");
-    //    //자원 수집
-    //    entityData.isHolding = true;
-    //    entityData.holdValue = entityData.gatherValue;  //자원 수집량만큼 보유
-    //    //자원 수집 애니메이션 및 딜레이 추가
-
-    //    targetPos = cargoPos;
-    //    Debug.Log("Returning to Cargo");
-    //    ChangeState(State.Move);
-    //}
-
-    //private void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //    if (collision.CompareTag("Cargo"))
-    //    {
-    //        Debug.Log("arrived at Cargo");
-    //    }
-    //    else if(collision.CompareTag("ResourceNode"))
-    //    {
-    //        Debug.Log("arrived at ResourceNode");
-    //    }
-    //}
     public State GetCurrentState()
     {
         return state;
@@ -396,11 +357,26 @@ public class Worker : MonoBehaviour
 
     IEnumerator BuildTimer()
     {
-        yield return new WaitForSeconds(buildTime);
+        yield return new WaitForSeconds(buildTime); 
         Debug.Log("Build Finish");
         // 작업 완료 전달?
         if (buildingType == BuildingType.None)
+        {
+            Wall node = (Wall)targetNode;
             MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "Path", true);
+            //targetNode.SetIsWorked(false);
+            //if (node.GetResource() != null)
+            //{
+            //    HexaMapNode resNode = MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "ResourceNode", true);
+            //    MapManager.Map.ResourceFactory.SetResource(node, resNode as ResourceNode2);
+            //    targetNode.SetIsWorked(false);
+            //}
+            //else
+            //{
+            //    MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "Path", true);
+            //    targetNode.SetIsWorked(false);
+            //}
+        }
         else
         {
             //건물 건설
