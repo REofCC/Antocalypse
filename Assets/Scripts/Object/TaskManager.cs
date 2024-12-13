@@ -71,12 +71,12 @@ public class TaskManager : MonoBehaviour
                         case TaskType.Build:
                             if (currentRequest.buildingName == null)  //벽 파괴
                             {
-                                List<Vector3> path = MapManager.Map.PathFinder.ReachWallPathFinding(start, currentRequest.targetNode); //대상이 벽일 경우 이전 노드까지 탐색
+                                List<Vector3> path = MapManager.Map.UnderPathFinder.ReachWallPathFinding(start, currentRequest.targetNode); //대상이 벽일 경우 이전 노드까지 탐색
                                 entity.GetComponent<Worker>().GetTask(currentRequest.targetNode, path, currentRequest.taskType);
                             }
                             else   //건물 건설
                             {
-                                List<Vector3> path = MapManager.Map.PathFinder.PathFinding(start, currentRequest.targetNode); //대상이 벽이 아닌 경우 해당 노드까지 탐색
+                                List<Vector3> path = MapManager.Map.UnderPathFinder.PathFinding(start, currentRequest.targetNode); //대상이 벽이 아닌 경우 해당 노드까지 탐색
                                 entity.GetComponent<Worker>().GetTask(currentRequest.targetNode, path, currentRequest.taskType);
                             }
                             break;

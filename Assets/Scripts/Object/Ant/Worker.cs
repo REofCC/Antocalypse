@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEngine.GraphicsBuffer;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class Worker : MonoBehaviour
 {
@@ -87,6 +90,8 @@ public class Worker : MonoBehaviour
 
         root.Evaluate();
     }
+    #region BT
+    #region BTAction
     BTNodeState Eat()
     {
         // 섭취 행동 대기시간 및 애니메이션
@@ -104,6 +109,7 @@ public class Worker : MonoBehaviour
             {
                 pathIndex--;
                 targetPos = path[pathIndex];
+                transform.rotation = Quaternion.Euler(new Vector3(0, 0, RotateValue(targetPos)));
                 return BTNodeState.Running;
             }
         }
@@ -148,10 +154,18 @@ public class Worker : MonoBehaviour
         // 유휴 애니메이션
         return BTNodeState.Running;
     }
+    #endregion
+    #region BTCondition
     bool IsKcalLow()
     {
-        if (entityData.kcal<=50)    //수치 조정
+        if (entityData.kcal <= 50 && currentTask == TaskType.None)    //수치 조정
+        {
+            currentTask = TaskType.Eat;
+            //path = 
+            //여왕개미 or 액체 식량 보관소 까지 경로 요청
             return true;
+        }
+
         else 
             return false;
     }
@@ -182,6 +196,8 @@ public class Worker : MonoBehaviour
         else
             return false;
     }
+    #endregion
+#endregion
 
     private void FixedUpdate()
     {
@@ -211,44 +227,6 @@ public class Worker : MonoBehaviour
                 break;
         }
     }
-    //void Move()
-    //{
-    //    if (transform.position.x == targetPos.x && transform.position.y == targetPos.y)
-    //    {
-    //        Debug.Log("Move Finish");
-    //        ChangeState(State.Idle);
-    //        MoveEnd();
-    //    }
-    //    transform.position = Vector2.MoveTowards(transform.position, targetPos, entityData.speed * Time.deltaTime);
-    //}
-    //void MoveEnd()
-    //{
-    //    switch(currentTask)
-    //    {
-    //        case TaskType.None:
-    //            ChangeState(State.Idle);
-    //            break;
-    //        case TaskType.Gather:
-    //            if (transform.position.x == cargoPos.x && transform.position.y == cargoPos.y)   // 저장소에 도착 시 
-    //            {
-    //                ColonyManager.Instance.GetResoruce(entityData.holdValue);   // 보유중인 자원만큼 저장소 자원 추가
-    //                targetPos = nodePos;
-    //                ChangeState(State.Move);
-    //            }
-    //            else if (transform.position.x == nodePos.x && transform.position.y == nodePos.y)    // 자원 노드에 도착 시
-    //            {
-    //                    targetPos = nodePos;
-    //                    ChangeState(State.Gather);  // 수집 상태로 변경
-    //            }
-    //            break;
-    //        case TaskType.Build:
-    //            ChangeState(State.Idle);
-    //            break;
-    //        case TaskType.Eat:
-    //            ChangeState(State.Idle);
-    //            break;
-    //    }
-    //}
     public void GetTask(HexaMapNode targetNode, List<Vector3> path, TaskType type)
     {
         Debug.Log("Task Confirmed");
@@ -299,7 +277,14 @@ public class Worker : MonoBehaviour
                 break;
         }
     }
+    float RotateValue(Vector3 targetPos)
+    {
+        Vector3 direction = targetPos - transform.position;
 
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+        return angle;
+    }
     //void Idle()
     //{
     //    // 유휴 행동
