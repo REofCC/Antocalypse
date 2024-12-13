@@ -24,6 +24,7 @@ public class Worker : MonoBehaviour
     TaskType currentTask;
     State state;
     //State nextState;
+    Vector2 currentTargetPos;
     Vector2 targetPos;
     Vector2Int targetGridPos;
     HexaMapNode targetNode;
@@ -99,21 +100,25 @@ public class Worker : MonoBehaviour
     }
     BTNodeState Move()
     {
-        if (transform.position.x == targetPos.x && transform.position.y == targetPos.y)
+        if (transform.position.x == currentTargetPos.x && transform.position.y == currentTargetPos.y)
         {
             //Debug.Log("Move Finish");
             //ChangeState(State.Idle);
             if (pathIndex == 0) // 경로 마지막일 때
+            {
+                transform.rotation = Quaternion.Euler(new Vector3(0, 0, RotateValue(targetPos)));
                 return BTNodeState.Success;
+            }
+
             else
             {
                 pathIndex--;
-                targetPos = path[pathIndex];
-                transform.rotation = Quaternion.Euler(new Vector3(0, 0, RotateValue(targetPos)));
+                currentTargetPos = path[pathIndex];
+                transform.rotation = Quaternion.Euler(new Vector3(0, 0, RotateValue(currentTargetPos)));
                 return BTNodeState.Running;
             }
         }
-        transform.position = Vector2.MoveTowards(transform.position, targetPos, entityData.speed * Time.deltaTime);
+        transform.position = Vector2.MoveTowards(transform.position, currentTargetPos, entityData.speed * Time.deltaTime);
         return BTNodeState.Running;
     }
 
@@ -232,7 +237,8 @@ public class Worker : MonoBehaviour
         Debug.Log("Task Confirmed");
         this.path = path;
         pathIndex = path.Count - 1;
-        targetPos = path[pathIndex];
+        targetPos = targetNode.GetWorldPos();
+        currentTargetPos = path[pathIndex];
         targetGridPos = targetNode.GetGridPos();
 
         switch (type)
@@ -257,7 +263,8 @@ public class Worker : MonoBehaviour
         Debug.Log("Task Confirmed");
         this.path = path;
         pathIndex = path.Count - 1;
-        targetPos = path[pathIndex];
+        targetPos = targetNode.GetWorldPos();
+        currentTargetPos = path[pathIndex];
         targetGridPos = targetNode.GetGridPos();
 
         switch (type)
