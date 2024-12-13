@@ -15,4 +15,6 @@ MonoBehaviour:
   resourceName: Leaf_l
   type: 2
   buildable: 1
-  amount: 12000
+  amount: 1000
+  maxWorker: 0
+  size: 0

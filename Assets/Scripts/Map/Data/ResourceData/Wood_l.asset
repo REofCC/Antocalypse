@@ -15,4 +15,6 @@ MonoBehaviour:
   resourceName: Wood_l
   type: 3
   buildable: 1
-  amount: 12000
+  amount: 1000
+  maxWorker: 0
+  size: 0

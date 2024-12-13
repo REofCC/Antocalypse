@@ -43,6 +43,12 @@ public enum Resourcetype
     Wood
 }
 
+public enum ResourceSize
+{
+    Large,
+    Medium,
+    Small
+}
 public enum EventType 
 {
     Question,

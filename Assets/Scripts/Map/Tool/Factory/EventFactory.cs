@@ -16,13 +16,18 @@ public class EventFactory : MonoBehaviour
         int idx = Random.Range(0, eventDict.Count);
         return eventDict[idx];
     }
-
+    private bool CheckNode(HexaMapNode node)
+    {
+        if (node == null ||node.GetTileType() != TileType.TravelNode)
+            return false;
+        return true;
+    }
     private GameObject GenerateEventObject(EventData eventData)
     {
-        GameObject obj = Resources.Load<GameObject>($"Prefabs/Event/{eventData.EventName}");
+        GameObject obj = Resources.Load<GameObject>($"Prefabs/Event/{eventData.name}");
         if (obj == null)
         {
-            Debug.Log($"Error : Prefabs/Event/{eventData.EventName} is not exist");
+            Debug.Log($"Error : Prefabs/Event/{eventData.name} is not exist");
             return null;
         }
         return Instantiate(obj, eventObjects.transform);
@@ -35,6 +40,7 @@ public class EventFactory : MonoBehaviour
     }
     public void GenerateEvent(TravelNode node)
     {
+        CheckNode(node);
         if (node == null)
         {
             return;
@@ -45,6 +51,7 @@ public class EventFactory : MonoBehaviour
 
     public void GenerateEvent(TravelNode node, int idx)
     {
+        CheckNode(node);
         if (node == null)
         {
             return;

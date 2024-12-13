@@ -57,13 +57,23 @@ public class BuildingFactory : MonoBehaviour
     }
     #endregion
     #region Build
+    private bool CheckResourceBuilding(ResourceNode2 node)
+    {
+        if (node.GetResource().GetInfo().Buildable && node.GetBuildable())
+            return true;
+        return false;
+    }
     private bool CheckBuilding(Path node, BuildData info)
     {
         if (!GetBuildingConstraint(info.Type))
             return false;
         for(int i = 0; i < info.Tiles.Count; i++)
         {
-            if (info.Tiles[i] == node.GetTileType()) // check buildable node type
+            if (info.Tiles[i]==TileType.ResourceNode && node.GetTileType() == TileType.ResourceNode)
+            {
+                return CheckResourceBuilding(node as ResourceNode2);
+            }
+            else if (info.Tiles[i] == node.GetTileType()) // check buildable node type
                 return node.GetBuildable(); // check already building on node
         }
         return false;

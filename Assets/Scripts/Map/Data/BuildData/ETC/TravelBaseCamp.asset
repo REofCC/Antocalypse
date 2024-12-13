@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5be4bae2b0a9d748a3e3fa3f23b71d3, type: 3}
   m_Name: TravelBaseCamp
   m_EditorClassIdentifier: 
-  buildingName: "\uC815\uCC30\uB300 \uBCF8\uBD80"
+  buildingName: "\uC815\uCC30\uB300 \uC804\uCD08\uAE30\uC9C0"
   leaf: 64000000
   wood: 32000000
-  tiles: 
+  tiles: 07000000
   time: 0
   type: 13

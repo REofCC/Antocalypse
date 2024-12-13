@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -92,12 +93,25 @@ public class MapMaker : MonoBehaviour
             }
         }
     }
+
+    private void MakeEvent()
+    {
+        for(int y = 0; y < mapSize; y++)
+        {
+            for( int x = 0; x < mapSize; x++)
+            {
+                TravelNode node = upGrid.GetNode(y,x) as TravelNode;
+                eventFactory.GenerateEvent(node, 0);
+            }
+        }
+    }
     public void MapMaking()
     {
         MakeBase();
         MakeDoorNode();
         MakeStartPos();
         MakeResource();
+        MakeEvent();
     }
     #endregion
 
@@ -112,6 +126,7 @@ public class MapMaker : MonoBehaviour
 
         nodeFactory = MapManager.Map.NodeFactory;
         resourceFactory = MapManager.Map.ResourceFactory;
+        eventFactory = MapManager.Map.EventFactory;
         //roomFactory = MapManager.Map.RoomFactory;
         this.mapSize = mapSize;
     }

@@ -15,4 +15,6 @@ MonoBehaviour:
   resourceName: Liquid_s
   type: 0
   buildable: 0
-  amount: 1500
+  amount: 100
+  maxWorker: 0
+  size: 2
