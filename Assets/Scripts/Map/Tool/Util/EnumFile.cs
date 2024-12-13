@@ -44,19 +44,11 @@ public enum ResourceType
     SOLID_FOOD,
     GENETIC_MATERIAL
 }
-
-public enum ResourceSize
-{
-    Large,
-    Medium,
-    Small
-}
 public enum EventType 
 {
     Question,
     Battle,
     Resource,
-
 }
 
 public enum LayerType
