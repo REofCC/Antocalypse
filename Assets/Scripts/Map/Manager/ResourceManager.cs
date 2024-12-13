@@ -20,6 +20,7 @@ public class ResourceManager
     int maxWood = 0;
     int maxSolidFood = 0;
     int maxLiquidFood = 0;
+    int maxGenetic = 0;
 
     public ResourceGroup resGroup= new();
     #endregion
@@ -98,14 +99,6 @@ public class ResourceManager
     public int GetMaxLiquidFood()
     {
         return maxLiquidFood;
-    }
-    public int GetMaxLeaf()
-    {
-        return maxLeaf;
-    }
-    public int GetMaxWood()
-    {
-        return maxWood;
     }
     public void SetMaxLeaf(int value)
     {

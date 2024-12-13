@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: SolidFoodSaverSave
   m_EditorClassIdentifier: 
   maxSave: 32000000
-  saveResources: 01000000
+  saveResources: 03000000

@@ -13,11 +13,11 @@ public class SaverPath : MonoBehaviour
     List<int> currentSave = new ();
     #endregion
     #region Getter
-    public int GetCurrentSave(Resourcetype type)
+    public int GetCurrentSave(ResourceType type)
     {
         return currentSave[(int)type];
     }
-    public List<Resourcetype> GetSaveResourceType()
+    public List<ResourceType> GetSaveResourceType()
     {
         return saveInfo.SaveResources;
     }
@@ -44,7 +44,7 @@ public class SaverPath : MonoBehaviour
     }
     public void SetRoute()
     {
-        List<Resourcetype> types = saveInfo.SaveResources;
+        List<ResourceType> types = saveInfo.SaveResources;
         for (int i = 0; i < types.Count; i++) 
         {
             List<BaseResource> res = Managers.Resource.resGroup.GetResources(types[i]);
@@ -60,7 +60,7 @@ public class SaverPath : MonoBehaviour
             currentSave.Add(0);
         }
     }
-    public bool CheckSaveState(int value, Resourcetype type)
+    public bool CheckSaveState(int value, ResourceType type)
     {
         if (!CheckResourceType(type))
             return false;
@@ -71,7 +71,7 @@ public class SaverPath : MonoBehaviour
         }
         return true;
     }
-    public bool CheckResourceType(Resourcetype type)
+    public bool CheckResourceType(ResourceType type)
     {
         for (int i = 0; i < saveInfo.SaveResources.Count; i++)
         {

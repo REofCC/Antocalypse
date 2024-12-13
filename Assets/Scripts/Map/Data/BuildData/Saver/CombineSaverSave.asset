@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: CombineSaverSave
   m_EditorClassIdentifier: 
   maxSave: 32000000320000003200000032000000
-  saveResources: 02000000030000000000000001000000
+  saveResources: 00000000010000000200000003000000

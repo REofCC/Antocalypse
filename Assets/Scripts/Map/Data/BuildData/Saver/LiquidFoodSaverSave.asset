@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: LiquidFoodSaverSave
   m_EditorClassIdentifier: 
   maxSave: 32000000
-  saveResources: 00000000
+  saveResources: 02000000

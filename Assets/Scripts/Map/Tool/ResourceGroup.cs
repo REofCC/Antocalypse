@@ -11,16 +11,16 @@ public class ResourceGroup
     {
         switch (resource.GetResourceType())
         {
-            case Resourcetype.Leaf:
+            case ResourceType.LEAF:
                 leafs.Add(resource);
                 break;
-            case Resourcetype.Wood:
+            case ResourceType.WOOD:
                 woods.Add(resource);
                 break;
-            case Resourcetype.Liquid:
+            case ResourceType.LIQUID_FOOD:
                 liquids.Add(resource);
                 break;
-            case Resourcetype.Solid:
+            case ResourceType.SOLID_FOOD:
                 solids.Add(resource);
                 break;
             default:
@@ -31,16 +31,16 @@ public class ResourceGroup
     {
         switch (resource.GetResourceType())
         {
-            case Resourcetype.Leaf:
+            case ResourceType.LEAF:
                 leafs.Remove(resource);
                 break;
-            case Resourcetype.Wood:
+            case ResourceType.WOOD:
                 woods.Remove(resource);
                 break;
-            case Resourcetype.Liquid:
+            case ResourceType.LIQUID_FOOD:
                 liquids.Remove(resource);
                 break;
-            case Resourcetype.Solid:
+            case ResourceType.SOLID_FOOD:
                 solids.Remove(resource);
                 break;
             default:
@@ -48,17 +48,17 @@ public class ResourceGroup
         }
     }
 
-    public List<BaseResource> GetResources(Resourcetype types)
+    public List<BaseResource> GetResources(ResourceType types)
     {
         switch (types)
         {
-            case Resourcetype.Leaf:
+            case ResourceType.LEAF:
                 return leafs;
-            case Resourcetype.Wood:
+            case ResourceType.WOOD:
                 return woods;
-            case Resourcetype.Liquid:
+            case ResourceType.LIQUID_FOOD:
                 return liquids;
-            case Resourcetype.Solid:
+            case ResourceType.SOLID_FOOD:
                 return solids;
             default:
                 return null;

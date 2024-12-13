@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: LargeSaverSave
   m_EditorClassIdentifier: 
   maxSave: 96000000
-  saveResources: 01000000
+  saveResources: 03000000

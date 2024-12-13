@@ -7,8 +7,8 @@ public class SaveData : ScriptableObject
     [SerializeField]
     List<int> maxSave;
     [SerializeField]
-    List<Resourcetype> saveResources;
+    List<ResourceType> saveResources;
 
     public List<int> MaxSave { get { return maxSave; } }
-    public List<Resourcetype> SaveResources { get { return saveResources; } }
+    public List<ResourceType> SaveResources { get { return saveResources; } }
 }

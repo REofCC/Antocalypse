@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: WoodSaverSave
   m_EditorClassIdentifier: 
   maxSave: 32000000
-  saveResources: 03000000
+  saveResources: 01000000

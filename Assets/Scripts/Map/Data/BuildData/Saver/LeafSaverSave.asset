@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: LeafSaverSave
   m_EditorClassIdentifier: 
   maxSave: 32000000
-  saveResources: 02000000
+  saveResources: 00000000
