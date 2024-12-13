@@ -31,7 +31,7 @@ public class Worker : MonoBehaviour
     HexaMapNode targetNode;
     List<Vector3> path;
     int pathIndex;
-    string buildingName;
+    BuildingType buildingType;
 
     public float buildTime = 2f;    //임시 건설시간
     public float gatherTime = 2f;    //임시 채집시간
@@ -134,7 +134,6 @@ public class Worker : MonoBehaviour
     }
     BTNodeState GatherResource()
     {
-        //자원 수집 애니메이션 및 딜레이 추가
         if (currentTask == TaskType.Gather && state != State.Gather)   // 최초 진입 시
         {
             ChangeState(State.Gather);
@@ -246,7 +245,7 @@ public class Worker : MonoBehaviour
         if (type == TaskType.Build)
         {
             RequestPath(targetNode, true);
-            buildingName = "Path";
+            buildingType = BuildingType.None;
         }
         else
         {
@@ -258,12 +257,12 @@ public class Worker : MonoBehaviour
         currentTargetPos = path[pathIndex];
         targetGridPos = targetNode.GetGridPos();
     }
-    public void GetTask(HexaMapNode targetNode, TaskType type, string _buildingName)
+    public void GetTask(HexaMapNode targetNode, TaskType type, BuildingType _buildingType)
     {
         Debug.Log("Task Confirmed");
 
         if (type == TaskType.Build)
-            buildingName = _buildingName;
+            buildingType = _buildingType;
 
         RequestPath(targetNode, false);
 
@@ -290,8 +289,12 @@ public class Worker : MonoBehaviour
         }
         else
         {
-            path = MapManager.Map.UnderPathFinder.ReachWallPathFinding(start, targetNode);
+            path = MapManager.Map.UnderPathFinder.PathFinding(start, targetNode);
         }
+    }
+    void FindCargo()
+    {
+
     }
     //void Idle()
     //{
@@ -360,7 +363,12 @@ public class Worker : MonoBehaviour
         yield return new WaitForSeconds(buildTime);
         Debug.Log("Build Finish");
         // 작업 완료 전달?
-        MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, buildingName, true);
+        if (buildingType == BuildingType.None)
+            MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "Path", true);
+        else
+        {
+            //건물 건설
+        }
         ChangeState(State.Idle);
         currentTask = TaskType.None;
     }

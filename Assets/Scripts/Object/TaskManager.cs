@@ -38,9 +38,9 @@ public class TaskManager : MonoBehaviour
         TaskRequest newTaskRequest = new TaskRequest(_targetNode, _taskType);
         requestQueue.Enqueue(newTaskRequest);
     }
-    public void RequestTask(HexaMapNode _targetNode, TaskType _taskType, string _buildingName)
+    public void RequestTask(HexaMapNode _targetNode, TaskType _taskType, BuildingType _buildingType)
     {
-        TaskRequest newTaskRequest = new TaskRequest(_targetNode, _taskType, _buildingName);
+        TaskRequest newTaskRequest = new TaskRequest(_targetNode, _taskType, _buildingType);
         requestQueue.Enqueue(newTaskRequest);
     }
     IEnumerator TryProcessNextRequest()
@@ -69,15 +69,13 @@ public class TaskManager : MonoBehaviour
                         case TaskType.Gather:
                             break;
                         case TaskType.Build:
-                            if (currentRequest.buildingName == null)  //벽 파괴
+                            if (currentRequest.buildingType == BuildingType.None)  //벽 파괴
                             {
-                                //List<Vector3> path = MapManager.Map.UnderPathFinder.ReachWallPathFinding(start, currentRequest.targetNode); //대상이 벽일 경우 이전 노드까지 탐색
                                 entity.GetComponent<Worker>().GetTask(currentRequest.targetNode, currentRequest.taskType);
                             }
                             else   //건물 건설
                             {
-                                //List<Vector3> path = MapManager.Map.UnderPathFinder.PathFinding(start, currentRequest.targetNode); //대상이 벽이 아닌 경우 해당 노드까지 탐색
-                                entity.GetComponent<Worker>().GetTask(currentRequest.targetNode, currentRequest.taskType, currentRequest.buildingName);
+                                entity.GetComponent<Worker>().GetTask(currentRequest.targetNode, currentRequest.taskType, currentRequest.buildingType);
                             }
                             break;
                     }
@@ -215,7 +213,7 @@ public class TaskManager : MonoBehaviour
     {
         public HexaMapNode targetNode;
         public TaskType taskType;
-        public string buildingName;
+        public BuildingType buildingType;
 
         // public UnityAction<bool> callback;
 
@@ -223,12 +221,12 @@ public class TaskManager : MonoBehaviour
         {
             targetNode = _targetNode;
             taskType = _taskType;
-            buildingName = null;
+        buildingType = BuildingType.None;
         }
-        public TaskRequest(HexaMapNode _targetNode, TaskType _taskType, string _buildingName)
+        public TaskRequest(HexaMapNode _targetNode, TaskType _taskType, BuildingType _buildingType)
         {
             targetNode = _targetNode;
             taskType = _taskType;
-            buildingName = _buildingName;
+            buildingType = _buildingType;
         }
     }
