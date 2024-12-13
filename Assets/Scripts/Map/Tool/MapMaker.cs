@@ -47,7 +47,7 @@ public class MapMaker : MonoBehaviour
     {
         startPos = underGrid.GetNode(mapSize / 2 + 1, mapSize / 2 + 1);
         Vector3Int pos = startPos.GetCellPos();
-        underGrid.SwapNode(pos.x, pos.y, "Path", true);
+        startPos = underGrid.SwapNode(pos.x, pos.y, "Path", true);
         //roomFactory.MakeRoom(startPos);
         List<HexaMapNode> list = underGrid.GetNeighborNode(mapSize / 2 + 1, mapSize / 2 + 1);
         for(int idx= 0; idx<list.Count; idx++)
@@ -55,7 +55,7 @@ public class MapMaker : MonoBehaviour
             pos = list[idx].GetCellPos();
             underGrid.SwapNode(pos.x, pos.y, "Path", true);
         }
-
+        MapManager.Map.BuildingFactory.Build(startPos as Path, BuildingType.Queen);
     }
     private void MakeDoorNode()
     {
@@ -93,7 +93,6 @@ public class MapMaker : MonoBehaviour
             }
         }
     }
-
     private void MakeEvent()
     {
         for(int y = 0; y < mapSize; y++)
