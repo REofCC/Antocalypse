@@ -17,11 +17,11 @@ TagManager:
   - Map
   - Resource
   - Ant
-  - 
-  - 
-  - 
-  - 
-  - 
+  - LeafSaver
+  - WoodSaver
+  - LiquidSaver
+  - SolidSaver
+  - CombineSaver
   - 
   - 
   - 

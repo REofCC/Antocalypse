@@ -9,6 +9,8 @@ public class BuildingFactory : MonoBehaviour
     List<BuildData> buildResources = new();
     bool[] buildConstraints; //idx = BuildingType | Modify True when Process complete
     int[] currentBuild; // idx = Bulding Type | Entire Map's Buliding Count
+    GameObject buildings;
+
     #endregion
     #region Getter
     public List<BuildData> GetBuildDatas() 
@@ -55,13 +57,23 @@ public class BuildingFactory : MonoBehaviour
     }
     #endregion
     #region Build
-    private bool CheckBuilding(RoomNode node, BuildData info)
+    private bool CheckResourceBuilding(ResourceNode2 node)
+    {
+        if (node.GetResource().GetInfo().Buildable && node.GetBuildable())
+            return true;
+        return false;
+    }
+    private bool CheckBuilding(Path node, BuildData info)
     {
         if (!GetBuildingConstraint(info.Type))
             return false;
         for(int i = 0; i < info.Tiles.Count; i++)
         {
-            if (info.Tiles[i] == node.GetTileType()) // check buildable node type
+            if (info.Tiles[i]==TileType.ResourceNode && node.GetTileType() == TileType.ResourceNode)
+            {
+                return CheckResourceBuilding(node as ResourceNode2);
+            }
+            else if (info.Tiles[i] == node.GetTileType()) // check buildable node type
                 return node.GetBuildable(); // check already building on node
         }
         return false;
@@ -73,16 +85,16 @@ public class BuildingFactory : MonoBehaviour
         {
             Debug.Log($"Error : Prefabs/Building/{buildingName} is not exist");
         }
-        return Instantiate(go);
+        return Instantiate(go, buildings.transform);
     }
-    private void SetBuildingPosition(GameObject building, RoomNode node)
+    private void SetBuildingPosition(GameObject building, Path node)
     {
         building.transform.position = node.GetWorldPos();
         building.GetComponent<BaseBuilding>().SetBuildedPos(node);
         node.SetBuilding(building.GetComponent<BaseBuilding>());
 
     }
-    private bool BuildStart(RoomNode node, BuildData info)
+    private bool BuildStart(Path node, BuildData info)
     {
         if (!CheckBuilding(node, info))
             return false;
@@ -90,15 +102,15 @@ public class BuildingFactory : MonoBehaviour
             return false;
         return true;
     }
-    private bool BuildEnd(RoomNode node, BuildData info)
+    private bool BuildEnd(Path node, BuildData info)
     {
-        GameObject building = InstantiateBuilding(info.BuildingName);
+        GameObject building = InstantiateBuilding(info.name);
         if (building == null)
             return false;
         SetBuildingPosition(building, node);
         return true;
     }
-    public void Build(RoomNode node, BuildingType type)
+    public void Build(Path node, BuildingType type)
     {
         BuildData info = GetBuildData(type);
         StartCoroutine(BuildingCoroutine(node, info));
@@ -133,7 +145,7 @@ public class BuildingFactory : MonoBehaviour
     #endregion
     #endregion
     #region Coroutine Time
-    IEnumerator BuildingCoroutine(RoomNode node, BuildData info)
+    IEnumerator BuildingCoroutine(Path node, BuildData info)
     {
         if(!BuildStart(node, info))
         {
@@ -146,7 +158,7 @@ public class BuildingFactory : MonoBehaviour
     }
     #endregion
     #region Unity Function
-    private void Start()
+    public void OnAwake()
     {
         currentBuild = new int[buildResources.Count];
         buildConstraints = new bool[buildResources.Count];
@@ -155,6 +167,9 @@ public class BuildingFactory : MonoBehaviour
             currentBuild[i] = 0;
             buildConstraints[i] = false;
         }
+        buildConstraints[(int)BuildingType.Queen] = true;
+        buildings = GameObject.Find("Buildings");
+
     }
     #endregion
 }

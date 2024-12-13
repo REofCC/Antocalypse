@@ -33,7 +33,8 @@ public enum BuildingType
     SoldierSpawner,
     EvolutionChamber,
     ScoutBaseCamp,
-    TravelBaseCamp
+    TravelBaseCamp,
+    Queen
 }
 public enum ResourceType
 {
@@ -44,6 +45,12 @@ public enum ResourceType
     GENETIC_MATERIAL
 }
 
+public enum ResourceSize
+{
+    Large,
+    Medium,
+    Small
+}
 public enum EventType 
 {
     Question,

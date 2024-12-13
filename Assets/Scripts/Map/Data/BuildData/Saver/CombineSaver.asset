@@ -15,6 +15,6 @@ MonoBehaviour:
   buildingName: "\uD1B5\uD569 \uC800\uC7A5\uC18C"
   leaf: 32000000
   wood: 1e000000
-  tiles: 
+  tiles: 01000000
   time: 20
-  type: 0
+  type: 4

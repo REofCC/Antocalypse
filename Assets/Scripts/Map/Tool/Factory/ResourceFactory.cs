@@ -97,7 +97,7 @@ public class ResourceFactory : MonoBehaviour
         resource.SetNode(node);
         node.SetBuildable(data.Buildable);
         node.SetResource(resource);
-        
+        Managers.Resource.resGroup.AddResource(resource);
     }
     public void SetResource(Wall node, ResourceNode2 resourceNode)
     {

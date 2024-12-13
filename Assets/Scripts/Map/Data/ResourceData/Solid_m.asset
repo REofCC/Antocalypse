@@ -15,4 +15,6 @@ MonoBehaviour:
   resourceName: Solid_m
   type: 1
   buildable: 1
-  amount: 4500
+  amount: 500
+  maxWorker: 0
+  size: 1

@@ -119,7 +119,9 @@ public class MapManager : MonoBehaviour
         upPathFinder.OnAwake(upGrid);
         mapMaker.OnAwake(mapSize);
         ResourceFactory.OnAwake(mapSize);
+        BuildingFactory.OnAwake();
         //RoomFactory.OnAwake();
+        EventFactory.OnAwake();
         UnderBlackMask.OnAwake("UnderGroundGrid");
         UpBlackMask.OnAwake("GroundGrid");
 

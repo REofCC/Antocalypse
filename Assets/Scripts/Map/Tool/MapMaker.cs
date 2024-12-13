@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -46,7 +47,7 @@ public class MapMaker : MonoBehaviour
     {
         startPos = underGrid.GetNode(mapSize / 2 + 1, mapSize / 2 + 1);
         Vector3Int pos = startPos.GetCellPos();
-        underGrid.SwapNode(pos.x, pos.y, "Path", true);
+        startPos = underGrid.SwapNode(pos.x, pos.y, "Path", true);
         //roomFactory.MakeRoom(startPos);
         List<HexaMapNode> list = underGrid.GetNeighborNode(mapSize / 2 + 1, mapSize / 2 + 1);
         for(int idx= 0; idx<list.Count; idx++)
@@ -54,7 +55,7 @@ public class MapMaker : MonoBehaviour
             pos = list[idx].GetCellPos();
             underGrid.SwapNode(pos.x, pos.y, "Path", true);
         }
-
+        MapManager.Map.BuildingFactory.Build(startPos as Path, BuildingType.Queen);
     }
     private void MakeDoorNode()
     {
@@ -92,12 +93,24 @@ public class MapMaker : MonoBehaviour
             }
         }
     }
+    private void MakeEvent()
+    {
+        for(int y = 0; y < mapSize; y++)
+        {
+            for( int x = 0; x < mapSize; x++)
+            {
+                TravelNode node = upGrid.GetNode(y,x) as TravelNode;
+                eventFactory.GenerateEvent(node, 0);
+            }
+        }
+    }
     public void MapMaking()
     {
         MakeBase();
         MakeDoorNode();
         MakeStartPos();
         MakeResource();
+        MakeEvent();
     }
     #endregion
 
@@ -112,6 +125,7 @@ public class MapMaker : MonoBehaviour
 
         nodeFactory = MapManager.Map.NodeFactory;
         resourceFactory = MapManager.Map.ResourceFactory;
+        eventFactory = MapManager.Map.EventFactory;
         //roomFactory = MapManager.Map.RoomFactory;
         this.mapSize = mapSize;
     }

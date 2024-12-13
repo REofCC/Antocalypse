@@ -137,7 +137,7 @@ public class ActiveManager : MonoBehaviour
             Debug.Log("current node is null");
             return;
         }
-        MapManager.Map.BuildingFactory.Build((RoomNode)node, type);
+        MapManager.Map.BuildingFactory.Build((Path)node, type);
     }
     /*
     public void UpgradeBuilding()

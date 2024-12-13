@@ -14,6 +14,8 @@ public class ResourceData : ScriptableObject
     int amount;
     [SerializeField]
     int maxWorker;
+    [SerializeField]
+    ResourceSize size;
     #endregion
 
     #region Getter & Setter
@@ -22,5 +24,6 @@ public class ResourceData : ScriptableObject
     public bool Buildable { get { return buildable; } }
     public int Amount { get { return amount; } }
     public int MaxWorker { get { return maxWorker; } }
+    public ResourceSize Size { get { return size; } }
     #endregion
 }

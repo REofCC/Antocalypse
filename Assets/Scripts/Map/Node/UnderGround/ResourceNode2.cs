@@ -1,4 +1,4 @@
-public class ResourceNode2 : HexaMapNode
+public class ResourceNode2 : Path
 {
     #region Attribute
     BaseResource resource;
