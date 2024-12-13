@@ -24,10 +24,10 @@ public class YearManager : MonoBehaviour
     public void Init()
     {
         currentYear = 0;
-        timeLimit = 600;
-
-        SetRequirement();        
-        StartNextYear();
+        timeLimit = 10;
+        SetRequirement();
+        OnWinterEvent?.Invoke();
+        StartNextYear();        
     }
     public int GetCurrentYear()
     {
@@ -37,15 +37,15 @@ public class YearManager : MonoBehaviour
     {
         return  currentTime / timeLimit;
     }
-    public int GetRequireResource(Resourcetype resourceType)
+    public int GetRequireResource(ResourceType resourceType)
     {
         switch (resourceType)
         {
-            case Resourcetype.Leaf:
+            case ResourceType.LEAF:
                 return requireLeaf;
-            case Resourcetype.Wood:
+            case ResourceType.WOOD:
                 return requireWood;
-            case Resourcetype.Liquid:
+            case ResourceType.LIQUID_FOOD:
                 return requireFood;
         }
         return -1;
@@ -64,13 +64,12 @@ public class YearManager : MonoBehaviour
     public void StartNextYear() //다음 연차 실행
     {
         currentTime = 0;
-        currentYear++;
-        OnWinterEvent?.Invoke();
+        currentYear++;        
         SetRequirement();
         StartCoroutine(Timer());
     }
     IEnumerator Timer()
-    {
+    {        
         while (timeLimit > currentTime)
         {
             currentTime += 1;            

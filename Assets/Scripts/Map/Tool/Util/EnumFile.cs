@@ -35,12 +35,13 @@ public enum BuildingType
     ScoutBaseCamp,
     TravelBaseCamp
 }
-public enum Resourcetype
+public enum ResourceType
 {
-    Liquid,
-    Solid,
-    Leaf,
-    Wood
+    LEAF,
+    WOOD,
+    LIQUID_FOOD,
+    SOLID_FOOD,
+    GENETIC_MATERIAL
 }
 
 public enum EventType 
