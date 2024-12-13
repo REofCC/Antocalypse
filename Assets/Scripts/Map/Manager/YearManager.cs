@@ -18,14 +18,16 @@ public class YearManager : MonoBehaviour
     int[] requireWoodArray = {0, 30, 50, 100, 300};
 
     public event Action OnWinterEvent;
+
+    public event Action OnTimeEvent;
+
     public void Init()
     {
         currentYear = 0;
-        timeLimit = 600;
-
+        timeLimit = 10;
         SetRequirement();
-
-        StartNextYear();
+        OnWinterEvent?.Invoke();
+        StartNextYear();        
     }
     public int GetCurrentYear()
     {
@@ -33,46 +35,47 @@ public class YearManager : MonoBehaviour
     }
     public float GetFillAmount()    //겨울 진행 바 채움 정도
     {
-        return timeLimit / currentTime;
+        return  currentTime / timeLimit;
     }
-    public int GetRequireResource(Resourcetype resourceType)
+    public int GetRequireResource(ResourceType resourceType)
     {
         switch (resourceType)
         {
-            case Resourcetype.Leaf:
+            case ResourceType.LEAF:
                 return requireLeaf;
-            case Resourcetype.Wood:
+            case ResourceType.WOOD:
                 return requireWood;
-            case Resourcetype.Liquid:
+            case ResourceType.LIQUID_FOOD:
                 return requireFood;
         }
         return -1;
     }
-    void RequirementEvnet() //정산 이벤트
+    void RequirementEvent() //정산 이벤트
     {
-        OnWinterEvent.Invoke();
+        OnWinterEvent?.Invoke();
         return;
     }
     void SetRequirement()
     {
         requireFood = requireFoodArray[currentYear];
         requireLeaf = requireLeafArray[currentYear];
-        requireLeaf = requireWoodArray[currentYear];
+        requireWood = requireWoodArray[currentYear];
     }
     public void StartNextYear() //다음 연차 실행
     {
         currentTime = 0;
-        currentYear++;
+        currentYear++;        
         SetRequirement();
         StartCoroutine(Timer());
     }
     IEnumerator Timer()
-    {
+    {        
         while (timeLimit > currentTime)
         {
-            currentTime += Time.deltaTime;
-            yield return null;
+            currentTime += 1;            
+            OnTimeEvent?.Invoke();
+            yield return new WaitForSeconds(1);
         }
-        RequirementEvnet();
+        RequirementEvent();        
     }
 }

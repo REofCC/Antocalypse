@@ -79,6 +79,18 @@ public class ResourceManager
         maxLiquidFood = value;
         OnResourceChange?.Invoke(ResourceType.LIQUID_FOOD);
     }
+    public int GetMaxLeaf()
+    {
+        return maxLeaf;
+    }
+    public int GetMaxWood()
+    {
+        return maxWood;
+    }
+    public int GetMaxGenetic()
+    {
+        return maxGenetic;
+    }
     public int GetMaxSolidFood()
     {
         return maxSolidFood;

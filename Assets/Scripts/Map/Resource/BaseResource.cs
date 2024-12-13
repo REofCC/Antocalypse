@@ -10,7 +10,7 @@ public class BaseResource : MonoBehaviour
 
     [SerializeField]
     string resName;
-    Resourcetype type;
+    ResourceType type;
     ResourceData info;
     HexaMapNode node;
     BaseBuilding warehouse;
@@ -36,7 +36,7 @@ public class BaseResource : MonoBehaviour
     {
         return currentWorker;
     }
-    public Resourcetype GetResourceType()
+    public ResourceType GetResourceType()
     {
         return type;
     }

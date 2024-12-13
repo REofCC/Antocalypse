@@ -16,15 +16,19 @@ public class Managers : MonoBehaviour
     static SpawnManager spawnManager = new();
     public static SpawnManager SpawnManager { get { return spawnManager; } }
     // 권희준 - yearManager 추가
-    static YearManager yearManager = new();
+    static YearManager yearManager;
     public static YearManager YearManager { get { return yearManager; } }
 
+    private void Awake()
+    {
+        yearManager = gameObject.AddComponent<YearManager>();        
+    }
     private void Start()
     {
         manager = GetComponent<Managers>();
         DontDestroyOnLoad(manager);
 
         //연차 초기설정 및 시작
-        YearManager.Init();
+        yearManager.Init();
     }
 }
