@@ -4,6 +4,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEngine.EventSystems.EventTrigger;
 using static UnityEngine.GraphicsBuffer;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 
@@ -33,6 +34,8 @@ public class Worker : MonoBehaviour
     string buildingName;
 
     public float buildTime = 2f;    //임시 건설시간
+    public float gatherTime = 2f;    //임시 채집시간
+
     // ToDo : 건설 명령 받을 때 건설시간 받아야 함
     private void Awake()
     {
@@ -131,14 +134,18 @@ public class Worker : MonoBehaviour
     }
     BTNodeState GatherResource()
     {
-        ChangeState(State.Gather);
-        Debug.Log("Gathering Resouces");
-
-        entityData.isHolding = true;
-        entityData.holdValue = entityData.gatherValue;  //자원 수집량만큼 보유
-                                                        //자원 수집 애니메이션 및 딜레이 추가
-        Debug.Log("Returning to Cargo");
-        return BTNodeState.Success;
+        //자원 수집 애니메이션 및 딜레이 추가
+        if (currentTask == TaskType.Gather && state != State.Gather)   // 최초 진입 시
+        {
+            ChangeState(State.Gather);
+            // 채집 대기시간, 애니메이션
+            StartCoroutine(GatherTimer());
+        }
+        else if (currentTask == TaskType.Gather && state != State.Gather)   // 건설 종료 후
+        {
+            return BTNodeState.Success;
+        }
+        return BTNodeState.Running;
     }
     BTNodeState Build()
     {
@@ -146,7 +153,7 @@ public class Worker : MonoBehaviour
         {
             ChangeState(State.Build);
             // 건설 자원 소모 및 대기시간, 애니메이션
-            StartCoroutine("BuildTimer");
+            StartCoroutine(BuildTimer());
         }
         else if (currentTask == TaskType.Build && state != State.Build)   // 건설 종료 후
         {
@@ -232,57 +239,39 @@ public class Worker : MonoBehaviour
                 break;
         }
     }
-    public void GetTask(HexaMapNode targetNode, List<Vector3> path, TaskType type)
+    public void GetTask(HexaMapNode targetNode, TaskType type)
     {
         Debug.Log("Task Confirmed");
-        this.path = path;
+
+        if (type == TaskType.Build)
+        {
+            RequestPath(targetNode, true);
+            buildingName = "Path";
+        }
+        else
+        {
+            RequestPath(targetNode, false);
+        }
+        currentTask = type;
         pathIndex = path.Count - 1;
         targetPos = targetNode.GetWorldPos();
         currentTargetPos = path[pathIndex];
         targetGridPos = targetNode.GetGridPos();
-
-        switch (type)
-        {
-            case TaskType.None:
-                currentTask = type;
-                //nextState = State.Idle;
-                break;
-            case TaskType.Gather:
-                currentTask = type;
-                //nextState = State.Gather;
-                break;
-            case TaskType.Build:
-                currentTask = type;
-                buildingName = "Path";
-                //nextState = State.Build;
-                break;
-        }
     }
-    public void GetTask(HexaMapNode targetNode, List<Vector3> path, TaskType type, string _buildingName)
+    public void GetTask(HexaMapNode targetNode, TaskType type, string _buildingName)
     {
         Debug.Log("Task Confirmed");
-        this.path = path;
+
+        if (type == TaskType.Build)
+            buildingName = _buildingName;
+
+        RequestPath(targetNode, false);
+
+        currentTask = type;
         pathIndex = path.Count - 1;
         targetPos = targetNode.GetWorldPos();
         currentTargetPos = path[pathIndex];
         targetGridPos = targetNode.GetGridPos();
-
-        switch (type)
-        {
-            case TaskType.None:
-                currentTask = type;
-                //nextState = State.Idle;
-                break;
-            case TaskType.Gather:
-                currentTask = type;
-                //nextState = State.Gather;
-                break;
-            case TaskType.Build:
-                currentTask = type;
-                buildingName = _buildingName;
-                //nextState = State.Build;
-                break;
-        }
     }
     float RotateValue(Vector3 targetPos)
     {
@@ -291,6 +280,18 @@ public class Worker : MonoBehaviour
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
         return angle;
+    }
+    void RequestPath(HexaMapNode targetNode, bool isTargetWall)
+    {
+        HexaMapNode start = MapManager.Map.UnderGrid.GetNode(transform.position);
+        if (isTargetWall)
+        {
+            path = MapManager.Map.UnderPathFinder.ReachWallPathFinding(start, targetNode);
+        }
+        else
+        {
+            path = MapManager.Map.UnderPathFinder.ReachWallPathFinding(start, targetNode);
+        }
     }
     //void Idle()
     //{
@@ -362,5 +363,16 @@ public class Worker : MonoBehaviour
         MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, buildingName, true);
         ChangeState(State.Idle);
         currentTask = TaskType.None;
+    }
+    IEnumerator GatherTimer()
+    {
+        yield return new WaitForSeconds(gatherTime);
+        Debug.Log("Gather Finish");
+        // 작업 완료 전달?
+        entityData.isHolding = true;
+        entityData.holdValue = entityData.gatherValue;
+
+        // 경로 반대로
+        ChangeState(State.Move);
     }
 }

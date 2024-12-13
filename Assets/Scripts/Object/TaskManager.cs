@@ -54,16 +54,16 @@ public class TaskManager : MonoBehaviour
                 currentRequest = requestQueue.Dequeue();
 
                 entity = FindEntity(TaskType.None);
-                if (entity == null)   //유휴 개체 없음
+                if (entity == null)   //유휴 개체 없음 TODO : 접근 불가능한 경로 일때 추가
                 {
                     requestQueue.Enqueue(currentRequest);   //다시 큐에 넣고 다음 명령 수행
                 }
                 else
                 {
-                    nodePos = currentRequest.targetNode.GetWorldPos();
-                    Vector2Int gridPos = currentRequest.targetNode.GetGridPos();
+                    //nodePos = currentRequest.targetNode.GetWorldPos();
+                    //Vector2Int gridPos = currentRequest.targetNode.GetGridPos();
 
-                    HexaMapNode start = MapManager.Map.UnderGrid.GetNode(entity.transform.position);
+                    //HexaMapNode start = MapManager.Map.UnderGrid.GetNode(entity.transform.position);
                     switch (currentRequest.taskType)
                     {
                         case TaskType.Gather:
@@ -71,13 +71,13 @@ public class TaskManager : MonoBehaviour
                         case TaskType.Build:
                             if (currentRequest.buildingName == null)  //벽 파괴
                             {
-                                List<Vector3> path = MapManager.Map.UnderPathFinder.ReachWallPathFinding(start, currentRequest.targetNode); //대상이 벽일 경우 이전 노드까지 탐색
-                                entity.GetComponent<Worker>().GetTask(currentRequest.targetNode, path, currentRequest.taskType);
+                                //List<Vector3> path = MapManager.Map.UnderPathFinder.ReachWallPathFinding(start, currentRequest.targetNode); //대상이 벽일 경우 이전 노드까지 탐색
+                                entity.GetComponent<Worker>().GetTask(currentRequest.targetNode, currentRequest.taskType);
                             }
                             else   //건물 건설
                             {
-                                List<Vector3> path = MapManager.Map.UnderPathFinder.PathFinding(start, currentRequest.targetNode); //대상이 벽이 아닌 경우 해당 노드까지 탐색
-                                entity.GetComponent<Worker>().GetTask(currentRequest.targetNode, path, currentRequest.taskType);
+                                //List<Vector3> path = MapManager.Map.UnderPathFinder.PathFinding(start, currentRequest.targetNode); //대상이 벽이 아닌 경우 해당 노드까지 탐색
+                                entity.GetComponent<Worker>().GetTask(currentRequest.targetNode, currentRequest.taskType, currentRequest.buildingName);
                             }
                             break;
                     }
@@ -211,7 +211,6 @@ public class TaskManager : MonoBehaviour
 
     }
 }
-
     struct TaskRequest
     {
         public HexaMapNode targetNode;
