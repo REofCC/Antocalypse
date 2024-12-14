@@ -12,23 +12,28 @@ public class Managers : MonoBehaviour
 
     static PopulationManager population = new();
     public static PopulationManager Population { get { return population; } }
-    // 권희준 - spwanManager 추가
+
     static SpawnManager spawnManager = new();
     public static SpawnManager SpawnManager { get { return spawnManager; } }
-    // 권희준 - yearManager 추가
+
     static YearManager yearManager;
     public static YearManager YearManager { get { return yearManager; } }
 
+    static TaskManager taskManager = new();
+    public static TaskManager Task { get { return taskManager; } }
     private void Awake()
     {
-        yearManager = gameObject.AddComponent<YearManager>();        
+        // 권희준 - 코루틴 사용을 위해 GameObject에 추가
+        yearManager = gameObject.AddComponent<YearManager>();
+        yearManager.Init();
+        taskManager = gameObject.AddComponent<TaskManager>();
+        taskManager.Init();
     }
+
+
     private void Start()
     {
         manager = GetComponent<Managers>();
         DontDestroyOnLoad(manager);
-
-        //연차 초기설정 및 시작
-        yearManager.Init();
     }
 }

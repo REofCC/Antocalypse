@@ -1,5 +1,13 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UIElements;
+using static UnityEngine.EventSystems.EventTrigger;
+using static UnityEngine.GraphicsBuffer;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class Worker : MonoBehaviour
 {
@@ -18,9 +26,17 @@ public class Worker : MonoBehaviour
     TaskType currentTask;
     State state;
     //State nextState;
+    Vector2 currentTargetPos;
     Vector2 targetPos;
+    Vector2Int targetGridPos;
+    HexaMapNode targetNode;
+    List<Vector3> path;
+    int pathIndex;
+    BuildingType buildingType;
 
     public float buildTime = 2f;    //임시 건설시간
+    public float gatherTime = 2f;    //임시 채집시간
+
     // ToDo : 건설 명령 받을 때 건설시간 받아야 함
     private void Awake()
     {
@@ -79,6 +95,8 @@ public class Worker : MonoBehaviour
 
         root.Evaluate();
     }
+    #region BT
+    #region BTAction
     BTNodeState Eat()
     {
         // 섭취 행동 대기시간 및 애니메이션
@@ -86,13 +104,25 @@ public class Worker : MonoBehaviour
     }
     BTNodeState Move()
     {
-        if (transform.position.x == targetPos.x && transform.position.y == targetPos.y)
+        if (transform.position.x == currentTargetPos.x && transform.position.y == currentTargetPos.y)
         {
             //Debug.Log("Move Finish");
             //ChangeState(State.Idle);
-            return BTNodeState.Success;
+            if (pathIndex == 0) // 경로 마지막일 때
+            {
+                transform.rotation = Quaternion.Euler(new Vector3(0, 0, RotateValue(targetPos)));
+                return BTNodeState.Success;
+            }
+
+            else
+            {
+                pathIndex--;
+                currentTargetPos = path[pathIndex];
+                transform.rotation = Quaternion.Euler(new Vector3(0, 0, RotateValue(currentTargetPos)));
+                return BTNodeState.Running;
+            }
         }
-        transform.position = Vector2.MoveTowards(transform.position, targetPos, entityData.speed * Time.deltaTime);
+        transform.position = Vector2.MoveTowards(transform.position, currentTargetPos, entityData.speed * Time.deltaTime);
         return BTNodeState.Running;
     }
 
@@ -105,14 +135,17 @@ public class Worker : MonoBehaviour
     }
     BTNodeState GatherResource()
     {
-        ChangeState(State.Gather);
-        Debug.Log("Gathering Resouces");
-
-        entityData.isHolding = true;
-        entityData.holdValue = entityData.gatherValue;  //자원 수집량만큼 보유
-                                                        //자원 수집 애니메이션 및 딜레이 추가
-        Debug.Log("Returning to Cargo");
-        return BTNodeState.Success;
+        if (currentTask == TaskType.Gather && state != State.Gather)   // 최초 진입 시
+        {
+            ChangeState(State.Gather);
+            // 채집 대기시간, 애니메이션
+            StartCoroutine(GatherTimer());
+        }
+        else if (currentTask == TaskType.Gather && state != State.Gather)   // 건설 종료 후
+        {
+            return BTNodeState.Success;
+        }
+        return BTNodeState.Running;
     }
     BTNodeState Build()
     {
@@ -120,7 +153,7 @@ public class Worker : MonoBehaviour
         {
             ChangeState(State.Build);
             // 건설 자원 소모 및 대기시간, 애니메이션
-            StartCoroutine("BuildTimer");
+            StartCoroutine(BuildTimer());
         }
         else if (currentTask == TaskType.Build && state != State.Build)   // 건설 종료 후
         {
@@ -133,10 +166,18 @@ public class Worker : MonoBehaviour
         // 유휴 애니메이션
         return BTNodeState.Running;
     }
+    #endregion
+    #region BTCondition
     bool IsKcalLow()
     {
-        if (entityData.kcal<=50)    //수치 조정
+        if (entityData.kcal <= 50 && currentTask == TaskType.None)    //수치 조정
+        {
+            currentTask = TaskType.Eat;
+            //path = 
+            //여왕개미 or 액체 식량 보관소 까지 경로 요청
             return true;
+        }
+
         else 
             return false;
     }
@@ -167,6 +208,8 @@ public class Worker : MonoBehaviour
         else
             return false;
     }
+    #endregion
+#endregion
 
     private void FixedUpdate()
     {
@@ -196,107 +239,103 @@ public class Worker : MonoBehaviour
                 break;
         }
     }
-    //void Move()
-    //{
-    //    if (transform.position.x == targetPos.x && transform.position.y == targetPos.y)
-    //    {
-    //        Debug.Log("Move Finish");
-    //        ChangeState(State.Idle);
-    //        MoveEnd();
-    //    }
-    //    transform.position = Vector2.MoveTowards(transform.position, targetPos, entityData.speed * Time.deltaTime);
-    //}
-    //void MoveEnd()
-    //{
-    //    switch(currentTask)
-    //    {
-    //        case TaskType.None:
-    //            ChangeState(State.Idle);
-    //            break;
-    //        case TaskType.Gather:
-    //            if (transform.position.x == cargoPos.x && transform.position.y == cargoPos.y)   // 저장소에 도착 시 
-    //            {
-    //                ColonyManager.Instance.GetResoruce(entityData.holdValue);   // 보유중인 자원만큼 저장소 자원 추가
-    //                targetPos = nodePos;
-    //                ChangeState(State.Move);
-    //            }
-    //            else if (transform.position.x == nodePos.x && transform.position.y == nodePos.y)    // 자원 노드에 도착 시
-    //            {
-    //                    targetPos = nodePos;
-    //                    ChangeState(State.Gather);  // 수집 상태로 변경
-    //            }
-    //            break;
-    //        case TaskType.Build:
-    //            ChangeState(State.Idle);
-    //            break;
-    //        case TaskType.Eat:
-    //            ChangeState(State.Idle);
-    //            break;
-    //    }
-    //}
-    public void GetTask(Vector2 target, TaskType type)
+    public void GetTask(HexaMapNode _targetNode, TaskType type)
     {
         Debug.Log("Task Confirmed");
-        switch (type)
+
+        if (type == TaskType.Build)
         {
-            case TaskType.None:
-                targetPos = target;
-                currentTask = type;
-                //nextState = State.Idle;
-                break;
-            case TaskType.Gather:
-                nodePos = target;
-                currentTask = type;
-                //nextState = State.Gather;
-                break;
-            case TaskType.Build:
-                targetPos = target;
-                currentTask = type;
-                //nextState = State.Build;
-                break;
+            RequestPath(_targetNode, true);
+            buildingType = BuildingType.None;
+        }
+        else
+        {
+            RequestPath(_targetNode, false);
+        }
+        currentTask = type;
+        targetNode = _targetNode;
+        pathIndex = path.Count - 1;
+        targetPos = targetNode.GetWorldPos();
+        currentTargetPos = path[pathIndex];
+        targetGridPos = targetNode.GetGridPos();
+    }
+    public void GetTask(HexaMapNode _targetNode, TaskType type, BuildingType _buildingType)
+    {
+        Debug.Log("Task Confirmed");
+
+        if (type == TaskType.Build)
+            buildingType = _buildingType;
+
+        RequestPath(_targetNode, false);
+
+        currentTask = type;
+        targetNode = _targetNode;
+        pathIndex = path.Count - 1;
+        targetPos = targetNode.GetWorldPos();
+        currentTargetPos = path[pathIndex];
+        targetGridPos = targetNode.GetGridPos();
+    }
+    float RotateValue(Vector3 targetPos)
+    {
+        Vector3 direction = targetPos - transform.position;
+
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+        return angle;
+    }
+    void RequestPath(HexaMapNode targetNode, bool isTargetWall)
+    {
+        HexaMapNode start = MapManager.Map.UnderGrid.GetNode(transform.position);
+        if (isTargetWall)
+        {
+            path = MapManager.Map.UnderPathFinder.ReachWallPathFinding(start, targetNode);
+        }
+        else
+        {
+            path = MapManager.Map.UnderPathFinder.PathFinding(start, targetNode);
         }
     }
-    //void Idle()
+    //void FindCargo(Resourcetype resourceType)
     //{
-    //    // 유휴 행동
+    //    LayerMask resourceLayer;    //해당 자원 레이어
+    //    switch (resourceType)
+    //    {
+    //        case Resourcetype.Leaf:
+    //            //resourceLayer = 
+    //            break;
+    //        case Resourcetype.Wood:
+    //            //resourceLayer = 
+    //            break;
+    //        case Resourcetype.Liquid:
+    //            //resourceLayer = 
+    //            break;
+    //        case Resourcetype.Solid:
+    //            //resourceLayer = 
+    //            break;
+    //    }    
+        
+    //    GameObject obj = null;
+
+    //    var hits = Physics2D.CircleCastAll(nodePos, Mathf.Infinity, Vector2.zero, Mathf.Infinity, resourceLayer);
+
+    //    foreach (var hit in hits.OrderBy(distance => Vector2.Distance(nodePos, distance.point)))
+    //    {
+    //        if ((hit.collider.GetComponent<건물>().현재저장가능?()))
+    //        {
+    //            obj = hit.collider.gameObject;
+    //            Debug.Log("Found");
+    //            break;
+    //        }
+    //    }
+
+    //    if (obj == null)
+    //    {
+    //        Debug.Log("Can't Find");
+    //    }
+
+    //    cargo = obj;
     //}
 
-    //bool FoodCheck()
-    //{
-    //    if (entityData.kcal < 50)
-    //    {
-    //        return true;
-    //    }
-    //    else
-    //    {
-    //        return false;
-    //    }
-    //}
-
-    //void GatherResouce()
-    //{
-    //    Debug.Log("Gathering Resouces");
-    //    //자원 수집
-    //    entityData.isHolding = true;
-    //    entityData.holdValue = entityData.gatherValue;  //자원 수집량만큼 보유
-    //    //자원 수집 애니메이션 및 딜레이 추가
-
-    //    targetPos = cargoPos;
-    //    Debug.Log("Returning to Cargo");
-    //    ChangeState(State.Move);
-    //}
-
-    //private void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //    if (collision.CompareTag("Cargo"))
-    //    {
-    //        Debug.Log("arrived at Cargo");
-    //    }
-    //    else if(collision.CompareTag("ResourceNode"))
-    //    {
-    //        Debug.Log("arrived at ResourceNode");
-    //    }
-    //}
     public State GetCurrentState()
     {
         return state;
@@ -320,8 +359,42 @@ public class Worker : MonoBehaviour
 
     IEnumerator BuildTimer()
     {
-        yield return new WaitForSeconds(buildTime);
+        yield return new WaitForSeconds(buildTime); 
         Debug.Log("Build Finish");
+        // 작업 완료 전달?
+        if (buildingType == BuildingType.None)
+        {
+            //MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "Path", true);
+            //targetNode.SetIsWorked(false);
+            Wall node = (Wall)targetNode;
+            if (node.GetResource() != null)
+            {
+                HexaMapNode resNode = MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "ResourceNode", true);
+                MapManager.Map.ResourceFactory.SetResource(node, resNode as ResourceNode2);
+            }
+            else
+            {
+                MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "Path", true);
+            }
+            targetNode.SetIsWorked(false);
+        }
+        else
+        {
+            MapManager.Map.BuildingFactory.Build((Path)targetNode, buildingType);
+            //건물 건설
+        }
+        ChangeState(State.Idle);
         currentTask = TaskType.None;
+    }
+    IEnumerator GatherTimer()
+    {
+        yield return new WaitForSeconds(gatherTime);
+        Debug.Log("Gather Finish");
+        // 작업 완료 전달?
+        entityData.isHolding = true;
+        entityData.holdValue = entityData.gatherValue;
+
+        //FindCargo(); //저장소 경로 할당
+        ChangeState(State.Move);
     }
 }

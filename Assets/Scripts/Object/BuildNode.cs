@@ -14,7 +14,7 @@ public class BuildNode : MonoBehaviour
     
     public void AssinBuild()
     {
-        GameManager.Task.AssignTask(TaskType.Build, gameObject);
+        //GameManager.Task.AssignTask(TaskType.Build, gameObject);
     }
     public void ChangeCurrentWorker(int value)
     {

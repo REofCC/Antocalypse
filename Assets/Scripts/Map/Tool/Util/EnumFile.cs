@@ -34,7 +34,8 @@ public enum BuildingType
     EvolutionChamber,
     ScoutBaseCamp,
     TravelBaseCamp,
-    Queen
+    Queen,
+    None
 }
 public enum ResourceType
 {
