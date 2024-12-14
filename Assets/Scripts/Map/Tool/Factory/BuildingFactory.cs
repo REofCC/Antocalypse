@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -110,24 +111,24 @@ public class BuildingFactory : MonoBehaviour
         SetBuildingPosition(building, node);
         return true;
     }
-    public void Build(Path node, BuildingType type)
+    public void Build(Path node, BuildingType type, System.Action<bool> callback)
     {
         BuildData info = GetBuildData(type);
-        StartCoroutine(BuildingCoroutine(node, info));
+        StartCoroutine(BuildingCoroutine(node, info, callback));
     }
     /*
-    public bool Upgrade(BaseBuilding building)
-    {
-        int phase = building.GetBuildingLevel();
-        BuildData info = GetBuildData(building.GetBuildingType());
-        if(UseBuildResource(info, phase))
-        {
-            building.UpgradeBuilding();
-            return true;
-        }
-        return false;
-    }
-    */
+public bool Upgrade(BaseBuilding building)
+{
+   int phase = building.GetBuildingLevel();
+   BuildData info = GetBuildData(building.GetBuildingType());
+   if(UseBuildResource(info, phase))
+   {
+       building.UpgradeBuilding();
+       return true;
+   }
+   return false;
+}
+*/
     #endregion
     #region Demolition
     public bool Demolition(GameObject building)
@@ -145,15 +146,17 @@ public class BuildingFactory : MonoBehaviour
     #endregion
     #endregion
     #region Coroutine Time
-    IEnumerator BuildingCoroutine(Path node, BuildData info)
+    IEnumerator BuildingCoroutine(Path node, BuildData info, System.Action<bool> callback)
     {
         if(!BuildStart(node, info))
         {
+            callback(false);
             yield break;
         }
         yield return new WaitForSeconds(info.Time);
         BuildEnd(node, info);
         currentBuild[(int)info.Type]++;
+        callback(true);
         yield break;
     }
     #endregion

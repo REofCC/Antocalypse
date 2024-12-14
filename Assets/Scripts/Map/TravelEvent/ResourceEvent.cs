@@ -8,13 +8,14 @@ public class ResourceEvent : Event
 
     #endregion
     #region Function
-    public override void SetEvent()
+    public override void SetEvent(EventData data)
     {
         SetEventType(EventType.Resource);
+        SetEventData(data);
     }
     public override bool EventFunction(GameObject traveler)
     {
-        GetResource();
+        GetResource(GetResourceInfo());
         return true;
     }
     #endregion

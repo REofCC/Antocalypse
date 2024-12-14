@@ -2,7 +2,10 @@ public class ResourceExtractor : BaseBuilding
 {
     public override void EventStart()
     {
-        throw new System.NotImplementedException();
+        ResourceNode2 node = GetBuildedPos() as ResourceNode2;
+        BaseResource res = node.GetResource();
+        res.MakeInfinite();
+        res.SetExtractable(true);
     }
 
     public override void EventStop()

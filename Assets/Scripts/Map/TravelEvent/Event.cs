@@ -25,7 +25,7 @@ public abstract class Event : MonoBehaviour
     {
         return node;
     }
-    public void SetResourceInfo(EventData info)
+    public void SetEventData(EventData info)
     {
         this.info = info;
     }
@@ -35,14 +35,14 @@ public abstract class Event : MonoBehaviour
     }
     #endregion
     #region Function
-    public void GetResource()
+    public void GetResource(EventData info)
     {
         Managers.Resource.AddLiquidFood(info.DropLiquid);
         Managers.Resource.AddSolidFood(info.DropSolid);
         Managers.Resource.AddWood(info.DropWood);
         Managers.Resource.AddWood(info.DropLeaf);
     }
-    public abstract void SetEvent();
+    public abstract void SetEvent(EventData data);
     public abstract bool EventFunction(GameObject traveler);
     public virtual void OnComplete()
     {

@@ -13,7 +13,7 @@ public class EventFactory : MonoBehaviour
     #region Function
     private EventData SelectEvent()
     {
-        int idx = Random.Range(0, eventDict.Count);
+        int idx = Random.Range(1, eventDict.Count);
         return eventDict[idx];
     }
     private bool CheckNode(HexaMapNode node)
@@ -32,10 +32,11 @@ public class EventFactory : MonoBehaviour
         }
         return Instantiate(obj, eventObjects.transform);
     }
-    private void CombineEventNode(GameObject obj, TravelNode node)
+    private void CombineEventNode(GameObject obj, TravelNode node, EventData data)
     {
         obj.transform.position = node.GetWorldPos();
         obj.GetComponent<Event>().SetNode(node);
+        obj.GetComponent<Event>().SetEvent(data);
         node.SetEvent(obj.GetComponent<Event>());
     }
     public void GenerateEvent(TravelNode node)
@@ -45,8 +46,9 @@ public class EventFactory : MonoBehaviour
         {
             return;
         }
-        GameObject obj = GenerateEventObject(SelectEvent());
-        CombineEventNode(obj, node);
+        EventData data = SelectEvent();
+        GameObject obj = GenerateEventObject(data);
+        CombineEventNode(obj, node, data);
     }
 
     public void GenerateEvent(TravelNode node, int idx)
@@ -58,7 +60,7 @@ public class EventFactory : MonoBehaviour
         }
         EventData data = eventDict[idx];
         GameObject obj = GenerateEventObject(data);
-        CombineEventNode(obj, node);
+        CombineEventNode(obj, node, data);
     }
     #endregion
     public void OnAwake()

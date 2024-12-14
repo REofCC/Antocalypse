@@ -5,6 +5,8 @@ public class BaseResource : MonoBehaviour
 {
     #region Attribute
     int currentAmount;
+    bool is_extractable;
+
     int currentWorker;
     List<Worker> workers = new();
 
@@ -53,6 +55,7 @@ public class BaseResource : MonoBehaviour
         info = data;
         currentAmount = data.Amount;
         type = data.ResourceType;
+        is_extractable = data.Extractable;
     }
     public void SetWareHouse(BaseBuilding warehouse)
     {
@@ -66,10 +69,21 @@ public class BaseResource : MonoBehaviour
     {
         return route;
     }
+    public void SetExtractable(bool extractable)
+    {
+        this.is_extractable = extractable;
+    }
+    public bool GetExtractable()
+    {
+        return is_extractable;
+    }
     #endregion
 
     #region Function
-
+    public void MakeInfinite()
+    {
+        currentAmount = int.MaxValue;
+    }
     private int MinusAmount(int value)
     {
         int amount;
