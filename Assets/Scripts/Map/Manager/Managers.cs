@@ -35,5 +35,6 @@ public class Managers : MonoBehaviour
     {
         manager = GetComponent<Managers>();
         DontDestroyOnLoad(manager);
+
     }
 }

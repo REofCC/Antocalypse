@@ -13,7 +13,7 @@ public class Worker : Ant
 
     BuildingType buildingType;
 
-    public float buildTime = 2f;    //임시 건설시간
+    public float wallBreakTime = 2f;    //임시 벽 파괴 시간
     public float gatherTime = 2f;    //임시 채집시간
     #endregion
     #region Function
@@ -143,6 +143,35 @@ public class Worker : Ant
 
     //    cargo = obj;
     //}
+    void StartBuild()
+    {
+        Debug.Log("Start Building");
+        if (buildingType == BuildingType.None)
+        {
+            //MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "Path", true);
+            //targetNode.SetIsWorked(false);
+            StartCoroutine(WallBreakTimer());
+        }
+        else
+        {
+            MapManager.Map.BuildingFactory.Build((Path)targetNode, buildingType, OnBuildFinish);
+            //건물 건설
+        }
+    }
+    void OnBuildFinish(bool finished)
+    {
+        Debug.Log(finished);
+        if (finished)
+        {
+            Debug.Log("Finished Building");
+        }
+        else
+        {
+            Debug.Log("Failed Building");
+        }
+        ChangeState(State.Idle);
+        currentTask = TaskType.None;
+    }
     #endregion
     #region Unity
     private void Awake()
@@ -162,35 +191,6 @@ public class Worker : Ant
     }
     #endregion
     #region Coroutine
-    IEnumerator BuildTimer()
-    {
-        yield return new WaitForSeconds(buildTime);
-        Debug.Log("Build Finish");
-        // 작업 완료 전달?
-        if (buildingType == BuildingType.None)
-        {
-            //MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "Path", true);
-            //targetNode.SetIsWorked(false);
-            Wall node = (Wall)targetNode;
-            if (node.GetResource() != null)
-            {
-                HexaMapNode resNode = MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "ResourceNode", true);
-                MapManager.Map.ResourceFactory.SetResource(node, resNode as ResourceNode2);
-            }
-            else
-            {
-                MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "Path", true);
-            }
-            targetNode.SetIsWorked(false);
-        }
-        else
-        {
-            MapManager.Map.BuildingFactory.Build((Path)targetNode, buildingType);
-            //건물 건설
-        }
-        ChangeState(State.Idle);
-        currentTask = TaskType.None;
-    }
     IEnumerator GatherTimer()
     {
         yield return new WaitForSeconds(gatherTime);
@@ -201,6 +201,24 @@ public class Worker : Ant
 
         //FindCargo(); //저장소 경로 할당
         ChangeState(State.Move);
+    }
+    IEnumerator WallBreakTimer()
+    {
+        yield return new WaitForSeconds(wallBreakTime);
+        Debug.Log("Break Finish");
+        Wall node = (Wall)targetNode;
+        if (node.GetResource() != null)
+        {
+            HexaMapNode resNode = MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "ResourceNode", true);
+            MapManager.Map.ResourceFactory.SetResource(node, resNode as ResourceNode2);
+        }
+        else
+        {
+            MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "Path", true);
+        }
+        targetNode.SetIsWorked(false);
+        ChangeState(State.Idle);
+        currentTask = TaskType.None;
     }
     #endregion
     #endregion
@@ -233,7 +251,8 @@ public class Worker : Ant
         {
             ChangeState(State.Build);
             // 건설 자원 소모 및 대기시간, 애니메이션
-            StartCoroutine(BuildTimer());
+            //StartCoroutine(BuildTimer());
+            StartBuild();
         }
         else if (currentTask == TaskType.Build && state != State.Build)   // 건설 종료 후
         {
