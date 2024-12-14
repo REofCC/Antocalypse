@@ -22,6 +22,8 @@ public abstract class Ant : MonoBehaviour
     protected HexaMapNode targetNode;
     protected List<Vector3> path;
     protected int pathIndex;
+
+    protected Animator animator;
     #endregion
     #region BasicGetter
     public State GetCurrentState()
@@ -50,27 +52,33 @@ public abstract class Ant : MonoBehaviour
     #endregion
     #region Private
     protected abstract void SetBT();
-    protected void ChangeState(State state)
+    protected void ChangeState(State _state)
     {
-        switch (state)
+        if (_state == state)
+            return;
+        switch (_state)
         {
             case State.Idle:
-                this.state = State.Idle;
+                state = State.Idle;
+                animator.SetInteger("State", 0);
                 break;
             case State.Move:
-                this.state = State.Move;
+                state = State.Move;
+                animator.SetInteger("State", 1);
                 break;
             case State.Gather:
-                this.state = State.Gather;
+                state = State.Gather;
+                animator.SetInteger("State", 2);
                 break;
             case State.Return:
-                this.state = State.Return;
+                state = State.Return;
                 break;
             case State.Eat:
-                this.state = State.Eat;
+                state = State.Eat;
                 break;
             case State.Build:
-                this.state = State.Build;
+                state = State.Build;
+                animator.SetInteger("State", 2);
                 break;
         }
     }
@@ -96,10 +104,15 @@ public abstract class Ant : MonoBehaviour
     }
     #endregion
     #region Unity
-    private void Awake()
+    protected void Awake()
     {
+        animator = GetComponentInChildren<Animator>();
+        entityData = GetComponent<EntityData>();
+        collider = GetComponent<CapsuleCollider2D>();
+
         state = State.Idle;
         currentTask = TaskType.None;
+        animator.SetInteger("State", 0);
     }
     #endregion
     #endregion
@@ -112,6 +125,8 @@ public abstract class Ant : MonoBehaviour
     }
     protected BTNodeState Move()
     {
+        if (state != State.Move)
+            ChangeState(State.Move);
         if (transform.position.x == currentTargetPos.x && transform.position.y == currentTargetPos.y)
         {
             //Debug.Log("Move Finish");
@@ -121,7 +136,6 @@ public abstract class Ant : MonoBehaviour
                 transform.rotation = Quaternion.Euler(new Vector3(0, 0, RotateValue(targetPos)));
                 return BTNodeState.Success;
             }
-
             else
             {
                 pathIndex--;
@@ -135,6 +149,8 @@ public abstract class Ant : MonoBehaviour
     }
     protected BTNodeState Idle()
     {
+        if (state != State.Idle)
+            ChangeState(State.Idle);
         // 유휴 애니메이션
         return BTNodeState.Running;
     }

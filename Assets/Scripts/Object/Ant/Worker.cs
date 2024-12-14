@@ -174,18 +174,13 @@ public class Worker : Ant
     }
     #endregion
     #region Unity
-    private void Awake()
-    {
-        entityData = GetComponent<EntityData>();
-        collider = GetComponent<CapsuleCollider2D>();
-        cargoPos = cargo.transform.position;
-    }
     private void Start()
     {
+        cargoPos = cargo.transform.position;
+
         SetBT();
-        root.Evaluate();
     }
-    private void FixedUpdate()
+    private void LateUpdate()
     {
         root.Evaluate();
     }
@@ -206,6 +201,7 @@ public class Worker : Ant
     {
         yield return new WaitForSeconds(wallBreakTime);
         Debug.Log("Break Finish");
+
         Wall node = (Wall)targetNode;
         if (node.GetResource() != null)
         {
