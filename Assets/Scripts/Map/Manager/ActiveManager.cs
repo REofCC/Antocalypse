@@ -147,6 +147,10 @@ public class ActiveManager : MonoBehaviour
             return;
         }
         Managers.Task.RequestTask(node, TaskType.Build, type);
+        MapManager.Map.BuildingFactory.Build((Path)node, type, result =>
+        {
+            if (!result) Debug.Log("");
+        });
     }
     /*
     public void UpgradeBuilding()

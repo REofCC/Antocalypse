@@ -55,7 +55,10 @@ public class MapMaker : MonoBehaviour
             pos = list[idx].GetCellPos();
             underGrid.SwapNode(pos.x, pos.y, "Path", true);
         }
-        MapManager.Map.BuildingFactory.Build(startPos as Path, BuildingType.Queen);
+        MapManager.Map.BuildingFactory.Build(startPos as Path, BuildingType.Queen, result =>
+        {
+            if (!result) Debug.Log("Quuen Build Failed");
+        });
     }
     private void MakeDoorNode()
     {
