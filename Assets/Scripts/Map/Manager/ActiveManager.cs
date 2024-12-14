@@ -96,9 +96,15 @@ public class ActiveManager : MonoBehaviour
         if (node == null || !node.GetBreakable()) return;
 
         Vector2Int gridPos = node.GetGridPos();
-        node.SetIsWorked(true);
-
-        Managers.Task.RequestTask(node, TaskType.Build);
+        if (!node.GetIsWorked())
+        {
+            node.SetIsWorked(true);
+            Managers.Task.RequestTask(node, TaskType.Build);
+        }
+        else
+        {
+            return;
+        }
         //Wall Node = (Wall)node;
         //if (Node.GetResource() != null)
         //{
@@ -140,7 +146,7 @@ public class ActiveManager : MonoBehaviour
             Debug.Log("current node is null");
             return;
         }
-        MapManager.Map.BuildingFactory.Build((Path)node, type);
+        Managers.Task.RequestTask(node, TaskType.Build, type);
     }
     /*
     public void UpgradeBuilding()

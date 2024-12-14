@@ -239,35 +239,37 @@ public class Worker : MonoBehaviour
                 break;
         }
     }
-    public void GetTask(HexaMapNode targetNode, TaskType type)
+    public void GetTask(HexaMapNode _targetNode, TaskType type)
     {
         Debug.Log("Task Confirmed");
 
         if (type == TaskType.Build)
         {
-            RequestPath(targetNode, true);
+            RequestPath(_targetNode, true);
             buildingType = BuildingType.None;
         }
         else
         {
-            RequestPath(targetNode, false);
+            RequestPath(_targetNode, false);
         }
         currentTask = type;
+        targetNode = _targetNode;
         pathIndex = path.Count - 1;
         targetPos = targetNode.GetWorldPos();
         currentTargetPos = path[pathIndex];
         targetGridPos = targetNode.GetGridPos();
     }
-    public void GetTask(HexaMapNode targetNode, TaskType type, BuildingType _buildingType)
+    public void GetTask(HexaMapNode _targetNode, TaskType type, BuildingType _buildingType)
     {
         Debug.Log("Task Confirmed");
 
         if (type == TaskType.Build)
             buildingType = _buildingType;
 
-        RequestPath(targetNode, false);
+        RequestPath(_targetNode, false);
 
         currentTask = type;
+        targetNode = _targetNode;
         pathIndex = path.Count - 1;
         targetPos = targetNode.GetWorldPos();
         currentTargetPos = path[pathIndex];
@@ -362,23 +364,23 @@ public class Worker : MonoBehaviour
         // 작업 완료 전달?
         if (buildingType == BuildingType.None)
         {
-            Wall node = (Wall)targetNode;
-            MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "Path", true);
+            //MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "Path", true);
             //targetNode.SetIsWorked(false);
-            //if (node.GetResource() != null)
-            //{
-            //    HexaMapNode resNode = MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "ResourceNode", true);
-            //    MapManager.Map.ResourceFactory.SetResource(node, resNode as ResourceNode2);
-            //    targetNode.SetIsWorked(false);
-            //}
-            //else
-            //{
-            //    MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "Path", true);
-            //    targetNode.SetIsWorked(false);
-            //}
+            Wall node = (Wall)targetNode;
+            if (node.GetResource() != null)
+            {
+                HexaMapNode resNode = MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "ResourceNode", true);
+                MapManager.Map.ResourceFactory.SetResource(node, resNode as ResourceNode2);
+            }
+            else
+            {
+                MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "Path", true);
+            }
+            targetNode.SetIsWorked(false);
         }
         else
         {
+            MapManager.Map.BuildingFactory.Build((Path)targetNode, buildingType);
             //건물 건설
         }
         ChangeState(State.Idle);
