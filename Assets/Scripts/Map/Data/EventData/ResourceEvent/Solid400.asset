@@ -9,12 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82c3249f6a50485459c13ae29bdeccee, type: 3}
-  m_Name: Solid_s
+  m_Script: {fileID: 11500000, guid: ac2c70277a90c9047a259d74a9e12b82, type: 3}
+  m_Name: Solid400
   m_EditorClassIdentifier: 
-  resourceName: Solid_s
-  type: 1
-  buildable: 0
-  amount: 100
-  maxWorker: 0
-  extractable: 1
+  eventName: "\uACE0\uCCB4 \uC2DD\uB7C9 400"
+  dropLiquid: 0
+  dropSolid: 400
+  dropLeaf: 0
+  dropWood: 0

@@ -17,4 +17,4 @@ MonoBehaviour:
   buildable: 0
   amount: 500
   maxWorker: 0
-  size: 1
+  extractable: 1

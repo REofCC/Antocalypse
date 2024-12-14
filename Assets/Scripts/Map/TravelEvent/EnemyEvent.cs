@@ -21,9 +21,10 @@ public class EnemyEvent : Event
     }
     #endregion
     #region Function
-    public override void SetEvent()
+    public override void SetEvent(EventData data)
     {
         SetEventType(EventType.Battle);
+        SetEnemyInfo(data as EnemyData);
         currentPower = enemyInfo.CombatPower;
     }
     public override bool EventFunction(GameObject traveler)
@@ -41,8 +42,7 @@ public class EnemyEvent : Event
     }
     public override void OnComplete()
     {
-        Managers.Resource.AddLiquidFood(enemyInfo.DropLiquid);
-        Managers.Resource.AddSolidFood(enemyInfo.DropSolid);
+        GetResource(enemyInfo);
         GetNode().OnEventComplete();
         Destroy(this.gameObject);
     }
