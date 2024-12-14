@@ -1,52 +1,62 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEngine.EventSystems.EventTrigger;
-using static UnityEngine.GraphicsBuffer;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
-public class Worker : MonoBehaviour
+public class Worker : Ant
 {
-
-    private BTSelector root;
-
-    EntityData entityData;
-    CapsuleCollider2D collider;
-
+    #region Attribute
     [SerializeField]
     GameObject cargo;
 
     Vector2 cargoPos;
-    Vector2 nodePos;
 
-    TaskType currentTask;
-    State state;
     //State nextState;
-    Vector2 currentTargetPos;
-    Vector2 targetPos;
-    Vector2Int targetGridPos;
-    HexaMapNode targetNode;
-    List<Vector3> path;
-    int pathIndex;
+
     BuildingType buildingType;
 
     public float buildTime = 2f;    //임시 건설시간
     public float gatherTime = 2f;    //임시 채집시간
-
-    // ToDo : 건설 명령 받을 때 건설시간 받아야 함
-    private void Awake()
+    #endregion
+    #region Function
+    #region Public
+    public void GetTask(HexaMapNode _targetNode, TaskType type)
     {
-        entityData = GetComponent<EntityData>();
-        collider = GetComponent<CapsuleCollider2D>();
-        state = State.Idle;
-        cargoPos = cargo.transform.position;
-        currentTask = TaskType.None;
+        Debug.Log("Task Confirmed");
+
+        if (type == TaskType.Build)
+        {
+            RequestPath(_targetNode, true);
+            buildingType = BuildingType.None;
+        }
+        else
+        {
+            RequestPath(_targetNode, false);
+        }
+        currentTask = type;
+        targetNode = _targetNode;
+        pathIndex = path.Count - 1;
+        targetPos = targetNode.GetWorldPos();
+        currentTargetPos = path[pathIndex];
+        targetGridPos = targetNode.GetGridPos();
     }
-    private void Start()
+    public void GetTask(HexaMapNode _targetNode, TaskType type, BuildingType _buildingType)
+    {
+        Debug.Log("Task Confirmed");
+
+        if (type == TaskType.Build)
+            buildingType = _buildingType;
+
+        RequestPath(_targetNode, false);
+
+        currentTask = type;
+        targetNode = _targetNode;
+        pathIndex = path.Count - 1;
+        targetPos = targetNode.GetWorldPos();
+        currentTargetPos = path[pathIndex];
+        targetGridPos = targetNode.GetGridPos();
+    }
+    #endregion
+    #region Private
+    protected override void SetBT()
     {
         root = new BTSelector();
         BTSelector orderSelector = new BTSelector();
@@ -92,208 +102,6 @@ public class Worker : MonoBehaviour
         buildSequence.AddChild(isBuildOrder);
         buildSequence.AddChild(moveAction);
         buildSequence.AddChild(buildAction);
-
-        root.Evaluate();
-    }
-    #region BT
-    #region BTAction
-    BTNodeState Eat()
-    {
-        // 섭취 행동 대기시간 및 애니메이션
-        return BTNodeState.Success;
-    }
-    BTNodeState Move()
-    {
-        if (transform.position.x == currentTargetPos.x && transform.position.y == currentTargetPos.y)
-        {
-            //Debug.Log("Move Finish");
-            //ChangeState(State.Idle);
-            if (pathIndex == 0) // 경로 마지막일 때
-            {
-                transform.rotation = Quaternion.Euler(new Vector3(0, 0, RotateValue(targetPos)));
-                return BTNodeState.Success;
-            }
-
-            else
-            {
-                pathIndex--;
-                currentTargetPos = path[pathIndex];
-                transform.rotation = Quaternion.Euler(new Vector3(0, 0, RotateValue(currentTargetPos)));
-                return BTNodeState.Running;
-            }
-        }
-        transform.position = Vector2.MoveTowards(transform.position, currentTargetPos, entityData.speed * Time.deltaTime);
-        return BTNodeState.Running;
-    }
-
-    BTNodeState Store()
-    {
-        entityData.isHolding = false;
-        Debug.Log("Stored");
-        // 자원 보관 추가
-        return BTNodeState.Success;
-    }
-    BTNodeState GatherResource()
-    {
-        if (currentTask == TaskType.Gather && state != State.Gather)   // 최초 진입 시
-        {
-            ChangeState(State.Gather);
-            // 채집 대기시간, 애니메이션
-            StartCoroutine(GatherTimer());
-        }
-        else if (currentTask == TaskType.Gather && state != State.Gather)   // 건설 종료 후
-        {
-            return BTNodeState.Success;
-        }
-        return BTNodeState.Running;
-    }
-    BTNodeState Build()
-    {
-        if (currentTask == TaskType.Build && state != State.Build)   // 최초 진입 시
-        {
-            ChangeState(State.Build);
-            // 건설 자원 소모 및 대기시간, 애니메이션
-            StartCoroutine(BuildTimer());
-        }
-        else if (currentTask == TaskType.Build && state != State.Build)   // 건설 종료 후
-        {
-            return BTNodeState.Success;
-        }
-        return BTNodeState.Running;
-    }
-    BTNodeState Idle()
-    {
-        // 유휴 애니메이션
-        return BTNodeState.Running;
-    }
-    #endregion
-    #region BTCondition
-    bool IsKcalLow()
-    {
-        if (entityData.kcal <= 50 && currentTask == TaskType.None)    //수치 조정
-        {
-            currentTask = TaskType.Eat;
-            //path = 
-            //여왕개미 or 액체 식량 보관소 까지 경로 요청
-            return true;
-        }
-
-        else 
-            return false;
-    }
-    bool IsHolding()
-    {
-        if (entityData.isHolding)
-        {
-            targetPos = cargoPos;
-            ChangeState(State.Return);
-            return true;
-        }
-        return false;
-    }
-    bool IsGatherOrder()
-    {
-        if (currentTask == TaskType.Gather)
-        {
-            targetPos = nodePos;
-            return true;
-        }
-        else
-            return false;
-    }
-    bool IsBuildOrder()
-    {
-        if (currentTask == TaskType.Build)
-            return true;
-        else
-            return false;
-    }
-    #endregion
-#endregion
-
-    private void FixedUpdate()
-    {
-        root.Evaluate();
-    }
-    void ChangeState(State state)
-    {
-        switch (state)
-        {
-            case State.Idle:
-                this.state = State.Idle;
-                break;
-            case State.Move:
-                this.state = State.Move;
-                break;
-            case State.Gather:
-                this.state = State.Gather;
-                break;
-            case State.Return:
-                this.state = State.Return;
-                break;
-            case State.Eat:
-                this.state = State.Eat;
-                break;
-            case State.Build:
-                this.state = State.Build;
-                break;
-        }
-    }
-    public void GetTask(HexaMapNode _targetNode, TaskType type)
-    {
-        Debug.Log("Task Confirmed");
-
-        if (type == TaskType.Build)
-        {
-            RequestPath(_targetNode, true);
-            buildingType = BuildingType.None;
-        }
-        else
-        {
-            RequestPath(_targetNode, false);
-        }
-        currentTask = type;
-        targetNode = _targetNode;
-        pathIndex = path.Count - 1;
-        targetPos = targetNode.GetWorldPos();
-        currentTargetPos = path[pathIndex];
-        targetGridPos = targetNode.GetGridPos();
-    }
-    public void GetTask(HexaMapNode _targetNode, TaskType type, BuildingType _buildingType)
-    {
-        Debug.Log("Task Confirmed");
-
-        if (type == TaskType.Build)
-            buildingType = _buildingType;
-
-        RequestPath(_targetNode, false);
-
-        currentTask = type;
-        targetNode = _targetNode;
-        pathIndex = path.Count - 1;
-        targetPos = targetNode.GetWorldPos();
-        currentTargetPos = path[pathIndex];
-        targetGridPos = targetNode.GetGridPos();
-    }
-    float RotateValue(Vector3 targetPos)
-    {
-        Vector3 direction = targetPos - transform.position;
-
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-
-        return angle;
-    }
-    void RequestPath(HexaMapNode targetNode, bool isTargetWall)
-    {
-        HexaMapNode start = MapManager.Map.UnderGrid.GetNode(transform.position);
-        if (isTargetWall)
-        {
-            path = MapManager.Map.UnderPathFinder.ReachWallPathFinding(start, targetNode);
-        }
-        else
-        {
-            path = MapManager.Map.UnderPathFinder.PathFinding(start, targetNode);
-        }
     }
     //void FindCargo(Resourcetype resourceType)
     //{
@@ -313,7 +121,7 @@ public class Worker : MonoBehaviour
     //            //resourceLayer = 
     //            break;
     //    }    
-        
+
     //    GameObject obj = null;
 
     //    var hits = Physics2D.CircleCastAll(nodePos, Mathf.Infinity, Vector2.zero, Mathf.Infinity, resourceLayer);
@@ -335,31 +143,28 @@ public class Worker : MonoBehaviour
 
     //    cargo = obj;
     //}
-
-    public State GetCurrentState()
+    #endregion
+    #region Unity
+    private void Awake()
     {
-        return state;
+        entityData = GetComponent<EntityData>();
+        collider = GetComponent<CapsuleCollider2D>();
+        cargoPos = cargo.transform.position;
     }
-    public TaskType GetCurrentTask()
+    private void Start()
     {
-        return currentTask;
+        SetBT();
+        root.Evaluate();
     }
-    public void GetTask(TaskType task)
+    private void FixedUpdate()
     {
-        currentTask = task;
+        root.Evaluate();
     }
-    public int GetGatherValue()
-    {
-        return entityData.gatherValue;
-    }
-    public Vector2 GetTargetNodePos()
-    {
-        return nodePos;
-    }
-
+    #endregion
+    #region Coroutine
     IEnumerator BuildTimer()
     {
-        yield return new WaitForSeconds(buildTime); 
+        yield return new WaitForSeconds(buildTime);
         Debug.Log("Build Finish");
         // 작업 완료 전달?
         if (buildingType == BuildingType.None)
@@ -397,4 +202,74 @@ public class Worker : MonoBehaviour
         //FindCargo(); //저장소 경로 할당
         ChangeState(State.Move);
     }
+    #endregion
+    #endregion
+    #region BT
+    #region BTAction
+    BTNodeState Store()
+    {
+        entityData.isHolding = false;
+        Debug.Log("Stored");
+        // 자원 보관 추가
+        return BTNodeState.Success;
+    }
+    BTNodeState GatherResource()
+    {
+        if (currentTask == TaskType.Gather && state != State.Gather)   // 최초 진입 시
+        {
+            ChangeState(State.Gather);
+            // 채집 대기시간, 애니메이션
+            StartCoroutine(GatherTimer());
+        }
+        else if (currentTask == TaskType.Gather && state != State.Gather)   // 건설 종료 후
+        {
+            return BTNodeState.Success;
+        }
+        return BTNodeState.Running;
+    }
+    BTNodeState Build()
+    {
+        if (currentTask == TaskType.Build && state != State.Build)   // 최초 진입 시
+        {
+            ChangeState(State.Build);
+            // 건설 자원 소모 및 대기시간, 애니메이션
+            StartCoroutine(BuildTimer());
+        }
+        else if (currentTask == TaskType.Build && state != State.Build)   // 건설 종료 후
+        {
+            return BTNodeState.Success;
+        }
+        return BTNodeState.Running;
+    }
+    #endregion
+    #region BTCondition
+    bool IsHolding()
+    {
+        if (entityData.isHolding)
+        {
+            targetPos = cargoPos;
+            ChangeState(State.Return);
+            return true;
+        }
+        return false;
+    }
+    bool IsGatherOrder()
+    {
+        if (currentTask == TaskType.Gather)
+        {
+            targetPos = nodePos;
+            return true;
+        }
+        else
+            return false;
+    }
+    bool IsBuildOrder()
+    {
+        if (currentTask == TaskType.Build)
+            return true;
+        else
+            return false;
+    }
+    #endregion
+    #endregion
 }
