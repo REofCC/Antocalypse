@@ -21,6 +21,8 @@ public class ResearchTreeManager : MonoBehaviour
 
     public event Action ResearchUpdate;
 
+    private bool isResearchInProgress = false;
+
     private void Start()
     {
         foreach (ResearchNode node in researchNodes)
@@ -52,14 +54,20 @@ public class ResearchTreeManager : MonoBehaviour
         return true;
     }
 
+    public bool IsResearchInProgress()
+    {
+        return isResearchInProgress;
+    }
+
     public void StartResearchNode(ResearchNode node)
     {
-        if (node.NodeState != NodeState.UNLOCKED || !CanAffordNode(node) || !CanProgressNode(node))
+        if (isResearchInProgress || node.NodeState != NodeState.UNLOCKED || !CanAffordNode(node) || !CanProgressNode(node))
         {
             return;
         }
 
-        DeductResource(node.Cost);        
+        isResearchInProgress = true;
+        DeductResource(node.RequireLeaf, node.RequireWood, node.RequireLiquidFood);
         CloseExclusiveNode(node);
         node.SetNodeState(NodeState.IN_PROGRESS);
         StartCoroutine(ProgressResearch(node));
@@ -67,24 +75,29 @@ public class ResearchTreeManager : MonoBehaviour
     }
 
     IEnumerator ProgressResearch(ResearchNode node)
-    {        
+    {
         yield return new WaitForSeconds(node.ProgressTime); //[LSH:TODO] 게임 내 연차로 연동해야함        
         CompletedResearch(node);
+        isResearchInProgress = false;
         UpdateNode();
     }
 
     void CompletedResearch(ResearchNode node)
     {
-        node.SetNodeState(NodeState.COMPLETED);      
-        MapManager.Map.BuildingFactory.SetBuildingConstaint(node.BuildingType);
+        node.SetNodeState(NodeState.COMPLETED);
+        List<BuildingType> buildingTypes = node.UnlockBuildingTypes;
+        foreach (BuildingType buildingType in buildingTypes)
+        {
+            MapManager.Map.BuildingFactory.SetBuildingConstaint(buildingType);
+        }
         UnlockNode(node);
         completedNodes.Add(node);
     }
-    
+
     void UnlockNode(ResearchNode node)
     {
         foreach (ResearchNode nextNode in node.NextNodes)
-        {            
+        {
             bool allPreviousCompleted = true;
             foreach (ResearchNode previousNode in nextNode.PreviousNodes)
             {
@@ -94,7 +107,7 @@ public class ResearchTreeManager : MonoBehaviour
                     break;
                 }
             }
-            
+
             if (allPreviousCompleted && nextNode.NodeState == NodeState.LOCKED)
             {
                 nextNode.SetNodeState(NodeState.UNLOCKED);
@@ -105,10 +118,9 @@ public class ResearchTreeManager : MonoBehaviour
         UpdateNode();
     }
 
-
     void CloseExclusiveNode(ResearchNode node)
     {
-        foreach(ResearchNode exclusiveNode in node.ExclusiveNodes)
+        foreach (ResearchNode exclusiveNode in node.ExclusiveNodes)
         {
             exclusiveNode.SetNodeState(NodeState.CLOSED);
             //UPDATE UI
@@ -117,7 +129,23 @@ public class ResearchTreeManager : MonoBehaviour
 
     public void CancelResearchNode(ResearchNode node)
     {
+        if (node.NodeState != NodeState.IN_PROGRESS)
+        {
+            return;
+        }
 
+        StopCoroutine(ProgressResearch(node));
+        node.SetNodeState(NodeState.UNLOCKED);
+        isResearchInProgress = false;
+        RefundResource(node.RequireLeaf, node.RequireWood, node.RequireLiquidFood);
+        UpdateNode();
+    }
+
+    void RefundResource(int leaf, int wood, int liquid)
+    {
+        Managers.Resource.AddLeaf(leaf);
+        Managers.Resource.AddWood(wood);
+        Managers.Resource.AddLiquidFood(liquid);
     }
 
     void UpdateNode()
@@ -130,21 +158,30 @@ public class ResearchTreeManager : MonoBehaviour
         return true;
     }
 
-    void DeductResource(int cost)
+    void DeductResource(int leaf, int wood, int liquid)
     {
-
+        if (!Managers.Resource.CheckLeaf(leaf) || !Managers.Resource.CheckWood(wood) || !Managers.Resource.CheckLiquidFood(liquid))
+        {
+            return;
+        }
+        else
+        {
+            Managers.Resource.MinusLeaf(leaf);
+            Managers.Resource.MinusWood(wood);
+            Managers.Resource.MinusLiquidFood(liquid);
+        }
     }
 
     public ResearchNode GetNodeByIndex(int index)
     {
-        if(index >= 0 && index < researchNodes.Count)
+        if (index >= 0 && index < researchNodes.Count)
         {
             return researchNodes[index];
         }
 
         return null;
     }
-    
+
     public bool IsCompletedNode(ResearchNode node)
     {
         return completedNodes.Contains(node);
