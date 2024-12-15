@@ -23,17 +23,12 @@ public class Managers : MonoBehaviour
     public static TaskManager Task { get { return taskManager; } }
     private void Awake()
     {
+        manager = GetComponent<Managers>();
+        DontDestroyOnLoad(manager);
         // 권희준 - 코루틴 사용을 위해 GameObject에 추가
         yearManager = gameObject.AddComponent<YearManager>();
         yearManager.Init();
         taskManager = gameObject.AddComponent<TaskManager>();
         taskManager.Init();
-    }
-
-
-    private void Start()
-    {
-        manager = GetComponent<Managers>();
-        DontDestroyOnLoad(manager);
     }
 }
