@@ -24,8 +24,25 @@ public class EvoManager
         currentBuff = new float[(int)BuffType.EndOfFloatBuff - 1];
         currentBoolBuff = new bool[(int)BuffType.EndOfBoolBuff - (int)BuffType.EndOfFloatBuff - 1];
     }
-    public void AddCurrentBuff(BuffType type, float value)  //진화 선택 완료시 적용 버프마다 호출
+    //public void AddCurrentBuff(BuffType type, float value)
+    //{
+    //    if ((int)type < (int)BuffType.EndOfFloatBuff)
+    //    {
+    //        currentBuff[(int)type] += value;
+    //    }
+    //    else
+    //    {
+    //        if (value == 1)
+    //            currentBoolBuff[(int)type - (int)BuffType.EndOfFloatBuff - 1] = true;
+    //        else if(value == -1)
+    //            currentBoolBuff[(int)type - (int)BuffType.EndOfFloatBuff -1] = false;
+    //    }
+    //}
+    public void AddCurrentBuff(BuffPart part, int branch)  //진화 선택 완료시 호출
     {
+        BuffType type = GetBuffType(buffTargetType, part, branch);
+        float value = GetBuffValue(buffTargetType, part, branch);
+
         if ((int)type < (int)BuffType.EndOfFloatBuff)
         {
             currentBuff[(int)type] += value;
@@ -34,8 +51,8 @@ public class EvoManager
         {
             if (value == 1)
                 currentBoolBuff[(int)type - (int)BuffType.EndOfFloatBuff - 1] = true;
-            else if(value == -1)
-                currentBoolBuff[(int)type - (int)BuffType.EndOfFloatBuff -1] = false;
+            else if (value == -1)
+                currentBoolBuff[(int)type - (int)BuffType.EndOfFloatBuff - 1] = false;
         }
     }
     public void AddEvoCount()   //진화 선택 완료시 호출
@@ -56,6 +73,22 @@ public class EvoManager
                 currentBoolBuff[(int)BuffType.CanGetCombatReward - (int)BuffType.EndOfFloatBuff] = true;
                 break;
         }
+    }
+    public string GetBasicDescription(AntType antType)
+    {
+        switch (antType)
+        {
+            case AntType.Worker:
+                return worker.GetBasicDescription(AntType.Worker);
+                break;
+            case AntType.Scout:
+                return scout.GetBasicDescription(AntType.Scout);
+                break;
+            case AntType.Soldier:
+                return soldier.GetBasicDescription(AntType.Soldier);
+                break;
+        }
+        return null;
     }
     public string GetBuffDescription(AntType antType, BuffPart part, int branch)
     {

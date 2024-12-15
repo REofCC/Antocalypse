@@ -84,7 +84,7 @@ public class Worker : Ant
         root.AddChild(idleAction);
 
         eatSequence.AddChild(kcalLow);
-        eatSequence.AddChild(moveAction);
+        //eatSequence.AddChild(moveAction);
         eatSequence.AddChild(eatAction);
 
         orderSelector.AddChild(returnSequence);

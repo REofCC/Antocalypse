@@ -4,7 +4,7 @@ public class EntityData:MonoBehaviour
 {
 
     [SerializeField]
-    string _entityType;
+    AntType _entityType;
     [SerializeField]
     int _maxHp;
     [SerializeField]
@@ -12,7 +12,9 @@ public class EntityData:MonoBehaviour
     [SerializeField]
     float _speed;
     [SerializeField]
-    int _kcal;
+    float _kcal;
+    [SerializeField] 
+    float _maxKcal;
     [SerializeField]
     int _gatherValue; //자원 운반량
     [SerializeField]
@@ -20,11 +22,12 @@ public class EntityData:MonoBehaviour
     [SerializeField]
     int _holdValue;  //자원 소지량
 
-    public string entityType { get { return _entityType; } set { _entityType = value; } }
+    public AntType entityType { get { return _entityType; } set { _entityType = value; } }
     public int maxHp { get { return _maxHp; } set { _maxHp = value; } }
     public int hp { get { return _hp; } set { _hp = value; } }
     public float speed { get { return _speed; } set { _speed = value; } }
-    public int kcal { get { return _kcal; } set { _kcal = value; } }
+    public float kcal { get { return _kcal; } set { _kcal = value; } }
+    public float maxKcal { get { return _maxKcal; } set { _maxKcal = value; } }
 
     public int gatherValue { get { return _gatherValue; } set { _gatherValue = value; } }
 

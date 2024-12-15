@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEditor.Recorder.AOV;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,13 +9,14 @@ using UnityEngine.UI;
 public class SpecializationPanelUI : MonoBehaviour
 {
     [SerializeField] ResearchSelectUI researchSelectUI;
+    [SerializeField] RegionResearchPanelUI regionResearchPanelUI;
     [SerializeField] List<Button> typeButtons = new List<Button>();
     [SerializeField] List<Specialization> specializations = new List<Specialization>();
-    [SerializeField] TMP_Text antType;
-    [SerializeField] TMP_Text specializationName;
+    [SerializeField] TMP_Text antTypeText;    
     [SerializeField] TMP_Text description;
     [SerializeField] Button progressButton;
     [SerializeField] Button exitButton;
+    AntType antType;
 
     private void Start()
     {        
@@ -30,24 +32,24 @@ public class SpecializationPanelUI : MonoBehaviour
 
     void Redraw()
     {
-        antType.text = "";
-        specializationName.text = "";
+        antTypeText.text = "";        
         description.text = "";
         progressButton.gameObject.SetActive(false);
     }
 
     void OnClickTypeButton(int typeNum)
     {
-        antType.text = specializations[typeNum].AntType;
-        specializationName.text = specializations[typeNum].SpecializationName;
-        description.text = specializations[typeNum].Description;
+        antType = (AntType)typeNum;
+        antTypeText.text = ((AntType)typeNum).ToString();        
+        description.text = Managers.EvoManager.GetBasicDescription((AntType)typeNum);
         progressButton.gameObject.SetActive(true);
     }
 
     void OnClickProgressButton()
     {
-        //[TODO:LSH]SpecializationManager.Instance.AdoptSpecialization(specializations[typeNum]);
+        Managers.EvoManager.SetBuffTargetType(antType);
         GetComponentInParent<SlidePopup>().ClosePopup();
+        regionResearchPanelUI.SetAntType(antType);
         StartCoroutine(WaitForPopupClose());
     }
 

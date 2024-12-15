@@ -28,7 +28,7 @@ public class Scout : Ant
         root.AddChild(idleAction);
 
         eatSequence.AddChild(kcalLow);
-        eatSequence.AddChild(moveAction);
+        //eatSequence.AddChild(moveAction);
         eatSequence.AddChild(eatAction);
     }
     #endregion

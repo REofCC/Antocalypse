@@ -3902,6 +3902,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1164165565f796b418d75e3f273aac21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  descriptionContent: {fileID: 0}
+  descriptionPrefab: {fileID: 0}
 --- !u!114 &212063398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12743,6 +12745,45 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 693541822}
   m_CullTransparentMesh: 1
+--- !u!21 &697946708
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Default UI Material(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)
+  m_Shader: {fileID: 10770, guid: 0000000000000000f000000000000000, type: 0}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _ColorMask: 15
+    - _Stencil: 0
+    - _StencilComp: 6
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    - _UseUIAlphaClip: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &699481063
 GameObject:
   m_ObjectHideFlags: 0
@@ -13673,6 +13714,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   researchSelectUI: {fileID: 1159075032}
+  regionResearchPanelUI: {fileID: 0}
   typeButtons:
   - {fileID: 1490958550}
   - {fileID: 1105443041}
@@ -13681,8 +13723,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: eebba2525fd9e08418ac5b255978d27d, type: 2}
   - {fileID: 11400000, guid: f5ed58b96135c3547a612e0734b4faf8, type: 2}
   - {fileID: 11400000, guid: 29f8b9708fd022d40a3fda4dcebaed55, type: 2}
-  antType: {fileID: 559132432}
-  specializationName: {fileID: 1478479329}
+  antTypeText: {fileID: 0}
   description: {fileID: 1088120241}
   progressButton: {fileID: 1347763232}
   exitButton: {fileID: 2072673940}
@@ -14440,45 +14481,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 787318129}
   m_CullTransparentMesh: 1
---- !u!21 &797687068
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Default UI Material(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)
-  m_Shader: {fileID: 10770, guid: 0000000000000000f000000000000000, type: 0}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - _ColorMask: 15
-    - _Stencil: 0
-    - _StencilComp: 6
-    - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
-    - _UseUIAlphaClip: 0
-    m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-  m_BuildTextureStacks: []
 --- !u!1 &800343319
 GameObject:
   m_ObjectHideFlags: 0
@@ -16729,7 +16731,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 797687068}
+  m_Material: {fileID: 697946708}
   m_Color: {r: 1, g: 1, b: 1, a: 0.99607843}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -19214,6 +19216,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6272037468371805679, guid: b9dae837eb8351d4e95149da4f1e1aee, type: 3}
+      propertyPath: _maxKcal
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 7722046487432534800, guid: b9dae837eb8351d4e95149da4f1e1aee, type: 3}
       propertyPath: m_Name
       value: Worker
@@ -19263,7 +19269,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1046056668}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c117a0c229c1e2547bae91ae7472da1c, type: 3}
+  m_Script: {fileID: 11500000, guid: 29c5151b326576c458c9a44a3723e071, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1046056671
@@ -28556,9 +28562,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c7c802b5832df042a78dc2af9a2b1db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  regionResearchInformationUI: {fileID: 0}
   headButton: {fileID: 1477859457}
   mesosomaButton: {fileID: 163434949}
   metasomaButton: {fileID: 1862842756}
+  leftButtons: []
+  rightButtons: []
 --- !u!114 &1621431759
 MonoBehaviour:
   m_ObjectHideFlags: 0
