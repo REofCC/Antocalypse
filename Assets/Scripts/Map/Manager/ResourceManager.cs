@@ -187,7 +187,20 @@ public class ResourceManager
         SetGenetic(GetGenetic() - value);
         return true;
     }
-
+    public void AddResource(int value, ResourceType type)
+    {
+        switch (type) 
+        {
+            case ResourceType.LEAF:
+                AddLeaf(value); break;
+            case ResourceType.LIQUID_FOOD:
+                AddLiquidFood(value); break;
+            case ResourceType.SOLID_FOOD:
+                AddSolidFood(value); break;
+            case ResourceType.WOOD:
+                AddWood(value); break;
+        }
+    }
     #endregion
     #region Function
     public void CalcMaxSolidFood(int value)

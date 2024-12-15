@@ -29,7 +29,7 @@ public abstract class Event : MonoBehaviour
     {
         this.info = info;
     }
-    public EventData GetResourceInfo()
+    public EventData GetEventInfo()
     {
         return info;
     }
