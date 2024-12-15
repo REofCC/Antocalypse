@@ -101,6 +101,10 @@ public class SaverPath : MonoBehaviour
         return value - amount;
     }
     */
+    public void GatherResource(int value, ResourceType type)
+    {
+        Managers.Resource.AddResource(value, type);
+    }
     #endregion
     #endregion
     #region UnityFunction

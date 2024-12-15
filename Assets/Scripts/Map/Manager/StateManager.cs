@@ -49,7 +49,10 @@ public class StateManager : MonoBehaviour
     {
         return travelEvent;
     }
-
+    public bool IsGround()
+    {
+        return isGround;
+    }
     
     #endregion
     #region Function

@@ -91,12 +91,12 @@ public class ActiveManager : MonoBehaviour
     {
         Vector3 pos = MapManager.Map.UpGrid.GetDoorPos().GetWorldPos();
         go.transform.position = pos;
-    }
+    } //under door -> ground door
     public void MoveToUnderMap(GameObject go)
     {
         Vector3 pos = MapManager.Map.UnderGrid.GetDoorPos().GetWorldPos();
         go.transform.position = pos;
-    }
+    } //ground door -> under door
     // ������ - ��ü ���� �ڵ� �߰�
     public void SpwanEgg(AntType type)
     {
