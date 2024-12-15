@@ -13,22 +13,27 @@ MonoBehaviour:
   m_Name: Worker
   m_EditorClassIdentifier: 
   antType: 0
-  BasicDescript: 'Expert Bonus : Able to Research "Deep Mine"'
+  BasicDescript: "\uC804\uBB38 \uBCF4\uB108\uC2A4 : \"\uC2EC\uCE35 \uCC44\uAD74\uAE30\"
+    \uC5F0\uAD6C\uB97C \uC7A0\uAE08 \uD574\uC81C\uD569\uB2C8\uB2E4."
   headBuffType1: 4
   headBuffValue1: 50
-  headDescript1: Increase Gather Speed +50%
+  headDescript1: "\uC77C\uAC1C\uBBF8\uC758 \uCC44\uC9D1 \uC18D\uB3C4\uB97C 50% \uC99D\uAC00\uC2DC\uD0B5\uB2C8\uB2E4."
   headBuffType2: 5
   headBuffValue2: 50
-  headDescript2: Increase Dig, Build, Demolish Speed +50%
+  headDescript2: "\uBCBD \uD30C\uAE30, \uAC74\uC124, \uCCA0\uAC70 \uC18D\uB3C4\uB97C
+    50% \uC99D\uAC00\uC2DC\uD0B5\uB2C8\uB2E4."
   chestBuffType1: 1
   chestBuffValue1: 30
-  chestDescript1: Increase Worker Movement Speed +30%
+  chestDescript1: "\uC77C\uAC1C\uBBF8\uC758 \uC774\uB3D9 \uC18D\uB3C4\uB97C 30% \uC99D\uAC00\uC2DC\uD0B5\uB2C8\uB2E4."
   chestBuffType2: 2
   chestBuffValue2: 50
-  chestDescript2: Increase Worker Population Cap +50%
+  chestDescript2: "\uBAA8\uB4E0 \uC77C\uAC1C\uBBF8 \uBD80\uD654\uC9C0\uAC00 \uCD94\uAC00\uB85C
+    50%\uC758 \uC778\uAD6C\uB97C \uC81C\uACF5\uD569\uB2C8\uB2E4."
   bellyBuffType1: 0
   bellyBuffValue1: 30
-  bellyDescript1: Increase Resource Hold Value +30%
+  bellyDescript1: "\uC77C\uAC1C\uBBF8\uC758 \uC790\uC6D0 \uC218\uC9D1\uB7C9\uC744
+    30% \uC99D\uAC00\uC2DC\uD0B5\uB2C8\uB2E4."
   bellyBuffType2: 6
   bellyBuffValue2: -30
-  bellyDescript2: Reduce Worker Food Consume -30%
+  bellyDescript2: "\uC77C\uAC1C\uBBF8\uAC00 \uC2DD\uB7C9\uC744 30% \uB354 \uCC9C\uCC9C\uD788
+    \uC18C\uBE44\uD569\uB2C8\uB2E4."
