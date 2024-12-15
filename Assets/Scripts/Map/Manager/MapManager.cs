@@ -130,7 +130,7 @@ public class MapManager : MonoBehaviour
     #endregion
 
     #region UnityFunction
-    private void Start()
+    private void Awake()
     {
         mapManager = GetComponent<MapManager>();
         upPosCalc = new();
