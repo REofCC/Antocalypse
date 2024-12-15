@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d69f727ab84b7ac43bbf3bf49cb31254, type: 3}
+  m_Name: Resource_4
+  m_EditorClassIdentifier: 
+  unlockBuildingTypes: 05000000
+  nodeIcon: {fileID: 0}
+  nodeName: "\uB300\uD615 \uC800\uC7A5\uC18C"
+  description: "\uC790\uC6D0 \uBCF4\uAD00 \uD55C\uB3C4\uB97C \uB300\uD3ED \uB298\uB824\uC8FC\uB294
+    \uB300\uD615 \uC78E/\uB098\uBB34/\uC561\uCCB4/\uACE0\uCCB4 \uC2DD\uB7C9 \uC800\uC7A5\uC18C
+    \uCCAD\uC0AC\uC9C4 \uC7A0\uAE08 \uD574\uC81C\n[\uC694\uAD6C \uC870\uAC74: \uACE0\uAE09
+    \uC800\uC7A5 \uACF5\uAC04 \uC5F0\uAD6C]\n[\uD1B5\uD569 \uC800\uC7A5\uC18C \uC5F0\uAD6C
+    \uBD88\uAC00]"
+  progressTime: 60
+  requireResource:
+    leaf: 50
+    wood: 30
+    liquidFood: 0
+  nodeState: 0
+  nextNodes: []
+  previousNodes:
+  - {fileID: 11400000, guid: 392015ff8f8847e4eb5a28b3245e5cbd, type: 2}
+  exclusiveNodes:
+  - {fileID: 11400000, guid: ccaa24bed014e414a96d2337119877ad, type: 2}

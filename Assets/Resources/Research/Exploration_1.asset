@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d69f727ab84b7ac43bbf3bf49cb31254, type: 3}
+  m_Name: Exploration_1
+  m_EditorClassIdentifier: 
+  unlockBuildingTypes: 09000000
+  nodeIcon: {fileID: 0}
+  nodeName: "\uC815\uCC30\uBCD1 \uBD80\uD654"
+  description: "\uC815\uCC30\uBCD1 \uBD80\uD654 \uD55C\uB3C4\uB97C \uB298\uB9AC\uB294
+    \uC815\uCC30\uBCD1 \uBD80\uD654\uC9C0 \uCCAD\uC0AC\uC9C4 \uC7A0\uAE08 \uD574\uC81C"
+  progressTime: 30
+  requireResource:
+    leaf: 30
+    wood: 0
+    liquidFood: 0
+  nodeState: 0
+  nextNodes:
+  - {fileID: 11400000, guid: aa347f2b05fcf73409561cb305939859, type: 2}
+  previousNodes: []
+  exclusiveNodes: []
