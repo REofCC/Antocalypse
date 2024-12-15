@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d69f727ab84b7ac43bbf3bf49cb31254, type: 3}
+  m_Name: Exploration_2
+  m_EditorClassIdentifier: 
+  unlockBuildingTypes: 0c000000
+  nodeIcon: {fileID: 52396971, guid: 402c41a82fe43284aa0f6f1939ca15ee, type: 3}
+  nodeName: "\uD0D0\uC0AC\uB300 \uBCF8\uBD80"
+  description: "\uD0D0\uC0AC\uB300 \uBC0F \uBCD1\uC815\uAC1C\uBBF8\uB97C \uC9C0\uC0C1\uC73C\uB85C
+    \uD30C\uACAC\uD560 \uC218 \uC788\uB294 \uD0D0\uC0AC\uB300 \uBCF8\uBD80 \uCCAD\uC0AC\uC9C4
+    \uC7A0\uAE08 \uD574\uC81C\n[\uC694\uAD6C \uC870\uAC74: \uC815\uCC30\uBCD1 \uBD80\uD654
+    \uC5F0\uAD6C]"
+  progressTime: 45
+  requireResource:
+    leaf: 50
+    wood: 0
+    liquidFood: 0
+  nodeState: 0
+  nextNodes:
+  - {fileID: 11400000, guid: 26b72e4174b251045ba515861abcffcb, type: 2}
+  previousNodes:
+  - {fileID: 11400000, guid: fa8e23b73cce86946b4523f2f3cd3c6f, type: 2}
+  exclusiveNodes: []

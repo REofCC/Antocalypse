@@ -21,11 +21,14 @@ public class Managers : MonoBehaviour
 
     static TaskManager taskManager = new();
     public static TaskManager Task { get { return taskManager; } }
+
+    static EvoManager evoManager = new();
+    public static EvoManager EvoManager { get { return evoManager; } }
     private void Awake()
     {
         manager = GetComponent<Managers>();
         DontDestroyOnLoad(manager);
-        // ±ÇÈñÁØ - ÄÚ·çÆ¾ »ç¿ëÀ» À§ÇØ GameObject¿¡ Ãß°¡
+        // ê¶Œí¬ì¤€ - ì½”ë£¨í‹´ ì‚¬ìš©ì„ ìœ„í•´ GameObjectì— ì¶”ê°€
         yearManager = gameObject.AddComponent<YearManager>();
         yearManager.Init();
         taskManager = gameObject.AddComponent<TaskManager>();

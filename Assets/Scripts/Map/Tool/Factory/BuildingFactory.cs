@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class BuildingFactory : MonoBehaviour
 {
+    #region Event
+    public event Action<BuildingType> OnBuildBuilding;
+    #endregion
+
     #region Attribute
     [SerializeField]
     List<BuildData> buildResources = new();
@@ -31,6 +35,7 @@ public class BuildingFactory : MonoBehaviour
     public void SetBuildingConstaint(BuildingType type, bool permission = true)
     {
         buildConstraints[(int)type] = permission;
+        OnBuildBuilding?.Invoke(type);
     }
     public bool GetBuildingConstraint(BuildingType type)
     {
