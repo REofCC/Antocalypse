@@ -13,9 +13,16 @@ public class ResourceEvent : Event
         SetEventType(EventType.Resource);
         SetEventData(data);
     }
+    public void ChooseResource(bool choose)
+    {
+        if (choose)
+        {
+            MapManager.Map.ResourceFactory.MakeResource(GetNode(), GetEventInfo().ResourceDataIdx);
+        }
+    }
     public override bool EventFunction(GameObject traveler)
     {
-        GetResource(GetEventInfo());
+        ChooseResource(true);
         return true;
     }
     #endregion

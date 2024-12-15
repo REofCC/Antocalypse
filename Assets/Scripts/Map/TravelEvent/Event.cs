@@ -49,14 +49,15 @@ public abstract class Event : MonoBehaviour
         node.OnEventComplete();
         Destroy(this.gameObject);
     }
-    #endregion
-    #region UnityFunction
-    private void OnTriggerEnter2D(Collider2D collision)
+    public virtual void CallEventFunction(GameObject traveler)
     {
-        if (EventFunction(collision.gameObject))
+        if (EventFunction(traveler))
         {
             OnComplete();
         }
     }
+    #endregion
+    #region UnityFunction
+
     #endregion
 }

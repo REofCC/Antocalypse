@@ -87,8 +87,8 @@ public class StateManager : MonoBehaviour
     }
     private void ClickOnGroundGrid(Vector3 pos)
     {
-        HexaMapNode node = ClickUnderGrid(pos);
-        if (CheckGroundMask(node) || node.GetIsWorked()) return;
+        HexaMapNode node = ClickGroundGrid(pos);
+        if (!CheckGroundMask(node) || node.GetIsWorked()) return;
         BaseResource res = node.GetResource();
         BaseBuilding building = node.GetBuilding();
         TravelNode travelNode = (TravelNode)node;

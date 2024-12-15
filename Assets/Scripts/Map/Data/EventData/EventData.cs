@@ -16,6 +16,9 @@ public class EventData : ScriptableObject
     int dropWood;
     [SerializeField]
     string description;
+    [SerializeField]
+    int resourceDataIdx;
+
 
     #endregion
 
@@ -26,5 +29,6 @@ public class EventData : ScriptableObject
     public int DropLeaf { get { return dropLeaf; } }
     public int DropWood { get { return dropWood; } }
     public string Description { get { return description; } }
+    public int ResourceDataIdx { get { return resourceDataIdx; } }
     #endregion
 }

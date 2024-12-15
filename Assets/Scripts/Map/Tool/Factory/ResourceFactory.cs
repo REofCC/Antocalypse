@@ -91,7 +91,7 @@ public class ResourceFactory : MonoBehaviour
         }
         return Instantiate(resource, resources.transform);
     }
-    private void SetResource(BaseResource resource, Wall node, ResourceData data)
+    private void SetResource(BaseResource resource, HexaMapNode node, ResourceData data)
     {
         resource.SetResourceData(data);
         resource.SetNode(node);
@@ -99,7 +99,7 @@ public class ResourceFactory : MonoBehaviour
         node.SetResource(resource);
         Managers.Resource.resGroup.AddResource(resource);
     }
-    public void SetResource(Wall node, ResourceNode2 resourceNode)
+    public void SetResource(HexaMapNode node, ResourceNode2 resourceNode)
     {
         BaseResource resource = node.GetResource();
         resourceNode.SetResource(resource);
@@ -130,9 +130,18 @@ public class ResourceFactory : MonoBehaviour
         {
             return;
         }
-        SetResource(obj.GetComponent<BaseResource>(), node as Wall, info);
+        SetResource(obj.GetComponent<BaseResource>(), node, info);
         obj.transform.position = node.GetWorldPos();
         SetEnable(node, phase);
+    }
+    public void MakeResource(HexaMapNode node, int idx)
+    {
+        ResourceData info = datas[idx];
+        GameObject obj = InstantiateResource(info.ResourceName);
+        if (obj == null)
+            return;
+        SetResource(obj.GetComponent<BaseResource>(), node, info);
+        obj.transform.position = node.GetWorldPos();
     }
     #endregion
     public void OnAwake(int mapSize)
