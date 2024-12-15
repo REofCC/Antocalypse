@@ -10,6 +10,9 @@ public class MapManager : MonoBehaviour
 
     #region Attribute
     int mapSize = 31;
+    //state
+    StateManager stateManager;
+
     //underground map
     HexaGrid underGrid;
     Tilemap undermap;
@@ -43,6 +46,7 @@ public class MapManager : MonoBehaviour
     #endregion
 
     #region Getter
+    public StateManager State {  get { return stateManager; } }
     public HexaGrid UnderGrid { get { return underGrid; } }
     public Tilemap UnderTileMap { get { return undermap; } }
     public HexaGrid UpGrid { get {return upGrid; } }
@@ -82,6 +86,7 @@ public class MapManager : MonoBehaviour
 
     private bool SetTools()
     {
+        stateManager = GetComponent<StateManager>();
         GameObject go = GameObject.Find("MapTool");
         underPathFinder = go.GetComponent<HexaPathFinder>();
         mapMaker = go.GetComponent<MapMaker>();

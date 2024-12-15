@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class ActiveManager : MonoBehaviour
 {
@@ -11,118 +9,19 @@ public class ActiveManager : MonoBehaviour
     #endregion
 
     #region Attribute
-    HexaMapNode node;
-    BaseBuilding building;
-    BaseResource resource;
-    Event travelEvent;
-    bool isGround = false;
-    #endregion
-    #region Getter & Setter
-    public HexaMapNode GetCurrentNode()
-    {
-        return node;
-    }
-    public void SetCurrentNode(HexaMapNode node)
-    {
-        this.node = node;
-    }
-    public void SetBuilding(BaseBuilding building)
-    {
-        this.building = building;
-    }
-    public void SetEvent(Event travelEvent)
-    {
-        this.travelEvent = travelEvent;
-    }
-    public Vector3 GetStartWorlePos()
-    {
-        HexaMapNode startNode = MapManager.Map.MapMaker.GetStartPos();
-        return startNode.GetWorldPos();
-    }
-    public void SetResource(BaseResource res)
-    {
-        this.resource = res;
-    }
-    public BaseResource GetResource()
-    {
-        return resource;
-    }
-    public BaseBuilding GetBuilding()
-    {
-        return this.building;
-    }
-    public Event GetEvent()
-    {
-        return travelEvent;
-    }
+    StateManager state;
     #endregion
 
     #region Function
-    private HexaMapNode ClickTile(Vector3 pos)
-    {
-        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(pos.x, pos.y, Camera.main.transform.position.z * -1));
-        if (isGround)
-        {
-            Vector2Int Pos = MapManager.Map.UpPosCalc.CalcGridPos(mouseWorldPos);
-
-            return MapManager.Map.UpGrid.GetNode(mouseWorldPos);
-        }
-        Vector2Int gridPos = MapManager.Map.UnderPosCalc.CalcGridPos(mouseWorldPos);
-        return MapManager.Map.UnderGrid.GetNode(mouseWorldPos);
-    }
-    private void ClickBuilding()
-    {
-        if (node.GetBuilding() != null)
-        {
-            SetBuilding(node.GetBuilding());
-            Debug.Log(building);
-            return;
-        }
-        SetBuilding(null);
-    }
-    private void ClickResource()
-    {
-        if (node.GetTileType() == TileType.ResourceNode)
-        {
-            ResourceNode2 resNode = (ResourceNode2)node;
-            if (resNode.GetResource() != null)
-            {
-                SetResource(resNode.GetResource());
-                Debug.Log(resource);
-                return;
-            }
-        }
-        SetResource(null);
-    }
-
-    private void ClickEvent()
-    {
-        if(node.GetTileType() == TileType.TravelNode)
-        {
-            TravelNode travelNode = (TravelNode)node;
-            if(travelNode.GetEvent()!= null)
-            {
-                SetEvent(travelNode.GetEvent());
-                Debug.Log(travelEvent);
-                return;
-            }
-        }
-        SetEvent(null);
-    }
     public void BreakTile()
     {
+        HexaMapNode node = state.GetCurrentNode();
         if (node == null || !node.GetBreakable()) return;
 
         Vector2Int gridPos = node.GetGridPos();
-        if (!node.GetIsWorked())
-        {
-            node.SetIsWorked(true);
-            Managers.Task.RequestTask(node, TaskType.Build);
-        }
-        else
-        {
-            return;
-        }
+        node.SetIsWorked(true);
+        Managers.Task.RequestTask(node, TaskType.Build);
+        /*
         //Wall Node = (Wall)node;
         //if (Node.GetResource() != null)
         //{
@@ -135,30 +34,12 @@ public class ActiveManager : MonoBehaviour
         //    // ������ - TaskManager ���� �׽�Ʈ
         //    Managers.Task.RequestTask(node, TaskType.Build);
         //}
-    }
-    /*
-    public void MakeRoom()
-    {
-        if (node == null)
-        {
-            Debug.Log("current node is null");
-            return;
-        }
-        MapManager.Map.RoomFactory.MakeRoom(node);
-    }
-    public void ExpandRoom()
-    {
-        if (node == null)
-        {
-            Debug.Log("current node is null");
-            return;
-        }
-
-        MapManager.Map.RoomFactory.ExpandRoom((RoomCenter)node);
-    }
-    */
+        */
+        node.SetIsWorked(false);
+    } //dig the ground
     public void BuildBuilding(BuildingType type)
     {
+        HexaMapNode node = state.GetCurrentNode();
         if (node == null)
         {
             Debug.Log("current node is null");
@@ -169,80 +50,52 @@ public class ActiveManager : MonoBehaviour
         {
             if (!result) Debug.Log("");
         });
-    }
-    /*
-    public void UpgradeBuilding()
-    {
-        if(building == null)
-        {
-            Debug.Log("current building is null");
-            return;
-        }
-        MapManager.Map.BuildingFactory.Upgrade(building);
-    }
-    */
+    } //build building
     public void DemolitionBuilding()
     {
+        BaseBuilding building = state.GetBuilding();
         if (building == null)
         {
             Debug.Log("current building is null");
             return;
         }
         MapManager.Map.BuildingFactory.Demolition(building.gameObject);
-    }
-    public List<Vector3> PathFind()
+    } //destroy building
+    public List<Vector3> PathFindOnUnderGrid(GameObject go)
     {
-        HexaMapNode start = MapManager.Map.UnderGrid.GetNode(15,15);
-        List<Vector3> route = MapManager.Map.UnderPathFinder.PathFinding(start, GetCurrentNode());
-        if(route != null)
+        HexaMapNode start = MapManager.Map.UnderGrid.GetNode(go);
+        List<Vector3> route = MapManager.Map.UnderPathFinder.PathFinding(start, state.GetCurrentNode());
+        if (route != null)
         {
             Debug.Log(route);
             return route;
         }
-        route = MapManager.Map.UnderPathFinder.ReachWallPathFinding(start, GetCurrentNode());
+        route = MapManager.Map.UnderPathFinder.ReachWallPathFinding(start, state.GetCurrentNode());
         Debug.Log(route);
         return route;
-    }
-    public void GetTravelRoute()
+    } //path find under
+    public List<Vector3> PathFindingOnGroundGrid()
     {
-        if(node.GetTileType() == TileType.TravelNode)
-        {
-            List<Vector3> list = MapManager.Map.UpPathFinder.PathFindTravelNode(GetCurrentNode());
-            MapManager.Map.TravelTrail.DrawLine(list);
-        }
-    }
-    public HexaMapNode GetRandomWalkableNode(HexaMapNode node)
-    {
-        Vector2Int pos = node.GetGridPos();
-        List<HexaMapNode> list = MapManager.Map.UnderGrid.GetNeighborWalkableNode(pos.x, pos.y);
+        List<Vector3> list = MapManager.Map.UpPathFinder.PathFindTravelNode(state.GetCurrentNode());
+        MapManager.Map.TravelTrail.DrawLine(list);
 
-        int idx = Random.Range(0, list.Count);
-
-        return list[idx];
-    }
-    private bool CheckMask(HexaMapNode node)
+        return list;
+    } //path find ground
+    public Vector3 GetRandomNeighborPos(GameObject go)
     {
-        Vector3Int pos = node.GetCellPos();
-        if (isGround)
-        {
-            return MapManager.Map.UpBlackMask.CheckMask(pos);
-        }
-        return MapManager.Map.UnderBlackMask.CheckMask(pos);
-    }
-
-    public void SetMapMode()
+        HexaMapNode node = MapManager.Map.UnderGrid.GetNode(go);
+        node = MapManager.Map.UnderGrid.GetRandomWalkableNode(node);
+        return node.GetWorldPos();
+    } //get random neighbor node which can walk
+    public void MoveToGroundMap(GameObject go)
     {
-        Vector3 Pos = new Vector3(100,0,0);
-        if (isGround)
-        {
-            isGround = false;
-            Camera.main.transform.position -= Pos;
-        }
-        else
-        {
-            isGround = true;
-            Camera.main.transform.position += Pos;
-        }
+        Vector3 pos = MapManager.Map.UpGrid.GetDoorPos().GetWorldPos();
+        go.transform.position = pos;
+    }
+    public void MoveToUnderMap(GameObject go)
+    {
+        Vector3 pos = MapManager.Map.UnderGrid.GetDoorPos().GetWorldPos();
+        go.transform.position = pos;
     }
     // ������ - ��ü ���� �ڵ� �߰�
     public void SpwanEgg(AntType type)
@@ -252,7 +105,6 @@ public class ActiveManager : MonoBehaviour
     }
     // ������ ------
     #endregion
-
     #region Unity Function
     private void Awake()
     {
@@ -264,36 +116,6 @@ public class ActiveManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
-        }
-    }
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (!EventSystem.current.IsPointerOverGameObject())
-            {
-                HexaMapNode node = ClickTile(Input.mousePosition);
-                if (CheckMask(node))
-                {
-                    if (!node.GetIsWorked())
-                    {
-                        SetCurrentNode(node);
-                        ClickBuilding();
-                        ClickResource();
-                        Debug.Log(node);
-                        GetTravelRoute();
-                    }
-                        
-                    //if (building == null)
-                    //{
-                    //    Debug.Log(node);
-                    //}
-                    //else
-                    //{
-                    //    Debug.Log(building);
-                    //}
-                }
-            }
         }
     }
 }

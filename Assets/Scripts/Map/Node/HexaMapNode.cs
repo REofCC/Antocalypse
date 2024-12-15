@@ -8,6 +8,7 @@ public class HexaMapNode
     bool breakable;
     bool isWorked = false;
     protected BaseBuilding building;
+    protected BaseResource resource;
     TileType type;
 
     Vector2Int gridPos;
@@ -20,6 +21,14 @@ public class HexaMapNode
     #endregion
 
     #region Getter & Setter
+    public BaseResource GetResource()
+    {
+        return resource;
+    }
+    public void SetResource(BaseResource resource)
+    {
+        this.resource = resource;
+    }
     public BaseBuilding GetBuilding()
     {
         return building;

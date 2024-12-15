@@ -269,6 +269,15 @@ public class HexaGrid : MonoBehaviour
         }
         return neighbors;
     }
+    public HexaMapNode GetRandomWalkableNode(HexaMapNode node)
+    {
+        Vector2Int pos = node.GetGridPos();
+        List<HexaMapNode> list = MapManager.Map.UnderGrid.GetNeighborWalkableNode(pos.x, pos.y);
+
+        int idx = Random.Range(0, list.Count);
+
+        return list[idx];
+    }
     #endregion
     #region TileSwap
     public HexaMapNode SwapNode(int x, int y, string tile, bool is_pass)
