@@ -15,7 +15,7 @@ public class ResourceEvent : Event
     }
     public override bool EventFunction(GameObject traveler)
     {
-        GetResource(GetResourceInfo());
+        GetResource(GetEventInfo());
         return true;
     }
     #endregion
