@@ -7,16 +7,20 @@ public class SaverPath : MonoBehaviour
     [SerializeField]
     HexaMapNode node;
     List<Vector3> route;
-
+    
     [SerializeField]
     SaveData saveInfo;
-    List<int> currentSave = new ();
+    
+    //List<int> currentSave = new ();
+
     #endregion
     #region Getter
+    /*
     public int GetCurrentSave(ResourceType type)
     {
         return currentSave[(int)type];
     }
+    */
     public List<ResourceType> GetSaveResourceType()
     {
         return saveInfo.SaveResources;
@@ -53,6 +57,7 @@ public class SaverPath : MonoBehaviour
     }
     #endregion
     #region Resource Save
+    /*
     private void InitCurrentSave()
     {
         for (int idx = 0; idx < 4; idx++)
@@ -60,6 +65,8 @@ public class SaverPath : MonoBehaviour
             currentSave.Add(0);
         }
     }
+    */
+    /*
     public bool CheckSaveState(int value, ResourceType type)
     {
         if (!CheckResourceType(type))
@@ -71,6 +78,7 @@ public class SaverPath : MonoBehaviour
         }
         return true;
     }
+    */
     public bool CheckResourceType(ResourceType type)
     {
         for (int i = 0; i < saveInfo.SaveResources.Count; i++)
@@ -80,6 +88,7 @@ public class SaverPath : MonoBehaviour
         }
         return false;
     }
+    /*
     public int GatherResource(int value, ResourceType type)
     {
         int amount = value;
@@ -89,9 +98,9 @@ public class SaverPath : MonoBehaviour
             amount = diff;
         }
         currentSave[(int)type] += amount;
-
         return value - amount;
     }
+    */
     #endregion
     #endregion
     #region UnityFunction
@@ -99,7 +108,7 @@ public class SaverPath : MonoBehaviour
     {
         node = this.gameObject.GetComponent<BaseBuilding>().GetBuildedPos();
         //SetRoute();
-        InitCurrentSave();
+        //InitCurrentSave();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

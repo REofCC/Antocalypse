@@ -141,7 +141,6 @@ public class HexaPathFinder : MonoBehaviour
         ResetCost();
         return routes;
     }
-
     public List<Vector3> ReachWallPathFinding(HexaMapNode start, HexaMapNode end)
     {
         ClearList();
@@ -177,5 +176,6 @@ public class HexaPathFinder : MonoBehaviour
     {
         this.grid = grid;
     }
+    
     #endregion
 }
