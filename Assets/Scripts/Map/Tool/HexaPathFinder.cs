@@ -168,25 +168,7 @@ public class HexaPathFinder : MonoBehaviour
 
     public List<Vector3> PathFindTravelNode(HexaMapNode end)
     {
-        ClearList();
-        SetEndNode(end);
-        current = start;
-        while (true)
-        {
-            if (CheckEnd())
-            {
-                List<Vector3> routes = GetRoute();
-                ResetCost();
-                return routes;
-            }
-            GetCandidateNode(current);
-            SelectNextNode();
-
-            if (current == null)
-            {
-                return null;
-            }
-        }
+        return PathFinding(start, end);
     }
     #endregion
 

@@ -203,6 +203,14 @@ public class ActiveManager : MonoBehaviour
         Debug.Log(route);
         return route;
     }
+    public void GetTravelRoute()
+    {
+        if(node.GetTileType() == TileType.TravelNode)
+        {
+            List<Vector3> list = MapManager.Map.UpPathFinder.PathFindTravelNode(GetCurrentNode());
+            MapManager.Map.TravelTrail.DrawLine(list);
+        }
+    }
     public HexaMapNode GetRandomWalkableNode(HexaMapNode node)
     {
         Vector2Int pos = node.GetGridPos();
@@ -273,6 +281,7 @@ public class ActiveManager : MonoBehaviour
                         ClickBuilding();
                         ClickResource();
                         Debug.Log(node);
+                        GetTravelRoute();
                     }
                         
                     //if (building == null)

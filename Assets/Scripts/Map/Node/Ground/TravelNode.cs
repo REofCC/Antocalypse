@@ -30,7 +30,7 @@ public class TravelNode : HexaMapNode
     {
         SetBreakable(false);
         SetBuildable(false);
-        SetWalkable(false);
+        SetWalkable(true);
         SetTileType(TileType.TravelNode);
     }
     #endregion
