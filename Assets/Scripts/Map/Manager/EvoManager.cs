@@ -57,6 +57,54 @@ public class EvoManager
                 break;
         }
     }
+    public string GetBuffDescription(AntType antType, BuffPart part, int branch)
+    {
+        switch (antType)
+        {
+            case AntType.Worker:
+                return worker.GetBuffDescription(part, branch);
+                break;
+            case AntType.Scout:
+                return scout.GetBuffDescription(part, branch);
+                break;
+            case AntType.Soldier:
+                return soldier.GetBuffDescription(part, branch);
+                break;
+        }
+        return null;
+    }
+    public BuffType GetBuffType(AntType antType, BuffPart part, int branch)
+    {
+        switch (antType)
+        {
+            case AntType.Worker:
+                return worker.GetBuffType(part, branch);
+                break;
+            case AntType.Scout:
+                return scout.GetBuffType(part, branch);
+                break;
+            case AntType.Soldier:
+                return soldier.GetBuffType(part, branch);
+                break;
+        }
+        return BuffType.EndOfFloatBuff;
+    }
+    public float GetBuffValue(AntType antType, BuffPart part, int branch)   //-1은 false, 1은 true와 동일
+    {
+        switch (antType)
+        {
+            case AntType.Worker:
+                return worker.GetBuffValue(part, branch);
+                break;
+            case AntType.Scout:
+                return scout.GetBuffValue(part, branch);
+                break;
+            case AntType.Soldier:
+                return soldier.GetBuffValue(part, branch);
+                break;
+        }
+        return 0;
+    }
     public AntType GetBuffAntType()
     {
         return buffTargetType;
