@@ -117,6 +117,7 @@ public class ActiveManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        state = MapManager.Map.State;
     }
 }
 #endregion
