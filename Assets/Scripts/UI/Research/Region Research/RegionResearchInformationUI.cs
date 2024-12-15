@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class RegionResearchInformationUI : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] RectTransform descriptionContent;
+    [SerializeField] GameObject descriptionPrefab;
 
-    // Update is called once per frame
-    void Update()
+    public void AddBuffDescription(string description)
     {
-        
+        GameObject descriptionPanel = Instantiate(descriptionPrefab, descriptionContent);
+        descriptionPanel.GetComponentInChildren<TMPro.TMP_Text>().text = description;
     }
 }

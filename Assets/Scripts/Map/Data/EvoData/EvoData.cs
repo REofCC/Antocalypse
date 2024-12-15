@@ -57,6 +57,10 @@ public class EvoData : ScriptableObject
     public AntType GetAntType()
     {
         return antType;
+    }    
+    public string GetBasicDescription(AntType antType)
+    {
+        return BasicDescript;
     }
     public string GetBuffDescription(BuffPart part, int branch)
     {
