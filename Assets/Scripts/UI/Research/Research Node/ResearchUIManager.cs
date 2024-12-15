@@ -42,7 +42,7 @@ public class ResearchUIManager : MonoBehaviour
             Button button = nodeButtonList[i];
             ResearchNode node = researchTreeManager.GetNodeByIndex(i);
             button.GetComponent<ResearchNodeButtonUI>().SetResearchUIManager(this);
-            button.gameObject.transform.transform.GetChild(0).GetComponent<TMP_Text>().text = node.NodeName;
+            //button.gameObject.transform.transform.GetChild(0).GetComponent<TMP_Text>().text = node.NodeName;
             button.GetComponent<ResearchNodeButtonUI>().SetResearchNodeInButton(node);
 
             if (node == null)
