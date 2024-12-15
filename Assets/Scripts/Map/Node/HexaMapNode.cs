@@ -7,6 +7,7 @@ public class HexaMapNode
     bool walkable;
     bool breakable;
     bool isWorked = false;
+    protected BaseBuilding building;
     TileType type;
 
     Vector2Int gridPos;
@@ -19,6 +20,19 @@ public class HexaMapNode
     #endregion
 
     #region Getter & Setter
+    public BaseBuilding GetBuilding()
+    {
+        return building;
+    }
+    public virtual void SetBuilding(BaseBuilding building)
+    {
+        if (GetBuildable())
+        {
+            this.building = building;
+            SetBuildable(false);
+            building.EventStart();
+        }
+    }
     public void SetGridPos(Vector2Int gridPos)
     {
         this.gridPos = gridPos;
@@ -110,6 +124,12 @@ public class HexaMapNode
     #endregion
 
     #region Fuction
+    public virtual void Demolition()
+    {
+        SetBuildable(true);
+        building.EventStop();
+        this.building = null;
+    }
     public void SetNodePosition(HexaMapNode node)
     {
         SetGridPos(node.GetGridPos());

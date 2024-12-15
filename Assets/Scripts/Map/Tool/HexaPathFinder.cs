@@ -165,6 +165,11 @@ public class HexaPathFinder : MonoBehaviour
             }
         }
     }
+
+    public List<Vector3> PathFindTravelNode(HexaMapNode end)
+    {
+        return PathFinding(start, end);
+    }
     #endregion
 
     #region Unity Function

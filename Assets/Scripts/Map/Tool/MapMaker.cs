@@ -78,8 +78,11 @@ public class MapMaker : MonoBehaviour
 
         DoorNode node = (DoorNode)underGrid.SwapNode(posx, posy, "DoorNode", false);
         underGrid.SetDoorPos(node);
+        
+
         node = (DoorNode)upGrid.SwapNode(posx, posy, "DoorNode", false);
         upGrid.SetDoorPos(node);
+        MapManager.Map.UpPathFinder.SetStartNode(node);
         MapManager.Map.UpBlackMask.EraseNeighborNode(posx, posy);
     }
     private void MakeResource()

@@ -37,7 +37,7 @@ public class MapManager : MonoBehaviour
     CellPositionCalc underPosCalc;
     BlackMask underBlackMask;
     BlackMask upBlackMask;
-
+    TravelTrail travelTrail;
     //Layer
     LayerType layerType;
     #endregion
@@ -61,6 +61,8 @@ public class MapManager : MonoBehaviour
     public BlackMask UnderBlackMask { get { return underBlackMask; } }
     public BlackMask UpBlackMask { get { return upBlackMask; } }
     public LayerType LayerType { get { return layerType; } }
+
+    public TravelTrail TravelTrail { get { return travelTrail; } }
 
     #endregion
 
@@ -87,7 +89,8 @@ public class MapManager : MonoBehaviour
         go = GameObject.Find("GroundTool");
         upPathFinder = go.GetComponent<HexaPathFinder>();
         upBlackMask = go.GetComponent<BlackMask>();
-
+        travelTrail = new();
+        travelTrail.OnAwake(go.GetComponent<LineRenderer>());
         return true;
     }
 

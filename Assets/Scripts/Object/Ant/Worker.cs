@@ -13,8 +13,8 @@ public class Worker : Ant
 
     BuildingType buildingType;
 
-    public float wallBreakTime = 2f;    //ÀÓ½Ã º® ÆÄ±« ½Ã°£
-    public float gatherTime = 2f;    //ÀÓ½Ã Ã¤Áı½Ã°£
+    public float wallBreakTime = 2f;    //ì„ì‹œ ë²½ íŒŒê´´ ì‹œê°„
+    public float gatherTime = 2f;    //ì„ì‹œ ì±„ì§‘ì‹œê°„
     #endregion
     #region Function
     #region Public
@@ -105,7 +105,7 @@ public class Worker : Ant
     }
     //void FindCargo(Resourcetype resourceType)
     //{
-    //    LayerMask resourceLayer;    //ÇØ´ç ÀÚ¿ø ·¹ÀÌ¾î
+    //    LayerMask resourceLayer;    //í•´ë‹¹ ìì› ë ˆì´ì–´
     //    switch (resourceType)
     //    {
     //        case Resourcetype.Leaf:
@@ -128,7 +128,7 @@ public class Worker : Ant
 
     //    foreach (var hit in hits.OrderBy(distance => Vector2.Distance(nodePos, distance.point)))
     //    {
-    //        if ((hit.collider.GetComponent<°Ç¹°>().ÇöÀçÀúÀå°¡´É?()))
+    //        if ((hit.collider.GetComponent<ê±´ë¬¼>().í˜„ì¬ì €ì¥ê°€ëŠ¥?()))
     //        {
     //            obj = hit.collider.gameObject;
     //            Debug.Log("Found");
@@ -155,7 +155,7 @@ public class Worker : Ant
         else
         {
             MapManager.Map.BuildingFactory.Build((Path)targetNode, buildingType, OnBuildFinish);
-            //°Ç¹° °Ç¼³
+            //ê±´ë¬¼ ê±´ì„¤
         }
     }
     void OnBuildFinish(bool finished)
@@ -190,11 +190,11 @@ public class Worker : Ant
     {
         yield return new WaitForSeconds(gatherTime);
         Debug.Log("Gather Finish");
-        // ÀÛ¾÷ ¿Ï·á Àü´Ş?
+        // ì‘ì—… ì™„ë£Œ ì „ë‹¬?
         entityData.isHolding = true;
         entityData.holdValue = entityData.gatherValue;
 
-        //FindCargo(); //ÀúÀå¼Ò °æ·Î ÇÒ´ç
+        //FindCargo(); //ì €ì¥ì†Œ ê²½ë¡œ í• ë‹¹
         ChangeState(State.Move);
     }
     IEnumerator WallBreakTimer()
@@ -224,18 +224,18 @@ public class Worker : Ant
     {
         entityData.isHolding = false;
         Debug.Log("Stored");
-        // ÀÚ¿ø º¸°ü Ãß°¡
+        // ìì› ë³´ê´€ ì¶”ê°€
         return BTNodeState.Success;
     }
     BTNodeState GatherResource()
     {
-        if (currentTask == TaskType.Gather && state != State.Gather)   // ÃÖÃÊ ÁøÀÔ ½Ã
+        if (currentTask == TaskType.Gather && state != State.Gather)   // ìµœì´ˆ ì§„ì… ì‹œ
         {
             ChangeState(State.Gather);
-            // Ã¤Áı ´ë±â½Ã°£, ¾Ö´Ï¸ŞÀÌ¼Ç
+            // ì±„ì§‘ ëŒ€ê¸°ì‹œê°„, ì• ë‹ˆë©”ì´ì…˜
             StartCoroutine(GatherTimer());
         }
-        else if (currentTask == TaskType.Gather && state != State.Gather)   // °Ç¼³ Á¾·á ÈÄ
+        else if (currentTask == TaskType.Gather && state != State.Gather)   // ê±´ì„¤ ì¢…ë£Œ í›„
         {
             return BTNodeState.Success;
         }
@@ -243,14 +243,14 @@ public class Worker : Ant
     }
     BTNodeState Build()
     {
-        if (currentTask == TaskType.Build && state != State.Build)   // ÃÖÃÊ ÁøÀÔ ½Ã
+        if (currentTask == TaskType.Build && state != State.Build)   // ìµœì´ˆ ì§„ì… ì‹œ
         {
             ChangeState(State.Build);
-            // °Ç¼³ ÀÚ¿ø ¼Ò¸ğ ¹× ´ë±â½Ã°£, ¾Ö´Ï¸ŞÀÌ¼Ç
+            // ê±´ì„¤ ìì› ì†Œëª¨ ë° ëŒ€ê¸°ì‹œê°„, ì• ë‹ˆë©”ì´ì…˜
             //StartCoroutine(BuildTimer());
             StartBuild();
         }
-        else if (currentTask == TaskType.Build && state != State.Build)   // °Ç¼³ Á¾·á ÈÄ
+        else if (currentTask == TaskType.Build && state != State.Build)   // ê±´ì„¤ ì¢…ë£Œ í›„
         {
             return BTNodeState.Success;
         }
@@ -285,6 +285,5 @@ public class Worker : Ant
         else
             return false;
     }
-    #endregion
     #endregion
 }
