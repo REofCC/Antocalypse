@@ -27,20 +27,19 @@ public class ResearchInformationUI : MonoBehaviour
         currentResearchNode = node;
         researchIconImage.sprite = node.NodeIcon;
         researchDescriptionText.text = $"Research: {node.name}\n Description: {node.Description}";
-        requirementResourceText.text = $"Cost: {node.Cost} / Time: {node.ProgressTime}";
+        requirementResourceText.text = $"잎: {node.RequireLeaf}\n 나무: {node.RequireWood}\n 액체 식량: {node.RequireLiquidFood}\n Time: {node.ProgressTime}";
 
         UpdateButtonState();
     }
 
-    //[LSH:TODO]해당 함수는 ResearchTreeManager에 위치하는것이 패턴상 더 적절할것 같다
     public void UpdateButtonState()
     {
-        if(currentResearchNode.NodeState == NodeState.UNLOCKED)
+        if (currentResearchNode.NodeState == NodeState.UNLOCKED)
         {
             progressResearchButton.interactable = true;
             cancleResearchButton.interactable = false;
         }
-        else if(currentResearchNode.NodeState == NodeState.IN_PROGRESS)
+        else if (currentResearchNode.NodeState == NodeState.IN_PROGRESS)
         {
             progressResearchButton.interactable = false;
             cancleResearchButton.interactable = true;
@@ -49,6 +48,11 @@ public class ResearchInformationUI : MonoBehaviour
         {
             progressResearchButton.interactable = false;
             cancleResearchButton.interactable = false;
+        }
+
+        if (researchTreeManager.IsResearchInProgress())
+        {
+            progressResearchButton.interactable = false;
         }
     }
 
