@@ -16,4 +16,15 @@ public abstract class ActionButtonController : MonoBehaviour
     }
 
     protected abstract void OnClickedButton(Button button);
+    protected List<Button> GetButtons()
+    {
+        return buttons;
+    }
+    protected void InitButtons()
+    {
+        foreach (Button button in buttons)
+        {
+            button.interactable = false;
+        }
+    }
 }

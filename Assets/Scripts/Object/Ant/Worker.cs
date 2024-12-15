@@ -1,52 +1,62 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEngine.EventSystems.EventTrigger;
-using static UnityEngine.GraphicsBuffer;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
-public class Worker : MonoBehaviour
+public class Worker : Ant
 {
-
-    private BTSelector root;
-
-    EntityData entityData;
-    CapsuleCollider2D collider;
-
+    #region Attribute
     [SerializeField]
     GameObject cargo;
 
     Vector2 cargoPos;
-    Vector2 nodePos;
 
-    TaskType currentTask;
-    State state;
     //State nextState;
-    Vector2 currentTargetPos;
-    Vector2 targetPos;
-    Vector2Int targetGridPos;
-    HexaMapNode targetNode;
-    List<Vector3> path;
-    int pathIndex;
+
     BuildingType buildingType;
 
-    public float buildTime = 2f;    //ÀÓ½Ã °Ç¼³½Ã°£
-    public float gatherTime = 2f;    //ÀÓ½Ã Ã¤Áı½Ã°£
-
-    // ToDo : °Ç¼³ ¸í·É ¹ŞÀ» ¶§ °Ç¼³½Ã°£ ¹Ş¾Æ¾ß ÇÔ
-    private void Awake()
+    public float wallBreakTime = 2f;    //ì„ì‹œ ë²½ íŒŒê´´ ì‹œê°„
+    public float gatherTime = 2f;    //ì„ì‹œ ì±„ì§‘ì‹œê°„
+    #endregion
+    #region Function
+    #region Public
+    public void GetTask(HexaMapNode _targetNode, TaskType type)
     {
-        entityData = GetComponent<EntityData>();
-        collider = GetComponent<CapsuleCollider2D>();
-        state = State.Idle;
-        cargoPos = cargo.transform.position;
-        currentTask = TaskType.None;
+        Debug.Log("Task Confirmed");
+
+        if (type == TaskType.Build)
+        {
+            RequestPath(_targetNode, true);
+            buildingType = BuildingType.None;
+        }
+        else
+        {
+            RequestPath(_targetNode, false);
+        }
+        currentTask = type;
+        targetNode = _targetNode;
+        pathIndex = path.Count - 1;
+        targetPos = targetNode.GetWorldPos();
+        currentTargetPos = path[pathIndex];
+        targetGridPos = targetNode.GetGridPos();
     }
-    private void Start()
+    public void GetTask(HexaMapNode _targetNode, TaskType type, BuildingType _buildingType)
+    {
+        Debug.Log("Task Confirmed");
+
+        if (type == TaskType.Build)
+            buildingType = _buildingType;
+
+        RequestPath(_targetNode, false);
+
+        currentTask = type;
+        targetNode = _targetNode;
+        pathIndex = path.Count - 1;
+        targetPos = targetNode.GetWorldPos();
+        currentTargetPos = path[pathIndex];
+        targetGridPos = targetNode.GetGridPos();
+    }
+    #endregion
+    #region Private
+    protected override void SetBT()
     {
         root = new BTSelector();
         BTSelector orderSelector = new BTSelector();
@@ -92,56 +102,140 @@ public class Worker : MonoBehaviour
         buildSequence.AddChild(isBuildOrder);
         buildSequence.AddChild(moveAction);
         buildSequence.AddChild(buildAction);
+    }
+    //void FindCargo(Resourcetype resourceType)
+    //{
+    //    LayerMask resourceLayer;    //í•´ë‹¹ ìì› ë ˆì´ì–´
+    //    switch (resourceType)
+    //    {
+    //        case Resourcetype.Leaf:
+    //            //resourceLayer = 
+    //            break;
+    //        case Resourcetype.Wood:
+    //            //resourceLayer = 
+    //            break;
+    //        case Resourcetype.Liquid:
+    //            //resourceLayer = 
+    //            break;
+    //        case Resourcetype.Solid:
+    //            //resourceLayer = 
+    //            break;
+    //    }    
 
+    //    GameObject obj = null;
+
+    //    var hits = Physics2D.CircleCastAll(nodePos, Mathf.Infinity, Vector2.zero, Mathf.Infinity, resourceLayer);
+
+    //    foreach (var hit in hits.OrderBy(distance => Vector2.Distance(nodePos, distance.point)))
+    //    {
+    //        if ((hit.collider.GetComponent<ê±´ë¬¼>().í˜„ì¬ì €ì¥ê°€ëŠ¥?()))
+    //        {
+    //            obj = hit.collider.gameObject;
+    //            Debug.Log("Found");
+    //            break;
+    //        }
+    //    }
+
+    //    if (obj == null)
+    //    {
+    //        Debug.Log("Can't Find");
+    //    }
+
+    //    cargo = obj;
+    //}
+    void StartBuild()
+    {
+        Debug.Log("Start Building");
+        if (buildingType == BuildingType.None)
+        {
+            //MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "Path", true);
+            //targetNode.SetIsWorked(false);
+            StartCoroutine(WallBreakTimer());
+        }
+        else
+        {
+            MapManager.Map.BuildingFactory.Build((Path)targetNode, buildingType, OnBuildFinish);
+            //ê±´ë¬¼ ê±´ì„¤
+        }
+    }
+    void OnBuildFinish(bool finished)
+    {
+        Debug.Log(finished);
+        if (finished)
+        {
+            Debug.Log("Finished Building");
+        }
+        else
+        {
+            Debug.Log("Failed Building");
+        }
+        ChangeState(State.Idle);
+        currentTask = TaskType.None;
+    }
+    #endregion
+    #region Unity
+    private void Start()
+    {
+        cargoPos = cargo.transform.position;
+
+        SetBT();
+    }
+    private void LateUpdate()
+    {
         root.Evaluate();
     }
+    #endregion
+    #region Coroutine
+    IEnumerator GatherTimer()
+    {
+        yield return new WaitForSeconds(gatherTime);
+        Debug.Log("Gather Finish");
+        // ì‘ì—… ì™„ë£Œ ì „ë‹¬?
+        entityData.isHolding = true;
+        entityData.holdValue = entityData.gatherValue;
+
+        //FindCargo(); //ì €ì¥ì†Œ ê²½ë¡œ í• ë‹¹
+        ChangeState(State.Move);
+    }
+    IEnumerator WallBreakTimer()
+    {
+        yield return new WaitForSeconds(wallBreakTime);
+        Debug.Log("Break Finish");
+
+        Wall node = (Wall)targetNode;
+        if (node.GetResource() != null)
+        {
+            HexaMapNode resNode = MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "ResourceNode", true);
+            MapManager.Map.ResourceFactory.SetResource(node, resNode as ResourceNode2);
+        }
+        else
+        {
+            MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "Path", true);
+        }
+        targetNode.SetIsWorked(false);
+        ChangeState(State.Idle);
+        currentTask = TaskType.None;
+    }
+    #endregion
+    #endregion
     #region BT
     #region BTAction
-    BTNodeState Eat()
-    {
-        // ¼·Ãë Çàµ¿ ´ë±â½Ã°£ ¹× ¾Ö´Ï¸ŞÀÌ¼Ç
-        return BTNodeState.Success;
-    }
-    BTNodeState Move()
-    {
-        if (transform.position.x == currentTargetPos.x && transform.position.y == currentTargetPos.y)
-        {
-            //Debug.Log("Move Finish");
-            //ChangeState(State.Idle);
-            if (pathIndex == 0) // °æ·Î ¸¶Áö¸·ÀÏ ¶§
-            {
-                transform.rotation = Quaternion.Euler(new Vector3(0, 0, RotateValue(targetPos)));
-                return BTNodeState.Success;
-            }
-
-            else
-            {
-                pathIndex--;
-                currentTargetPos = path[pathIndex];
-                transform.rotation = Quaternion.Euler(new Vector3(0, 0, RotateValue(currentTargetPos)));
-                return BTNodeState.Running;
-            }
-        }
-        transform.position = Vector2.MoveTowards(transform.position, currentTargetPos, entityData.speed * Time.deltaTime);
-        return BTNodeState.Running;
-    }
-
     BTNodeState Store()
     {
         entityData.isHolding = false;
         Debug.Log("Stored");
-        // ÀÚ¿ø º¸°ü Ãß°¡
+        // ìì› ë³´ê´€ ì¶”ê°€
         return BTNodeState.Success;
     }
     BTNodeState GatherResource()
     {
-        if (currentTask == TaskType.Gather && state != State.Gather)   // ÃÖÃÊ ÁøÀÔ ½Ã
+        if (currentTask == TaskType.Gather && state != State.Gather)   // ìµœì´ˆ ì§„ì… ì‹œ
         {
             ChangeState(State.Gather);
-            // Ã¤Áı ´ë±â½Ã°£, ¾Ö´Ï¸ŞÀÌ¼Ç
+            // ì±„ì§‘ ëŒ€ê¸°ì‹œê°„, ì• ë‹ˆë©”ì´ì…˜
             StartCoroutine(GatherTimer());
         }
-        else if (currentTask == TaskType.Gather && state != State.Gather)   // °Ç¼³ Á¾·á ÈÄ
+        else if (currentTask == TaskType.Gather && state != State.Gather)   // ê±´ì„¤ ì¢…ë£Œ í›„
         {
             return BTNodeState.Success;
         }
@@ -149,38 +243,21 @@ public class Worker : MonoBehaviour
     }
     BTNodeState Build()
     {
-        if (currentTask == TaskType.Build && state != State.Build)   // ÃÖÃÊ ÁøÀÔ ½Ã
+        if (currentTask == TaskType.Build && state != State.Build)   // ìµœì´ˆ ì§„ì… ì‹œ
         {
             ChangeState(State.Build);
-            // °Ç¼³ ÀÚ¿ø ¼Ò¸ğ ¹× ´ë±â½Ã°£, ¾Ö´Ï¸ŞÀÌ¼Ç
-            StartCoroutine(BuildTimer());
+            // ê±´ì„¤ ìì› ì†Œëª¨ ë° ëŒ€ê¸°ì‹œê°„, ì• ë‹ˆë©”ì´ì…˜
+            //StartCoroutine(BuildTimer());
+            StartBuild();
         }
-        else if (currentTask == TaskType.Build && state != State.Build)   // °Ç¼³ Á¾·á ÈÄ
+        else if (currentTask == TaskType.Build && state != State.Build)   // ê±´ì„¤ ì¢…ë£Œ í›„
         {
             return BTNodeState.Success;
         }
         return BTNodeState.Running;
     }
-    BTNodeState Idle()
-    {
-        // À¯ÈŞ ¾Ö´Ï¸ŞÀÌ¼Ç
-        return BTNodeState.Running;
-    }
     #endregion
     #region BTCondition
-    bool IsKcalLow()
-    {
-        if (entityData.kcal <= 50 && currentTask == TaskType.None)    //¼öÄ¡ Á¶Á¤
-        {
-            currentTask = TaskType.Eat;
-            //path = 
-            //¿©¿Õ°³¹Ì or ¾×Ã¼ ½Ä·® º¸°ü¼Ò ±îÁö °æ·Î ¿äÃ»
-            return true;
-        }
-
-        else 
-            return false;
-    }
     bool IsHolding()
     {
         if (entityData.isHolding)
@@ -209,192 +286,4 @@ public class Worker : MonoBehaviour
             return false;
     }
     #endregion
-#endregion
-
-    private void FixedUpdate()
-    {
-        root.Evaluate();
-    }
-    void ChangeState(State state)
-    {
-        switch (state)
-        {
-            case State.Idle:
-                this.state = State.Idle;
-                break;
-            case State.Move:
-                this.state = State.Move;
-                break;
-            case State.Gather:
-                this.state = State.Gather;
-                break;
-            case State.Return:
-                this.state = State.Return;
-                break;
-            case State.Eat:
-                this.state = State.Eat;
-                break;
-            case State.Build:
-                this.state = State.Build;
-                break;
-        }
-    }
-    public void GetTask(HexaMapNode _targetNode, TaskType type)
-    {
-        Debug.Log("Task Confirmed");
-
-        if (type == TaskType.Build)
-        {
-            RequestPath(_targetNode, true);
-            buildingType = BuildingType.None;
-        }
-        else
-        {
-            RequestPath(_targetNode, false);
-        }
-        currentTask = type;
-        targetNode = _targetNode;
-        pathIndex = path.Count - 1;
-        targetPos = targetNode.GetWorldPos();
-        currentTargetPos = path[pathIndex];
-        targetGridPos = targetNode.GetGridPos();
-    }
-    public void GetTask(HexaMapNode _targetNode, TaskType type, BuildingType _buildingType)
-    {
-        Debug.Log("Task Confirmed");
-
-        if (type == TaskType.Build)
-            buildingType = _buildingType;
-
-        RequestPath(_targetNode, false);
-
-        currentTask = type;
-        targetNode = _targetNode;
-        pathIndex = path.Count - 1;
-        targetPos = targetNode.GetWorldPos();
-        currentTargetPos = path[pathIndex];
-        targetGridPos = targetNode.GetGridPos();
-    }
-    float RotateValue(Vector3 targetPos)
-    {
-        Vector3 direction = targetPos - transform.position;
-
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-
-        return angle;
-    }
-    void RequestPath(HexaMapNode targetNode, bool isTargetWall)
-    {
-        HexaMapNode start = MapManager.Map.UnderGrid.GetNode(transform.position);
-        if (isTargetWall)
-        {
-            path = MapManager.Map.UnderPathFinder.ReachWallPathFinding(start, targetNode);
-        }
-        else
-        {
-            path = MapManager.Map.UnderPathFinder.PathFinding(start, targetNode);
-        }
-    }
-    //void FindCargo(Resourcetype resourceType)
-    //{
-    //    LayerMask resourceLayer;    //ÇØ´ç ÀÚ¿ø ·¹ÀÌ¾î
-    //    switch (resourceType)
-    //    {
-    //        case Resourcetype.Leaf:
-    //            //resourceLayer = 
-    //            break;
-    //        case Resourcetype.Wood:
-    //            //resourceLayer = 
-    //            break;
-    //        case Resourcetype.Liquid:
-    //            //resourceLayer = 
-    //            break;
-    //        case Resourcetype.Solid:
-    //            //resourceLayer = 
-    //            break;
-    //    }    
-        
-    //    GameObject obj = null;
-
-    //    var hits = Physics2D.CircleCastAll(nodePos, Mathf.Infinity, Vector2.zero, Mathf.Infinity, resourceLayer);
-
-    //    foreach (var hit in hits.OrderBy(distance => Vector2.Distance(nodePos, distance.point)))
-    //    {
-    //        if ((hit.collider.GetComponent<°Ç¹°>().ÇöÀçÀúÀå°¡´É?()))
-    //        {
-    //            obj = hit.collider.gameObject;
-    //            Debug.Log("Found");
-    //            break;
-    //        }
-    //    }
-
-    //    if (obj == null)
-    //    {
-    //        Debug.Log("Can't Find");
-    //    }
-
-    //    cargo = obj;
-    //}
-
-    public State GetCurrentState()
-    {
-        return state;
-    }
-    public TaskType GetCurrentTask()
-    {
-        return currentTask;
-    }
-    public void GetTask(TaskType task)
-    {
-        currentTask = task;
-    }
-    public int GetGatherValue()
-    {
-        return entityData.gatherValue;
-    }
-    public Vector2 GetTargetNodePos()
-    {
-        return nodePos;
-    }
-
-    IEnumerator BuildTimer()
-    {
-        yield return new WaitForSeconds(buildTime); 
-        Debug.Log("Build Finish");
-        // ÀÛ¾÷ ¿Ï·á Àü´Ş?
-        if (buildingType == BuildingType.None)
-        {
-            //MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "Path", true);
-            //targetNode.SetIsWorked(false);
-            Wall node = (Wall)targetNode;
-            if (node.GetResource() != null)
-            {
-                HexaMapNode resNode = MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "ResourceNode", true);
-                MapManager.Map.ResourceFactory.SetResource(node, resNode as ResourceNode2);
-            }
-            else
-            {
-                MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "Path", true);
-            }
-            targetNode.SetIsWorked(false);
-        }
-        else
-        {
-            //MapManager.Map.BuildingFactory.Build((Path)targetNode, buildingType);
-            //°Ç¹° °Ç¼³
-        }
-        ChangeState(State.Idle);
-        currentTask = TaskType.None;
-    }
-    IEnumerator GatherTimer()
-    {
-        yield return new WaitForSeconds(gatherTime);
-        Debug.Log("Gather Finish");
-        // ÀÛ¾÷ ¿Ï·á Àü´Ş?
-        entityData.isHolding = true;
-        entityData.holdValue = entityData.gatherValue;
-
-        //FindCargo(); //ÀúÀå¼Ò °æ·Î ÇÒ´ç
-        ChangeState(State.Move);
-    }
 }

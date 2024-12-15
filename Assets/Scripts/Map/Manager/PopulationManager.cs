@@ -1,5 +1,11 @@
+using System;
+
 public class PopulationManager
 {
+    //[LSH:REVIEW]: Setter에 이벤트 연결 해주세요
+    #region Event    
+    public event Action<AntType> OnPopulationChange;
+    #endregion
     #region Attribute
     int spawnResourceDecs;
     float spawnDescPerc;
