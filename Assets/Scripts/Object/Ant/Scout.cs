@@ -16,6 +16,7 @@ public class Scout : Ant
         BTSelector orderSelector = new BTSelector();
 
         BTSequence eatSequence = new BTSequence();
+        BTSequence idleSequence = new BTSequence();
 
         BTAction eatAction = new BTAction(Eat);
         BTAction moveAction = new BTAction(Move);
@@ -25,11 +26,14 @@ public class Scout : Ant
 
         root.AddChild(eatSequence);
         root.AddChild(orderSelector);
-        root.AddChild(idleAction);
+        root.AddChild(idleSequence);
 
         eatSequence.AddChild(kcalLow);
         //eatSequence.AddChild(moveAction);
         eatSequence.AddChild(eatAction);
+
+        idleSequence.AddChild(idleAction);
+        idleSequence.AddChild(moveAction);
     }
     #endregion
     #region Unity

@@ -23,6 +23,11 @@ public abstract class Ant : MonoBehaviour
     protected List<Vector3> path;
     protected int pathIndex;
 
+    protected bool isCorutineRunning;
+
+    protected float randMoveTimer;
+    protected float currentTimer;
+
     protected Animator animator;
     #endregion
     #region BasicGetter
@@ -102,6 +107,16 @@ public abstract class Ant : MonoBehaviour
 
         return angle;
     }
+    protected void RandMove()
+    {
+        Debug.Log("Starting Rand Move");
+        HexaMapNode node = MapManager.Map.UnderGrid.GetNode(gameObject);
+        targetNode = MapManager.Map.UnderGrid.GetRandomWalkableNode(node);
+        RequestPath(targetNode, false);
+        pathIndex = path.Count - 1;
+        currentTargetPos = path[pathIndex];
+        ChangeState(State.Move);
+    }
     #endregion
     #region Unity
     protected void Awake()
@@ -115,6 +130,8 @@ public abstract class Ant : MonoBehaviour
         animator.SetInteger("State", 0);
 
         entityData.kcal = entityData.maxKcal;
+        randMoveTimer = 3.0f;
+        currentTimer = 0;
     }
     private void FixedUpdate()
     {
@@ -125,6 +142,23 @@ public abstract class Ant : MonoBehaviour
         }
         entityData.kcal -= Time.deltaTime;
     }
+    #endregion
+    #region Coroutine
+    //IEnumerator RandMove()
+    //{
+    //    yield return new WaitForSeconds(3.0f);
+    //    Debug.Log("Starting Rand Move");
+    //    if (state == State.Idle)
+    //    {
+    //        HexaMapNode node = MapManager.Map.UnderGrid.GetNode(gameObject);
+    //        targetNode = MapManager.Map.UnderGrid.GetRandomWalkableNode(node);
+    //        RequestPath(targetNode, false);
+    //        pathIndex = path.Count - 1;
+    //        currentTargetPos = path[pathIndex];
+    //        ChangeState(State.Move);
+    //    }
+    //    isCorutineRunning = false;
+    //}
     #endregion
     #endregion
     #region BT
@@ -152,7 +186,11 @@ public abstract class Ant : MonoBehaviour
             //ChangeState(State.Idle);
             if (pathIndex == 0) // 경로 마지막일 때
             {
-                transform.rotation = Quaternion.Euler(new Vector3(0, 0, RotateValue(targetPos)));
+                if (currentTask == TaskType.Build)
+                {
+                    transform.rotation = Quaternion.Euler(new Vector3(0, 0, RotateValue(targetPos)));
+                }
+                ChangeState(State.Idle);
                 return BTNodeState.Success;
             }
             else
@@ -168,9 +206,26 @@ public abstract class Ant : MonoBehaviour
     }
     protected BTNodeState Idle()
     {
-        if (state != State.Idle)
+        if (state != State.Move)  //최초 진입 시
+        {
             ChangeState(State.Idle);
-        // 유휴 애니메이션
+            if (currentTimer<randMoveTimer)
+            {
+                currentTimer += Time.deltaTime;
+                return BTNodeState.Running;
+            }
+            else
+            {
+                currentTimer = 0;
+                RandMove();
+                return BTNodeState.Success;
+            }
+            //StartCoroutine(RandMove());
+        }
+        else if (state == State.Move)
+        {
+            return BTNodeState.Success;
+        }
         return BTNodeState.Running;
     }
     #endregion
