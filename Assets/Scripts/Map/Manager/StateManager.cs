@@ -129,6 +129,7 @@ public class StateManager : MonoBehaviour
                     ClickOnUnderGrid(Input.mousePosition);
                 }
             }
+            Debug.Log(node);
         }
     }
     #endregion
