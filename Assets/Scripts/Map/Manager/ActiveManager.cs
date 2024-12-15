@@ -104,6 +104,10 @@ public class ActiveManager : MonoBehaviour
         return;
     }
     // ������ ------
+    public void CallEventFunc()
+    {
+        state.GetEvent().CallEventFunction(null);
+    }
     #endregion
     #region Unity Function
     private void Awake()
