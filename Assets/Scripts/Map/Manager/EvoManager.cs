@@ -1,6 +1,5 @@
-using UnityEngine;
 
-public class EvoManager : MonoBehaviour
+public class EvoManager
 {
     AntType buffTargetType;
 
