@@ -380,7 +380,7 @@ public class Worker : MonoBehaviour
         }
         else
         {
-            MapManager.Map.BuildingFactory.Build((Path)targetNode, buildingType);
+            //MapManager.Map.BuildingFactory.Build((Path)targetNode, buildingType);
             //건물 건설
         }
         ChangeState(State.Idle);

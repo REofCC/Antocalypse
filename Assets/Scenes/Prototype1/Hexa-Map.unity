@@ -1624,7 +1624,6 @@ GameObject:
   - component: {fileID: 1426191628}
   - component: {fileID: 1426191627}
   - component: {fileID: 1426191626}
-  - component: {fileID: 1426191629}
   - component: {fileID: 1426191630}
   m_Layer: 0
   m_Name: Factory
@@ -1718,18 +1717,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 096cd5940fa44084f83a5333cbb62d52, type: 2}
   - {fileID: 11400000, guid: 0ffb42f0c0c2dea43b318423879e2b84, type: 2}
   - {fileID: 11400000, guid: 2844f5774eb505b48b17ba37eda03a20, type: 2}
---- !u!114 &1426191629
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1426191624}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf38f0560c4a3bc4dabc35edb15c228a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1426191630
 MonoBehaviour:
   m_ObjectHideFlags: 0

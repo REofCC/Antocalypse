@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -13,6 +14,7 @@ public class ActiveManager : MonoBehaviour
     HexaMapNode node;
     BaseBuilding building;
     BaseResource resource;
+    Event travelEvent;
     bool isGround = false;
     #endregion
     #region Getter & Setter
@@ -20,17 +22,18 @@ public class ActiveManager : MonoBehaviour
     {
         return node;
     }
-
     public void SetCurrentNode(HexaMapNode node)
     {
         this.node = node;
     }
-
     public void SetBuilding(BaseBuilding building)
     {
         this.building = building;
     }
-
+    public void SetEvent(Event travelEvent)
+    {
+        this.travelEvent = travelEvent;
+    }
     public Vector3 GetStartWorlePos()
     {
         HexaMapNode startNode = MapManager.Map.MapMaker.GetStartPos();
@@ -48,13 +51,16 @@ public class ActiveManager : MonoBehaviour
     {
         return this.building;
     }
+    public Event GetEvent()
+    {
+        return travelEvent;
+    }
     #endregion
 
     #region Function
     private HexaMapNode ClickTile(Vector3 pos)
     {
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(pos.x, pos.y, Camera.main.transform.position.z * -1));
-        Debug.Log(mouseWorldPos);
         if (isGround)
         {
             Vector2Int Pos = MapManager.Map.UpPosCalc.CalcGridPos(mouseWorldPos);
@@ -66,18 +72,14 @@ public class ActiveManager : MonoBehaviour
     }
     private void ClickBuilding()
     {
-        if (node.GetTileType() == TileType.RoomNode || node.GetTileType() == TileType.RoomCenter)
+        if (node.GetBuilding() != null)
         {
-            RoomNode room = (RoomNode)node;
-            if (room.GetBuilding() != null)
-            {
-                SetBuilding(room.GetBuilding());
-                return;
-            }
+            SetBuilding(node.GetBuilding());
+            Debug.Log(building);
+            return;
         }
         SetBuilding(null);
     }
-
     private void ClickResource()
     {
         if (node.GetTileType() == TileType.ResourceNode)
@@ -86,10 +88,26 @@ public class ActiveManager : MonoBehaviour
             if (resNode.GetResource() != null)
             {
                 SetResource(resNode.GetResource());
+                Debug.Log(resource);
                 return;
             }
         }
         SetResource(null);
+    }
+
+    private void ClickEvent()
+    {
+        if(node.GetTileType() == TileType.TravelNode)
+        {
+            TravelNode travelNode = (TravelNode)node;
+            if(travelNode.GetEvent()!= null)
+            {
+                SetEvent(travelNode.GetEvent());
+                Debug.Log(travelEvent);
+                return;
+            }
+        }
+        SetEvent(null);
     }
     public void BreakTile()
     {
@@ -197,6 +215,10 @@ public class ActiveManager : MonoBehaviour
     private bool CheckMask(HexaMapNode node)
     {
         Vector3Int pos = node.GetCellPos();
+        if (isGround)
+        {
+            return MapManager.Map.UpBlackMask.CheckMask(pos);
+        }
         return MapManager.Map.UnderBlackMask.CheckMask(pos);
     }
 
@@ -245,11 +267,14 @@ public class ActiveManager : MonoBehaviour
                 HexaMapNode node = ClickTile(Input.mousePosition);
                 if (CheckMask(node))
                 {
-                    if(!node.GetIsWorked())
+                    if (!node.GetIsWorked())
+                    {
                         SetCurrentNode(node);
-                    Debug.Log(node);
-                    ClickBuilding();
-                    ClickResource();
+                        ClickBuilding();
+                        ClickResource();
+                        Debug.Log(node);
+                    }
+                        
                     //if (building == null)
                     //{
                     //    Debug.Log(node);
