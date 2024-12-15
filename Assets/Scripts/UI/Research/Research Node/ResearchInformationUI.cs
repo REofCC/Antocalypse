@@ -26,8 +26,8 @@ public class ResearchInformationUI : MonoBehaviour
     {
         currentResearchNode = node;
         researchIconImage.sprite = node.NodeIcon;
-        researchDescriptionText.text = $"Research: {node.name}\n Description: {node.Description}";
-        requirementResourceText.text = $"잎: {node.RequireLeaf}\n 나무: {node.RequireWood}\n 액체 식량: {node.RequireLiquidFood}\n Time: {node.ProgressTime}";
+        researchDescriptionText.text = $"[연구]: {node.NodeName}\n[설명]: {node.Description}";
+        requirementResourceText.text = $"잎: {node.RequireLeaf}\n나무: {node.RequireWood}\n액체 식량: {node.RequireLiquidFood}\n시간: {node.ProgressTime}";
 
         UpdateButtonState();
     }
