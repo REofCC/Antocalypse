@@ -25,6 +25,9 @@ public abstract class Ant : MonoBehaviour
 
     protected bool isCorutineRunning;
 
+    protected float randMoveTimer;
+    protected float currentTimer;
+
     protected Animator animator;
     #endregion
     #region BasicGetter
@@ -104,6 +107,16 @@ public abstract class Ant : MonoBehaviour
 
         return angle;
     }
+    protected void RandMove()
+    {
+        Debug.Log("Starting Rand Move");
+        HexaMapNode node = MapManager.Map.UnderGrid.GetNode(gameObject);
+        targetNode = MapManager.Map.UnderGrid.GetRandomWalkableNode(node);
+        RequestPath(targetNode, false);
+        pathIndex = path.Count - 1;
+        currentTargetPos = path[pathIndex];
+        ChangeState(State.Move);
+    }
     #endregion
     #region Unity
     protected void Awake()
@@ -117,7 +130,8 @@ public abstract class Ant : MonoBehaviour
         animator.SetInteger("State", 0);
 
         entityData.kcal = entityData.maxKcal;
-        isCorutineRunning = false;  
+        randMoveTimer = 3.0f;
+        currentTimer = 0;
     }
     private void FixedUpdate()
     {
@@ -130,21 +144,21 @@ public abstract class Ant : MonoBehaviour
     }
     #endregion
     #region Coroutine
-    IEnumerator RandMove()
-    {
-        yield return new WaitForSeconds(3.0f);
-        Debug.Log("Starting Rand Move");
-        if (state == State.Idle)
-        {
-            HexaMapNode node = MapManager.Map.UnderGrid.GetNode(gameObject);
-            targetNode = MapManager.Map.UnderGrid.GetRandomWalkableNode(node);
-            RequestPath(targetNode, false);
-            pathIndex = path.Count - 1;
-            currentTargetPos = path[pathIndex];
-            ChangeState(State.Move);
-        }
-        isCorutineRunning = false;
-    }
+    //IEnumerator RandMove()
+    //{
+    //    yield return new WaitForSeconds(3.0f);
+    //    Debug.Log("Starting Rand Move");
+    //    if (state == State.Idle)
+    //    {
+    //        HexaMapNode node = MapManager.Map.UnderGrid.GetNode(gameObject);
+    //        targetNode = MapManager.Map.UnderGrid.GetRandomWalkableNode(node);
+    //        RequestPath(targetNode, false);
+    //        pathIndex = path.Count - 1;
+    //        currentTargetPos = path[pathIndex];
+    //        ChangeState(State.Move);
+    //    }
+    //    isCorutineRunning = false;
+    //}
     #endregion
     #endregion
     #region BT
@@ -192,12 +206,21 @@ public abstract class Ant : MonoBehaviour
     }
     protected BTNodeState Idle()
     {
-        if (!isCorutineRunning && state != State.Move)
+        if (state != State.Move)  //최초 진입 시
         {
             ChangeState(State.Idle);
-            isCorutineRunning = true;
-            StartCoroutine(RandMove());
-            return BTNodeState.Running;
+            if (currentTimer<randMoveTimer)
+            {
+                currentTimer += Time.deltaTime;
+                return BTNodeState.Running;
+            }
+            else
+            {
+                currentTimer = 0;
+                RandMove();
+                return BTNodeState.Success;
+            }
+            //StartCoroutine(RandMove());
         }
         else if (state == State.Move)
         {

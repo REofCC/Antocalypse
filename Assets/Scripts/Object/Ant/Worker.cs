@@ -21,7 +21,8 @@ public class Worker : Ant
     public void GetTask(HexaMapNode _targetNode, TaskType type)
     {
         Debug.Log("Task Confirmed");
-
+        currentTask = type;
+        targetNode = _targetNode;
         if (type == TaskType.Build)
         {
             RequestPath(_targetNode, true);
@@ -31,8 +32,6 @@ public class Worker : Ant
         {
             RequestPath(_targetNode, false);
         }
-        currentTask = type;
-        targetNode = _targetNode;
         pathIndex = path.Count - 1;
         targetPos = targetNode.GetWorldPos();
         currentTargetPos = path[pathIndex];
@@ -42,13 +41,12 @@ public class Worker : Ant
     {
         Debug.Log("Task Confirmed");
 
+        currentTask = type;
+        targetNode = _targetNode;
         if (type == TaskType.Build)
             buildingType = _buildingType;
 
         RequestPath(_targetNode, false);
-
-        currentTask = type;
-        targetNode = _targetNode;
         pathIndex = path.Count - 1;
         targetPos = targetNode.GetWorldPos();
         currentTargetPos = path[pathIndex];
@@ -147,23 +145,6 @@ public class Worker : Ant
 
     //    cargo = obj;
     //}
-    void StartBuild()
-    {
-        Debug.Log("Start Building");
-        if (buildingType == BuildingType.None && !isCorutineRunning)
-        {
-            //MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "Path", true);
-            //targetNode.SetIsWorked(false);
-
-            isCorutineRunning = true;
-            StartCoroutine(WallBreakTimer());
-        }
-        else
-        {
-            MapManager.Map.BuildingFactory.Build((Path)targetNode, buildingType, OnBuildFinish);
-            //건물 건설
-        }
-    }
     void OnBuildFinish(bool finished)
     {
         Debug.Log(finished);
@@ -178,37 +159,9 @@ public class Worker : Ant
         ChangeState(State.Idle);
         currentTask = TaskType.None;
     }
-    #endregion
-    #region Unity
-    private void Start()
+    void BreakWall()
     {
-        cargoPos = cargo.transform.position;
-
-        SetBT();
-    }
-    private void LateUpdate()
-    {
-        root.Evaluate();
-    }
-    #endregion
-    #region Coroutine
-    IEnumerator GatherTimer()
-    {
-        yield return new WaitForSeconds(gatherTime);
-        Debug.Log("Gather Finish");
-        // 작업 완료 전달?
-        entityData.isHolding = true;
-        entityData.holdValue = entityData.gatherValue;
-
-        //FindCargo(); //저장소 경로 할당
-        ChangeState(State.Move);
-        isCorutineRunning = false;
-    }
-    IEnumerator WallBreakTimer()
-    {
-        yield return new WaitForSeconds(wallBreakTime);
         Debug.Log("Break Finish");
-
         Wall node = (Wall)targetNode;
         if (node.GetResource() != null)
         {
@@ -222,8 +175,52 @@ public class Worker : Ant
         targetNode.SetIsWorked(false);
         ChangeState(State.Idle);
         currentTask = TaskType.None;
-        isCorutineRunning = false;
     }
+    #endregion
+    #region Unity
+    private void Start()
+    {
+        cargoPos = cargo.transform.position;
+
+        SetBT();
+    }
+    private void FixedUpdate()
+    {
+        root.Evaluate();
+    }
+    #endregion
+    #region Coroutine
+    //IEnumerator GatherTimer()
+    //{
+    //    yield return new WaitForSeconds(gatherTime);
+    //    Debug.Log("Gather Finish");
+    //    // 작업 완료 전달?
+    //    entityData.isHolding = true;
+    //    entityData.holdValue = entityData.gatherValue;
+
+    //    //FindCargo(); //저장소 경로 할당
+    //    ChangeState(State.Move);
+    //    isCorutineRunning = false;
+    //}
+    //IEnumerator WallBreakTimer()
+    //{
+    //    yield return new WaitForSeconds(wallBreakTime);
+    //    Debug.Log("Break Finish");
+
+    //    Wall node = (Wall)targetNode;
+    //    if (node.GetResource() != null)
+    //    {
+    //        HexaMapNode resNode = MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "ResourceNode", true);
+    //        MapManager.Map.ResourceFactory.SetResource(node, resNode as ResourceNode2);
+    //    }
+    //    else
+    //    {
+    //        MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "Path", true);
+    //    }
+    //    targetNode.SetIsWorked(false);
+    //    ChangeState(State.Idle);
+    //    currentTask = TaskType.None;
+    //}
     #endregion
     #endregion
     #region BT
@@ -239,10 +236,11 @@ public class Worker : Ant
     {
         if (currentTask == TaskType.Gather && state != State.Gather && !isCorutineRunning)   // 최초 진입 시
         {
+            currentTimer = 0;
             ChangeState(State.Gather);
             // 채집 대기시간, 애니메이션
             isCorutineRunning = true;
-            StartCoroutine(GatherTimer());
+            //StartCoroutine(GatherTimer());
         }
         else if (currentTask == TaskType.Gather && state != State.Gather)   // 건설 종료 후
         {
@@ -255,9 +253,29 @@ public class Worker : Ant
         if (currentTask == TaskType.Build && state != State.Build)   // 최초 진입 시
         {
             ChangeState(State.Build);
-            // 건설 자원 소모 및 대기시간, 애니메이션
-            //StartCoroutine(BuildTimer());
-            StartBuild();
+
+            if (buildingType == BuildingType.None)  //벽 파괴 시
+            {
+                Debug.Log("Start Breaking Wall");
+                if (currentTimer < wallBreakTime)
+                {
+                    currentTimer += Time.deltaTime;
+                    return BTNodeState.Running;
+                }
+                else
+                {
+                    currentTimer = 0;
+                    BreakWall();
+                    return BTNodeState.Success;
+                }
+                //StartCoroutine(WallBreakTimer());
+            }
+            else    // 건물 건설 시
+            {
+                Debug.Log("Start Building");
+                MapManager.Map.BuildingFactory.Build((Path)targetNode, buildingType, OnBuildFinish);
+                return BTNodeState.Running;
+            }
         }
         else if (currentTask == TaskType.Build && state != State.Build)   // 건설 종료 후
         {
