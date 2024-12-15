@@ -21,6 +21,9 @@ public class Managers : MonoBehaviour
 
     static TaskManager taskManager = new();
     public static TaskManager Task { get { return taskManager; } }
+
+    static EvoManager evoManager = new();
+    public static EvoManager EvoManager { get { return evoManager; } }
     private void Awake()
     {
         // 권희준 - 코루틴 사용을 위해 GameObject에 추가
