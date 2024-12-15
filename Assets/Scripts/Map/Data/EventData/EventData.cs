@@ -19,6 +19,7 @@ public class EventData : ScriptableObject
     [SerializeField]
     int resourceDataIdx;
 
+
     #endregion
 
     #region Getter & Setter

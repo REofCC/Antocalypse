@@ -23,7 +23,6 @@ public class ResourceEvent : Event
     public override bool EventFunction(GameObject traveler)
     {
         ChooseResource(true);
-
         return true;
     }
     #endregion
