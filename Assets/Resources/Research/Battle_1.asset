@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Battle_1
   m_EditorClassIdentifier: 
   unlockBuildingTypes: 0a000000
-  nodeIcon: {fileID: 0}
+  nodeIcon: {fileID: 1663687913, guid: cb498a23bb9e7e343baa40c2d0887831, type: 3}
   nodeName: "\uBCD1\uC815\uAC1C\uBBF8 \uBD80\uD654"
   description: "\uBCD1\uC815\uAC1C\uBBF8 \uBD80\uD654 \uD55C\uB3C4\uB97C \uB298\uB9AC\uB294
     \uBCD1\uC815\uAC1C\uBBF8 \uBD80\uD654\uC9C0 \uCCAD\uC0AC\uC9C4 \uC7A0\uAE08 \uD574\uC81C"

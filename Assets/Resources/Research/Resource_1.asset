@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Resource_1
   m_EditorClassIdentifier: 
   unlockBuildingTypes: 0000000002000000
-  nodeIcon: {fileID: 0}
+  nodeIcon: {fileID: 1630580430, guid: 3162032bf3224cc4c871a64d46181c6a, type: 3}
   nodeName: "\uAE30\uCD08 \uC800\uC7A5 \uACF5\uAC04"
   description: "\uC78E \uC800\uC7A5\uC18C, \uC561\uCCB4 \uC2DD\uB7C9 \uC800\uC7A5\uC18C
     \uCCAD\uC0AC\uC9C4 \uC7A0\uAE08 \uD574\uC81C"
@@ -22,7 +22,7 @@ MonoBehaviour:
     leaf: 20
     wood: 0
     liquidFood: 0
-  nodeState: 1
+  nodeState: 3
   nextNodes:
   - {fileID: 11400000, guid: 392015ff8f8847e4eb5a28b3245e5cbd, type: 2}
   previousNodes: []

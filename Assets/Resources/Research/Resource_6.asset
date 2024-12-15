@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Resource_6
   m_EditorClassIdentifier: 
   unlockBuildingTypes: 07000000
-  nodeIcon: {fileID: 0}
+  nodeIcon: {fileID: 1630580430, guid: 3162032bf3224cc4c871a64d46181c6a, type: 3}
   nodeName: "\uC2EC\uCE35 \uC790\uC6D0 \uCC44\uAD74"
   description: "\uC77C\uBC18\uC801\uC73C\uB85C \uCC44\uC9D1\uD560\uC218 \uC5C6\uB294
     \uC2EC\uCE35 \uC790\uC6D0 \uB178\uB4DC\uC5D0 \uAC74\uC124\uD558\uC5EC \uC790\uC6D0
