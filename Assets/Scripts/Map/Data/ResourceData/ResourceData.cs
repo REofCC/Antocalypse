@@ -16,6 +16,8 @@ public class ResourceData : ScriptableObject
     int maxWorker;
     [SerializeField]
     bool extractable;
+    [SerializeField]
+    bool is_ground;
     #endregion
 
     #region Getter & Setter
@@ -25,5 +27,6 @@ public class ResourceData : ScriptableObject
     public int Amount { get { return amount; } }
     public int MaxWorker { get { return maxWorker; } }
     public bool Extractable { get { return extractable; } }
+    public bool IsGround { get { return is_ground; } }
     #endregion
 }

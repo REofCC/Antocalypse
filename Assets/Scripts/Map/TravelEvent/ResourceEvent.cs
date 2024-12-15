@@ -1,3 +1,4 @@
+using System.Net;
 using UnityEngine;
 
 public class ResourceEvent : Event
@@ -13,10 +14,17 @@ public class ResourceEvent : Event
         SetEventType(EventType.Resource);
         SetEventData(data);
     }
+    public void ChooseResource(bool choose)
+    {
+        if (choose)
+        {
+            MapManager.Map.ResourceFactory.MakeResource(GetNode(), GetEventInfo().ResourceDataIdx);
+            OnComplete();
+        }
+    }
     public override bool EventFunction(GameObject traveler)
     {
-        GetResource(GetEventInfo());
-        return true;
+        return false;
     }
     #endregion
 }

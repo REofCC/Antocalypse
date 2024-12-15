@@ -6,6 +6,7 @@ public class BaseResource : MonoBehaviour
     #region Attribute
     int currentAmount;
     bool is_extractable;
+    bool is_ground;
 
     int currentWorker;
     List<Worker> workers = new();
@@ -56,6 +57,7 @@ public class BaseResource : MonoBehaviour
         currentAmount = data.Amount;
         type = data.ResourceType;
         is_extractable = data.Extractable;
+        is_ground = data.IsGround;
     }
     public void SetWareHouse(BaseBuilding warehouse)
     {

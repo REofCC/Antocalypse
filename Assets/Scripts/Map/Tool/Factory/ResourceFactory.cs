@@ -134,6 +134,15 @@ public class ResourceFactory : MonoBehaviour
         obj.transform.position = node.GetWorldPos();
         SetEnable(node, phase);
     }
+    public void MakeResource(HexaMapNode node, int idx)
+    {
+        ResourceData info = datas[idx];
+        GameObject obj = InstantiateResource(info.ResourceName);
+        if (obj == null)
+            return;
+        SetResource(obj.GetComponent<BaseResource>(), node as Wall, info);
+        obj.transform.position = node.GetWorldPos();
+    }
     #endregion
     public void OnAwake(int mapSize)
     {
