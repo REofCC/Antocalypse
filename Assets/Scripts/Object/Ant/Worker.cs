@@ -65,6 +65,7 @@ public class Worker : Ant
         BTSequence returnSequence = new BTSequence();
         BTSequence gatherSequence = new BTSequence();
         BTSequence buildSequence = new BTSequence();
+        BTSequence idleSequence = new BTSequence();
 
         BTAction eatAction = new BTAction(Eat);
         BTAction moveAction = new BTAction(Move);
@@ -81,7 +82,7 @@ public class Worker : Ant
 
         root.AddChild(eatSequence);
         root.AddChild(orderSelector);
-        root.AddChild(idleAction);
+        root.AddChild(idleSequence);
 
         eatSequence.AddChild(kcalLow);
         //eatSequence.AddChild(moveAction);
@@ -102,6 +103,9 @@ public class Worker : Ant
         buildSequence.AddChild(isBuildOrder);
         buildSequence.AddChild(moveAction);
         buildSequence.AddChild(buildAction);
+
+        idleSequence.AddChild(idleAction);
+        idleSequence.AddChild(moveAction);
     }
     //void FindCargo(Resourcetype resourceType)
     //{
@@ -146,10 +150,12 @@ public class Worker : Ant
     void StartBuild()
     {
         Debug.Log("Start Building");
-        if (buildingType == BuildingType.None)
+        if (buildingType == BuildingType.None && !isCorutineRunning)
         {
             //MapManager.Map.UnderGrid.SwapNode(targetGridPos.x, targetGridPos.y, "Path", true);
             //targetNode.SetIsWorked(false);
+
+            isCorutineRunning = true;
             StartCoroutine(WallBreakTimer());
         }
         else
@@ -196,6 +202,7 @@ public class Worker : Ant
 
         //FindCargo(); //저장소 경로 할당
         ChangeState(State.Move);
+        isCorutineRunning = false;
     }
     IEnumerator WallBreakTimer()
     {
@@ -215,6 +222,7 @@ public class Worker : Ant
         targetNode.SetIsWorked(false);
         ChangeState(State.Idle);
         currentTask = TaskType.None;
+        isCorutineRunning = false;
     }
     #endregion
     #endregion
@@ -229,10 +237,11 @@ public class Worker : Ant
     }
     BTNodeState GatherResource()
     {
-        if (currentTask == TaskType.Gather && state != State.Gather)   // 최초 진입 시
+        if (currentTask == TaskType.Gather && state != State.Gather && !isCorutineRunning)   // 최초 진입 시
         {
             ChangeState(State.Gather);
             // 채집 대기시간, 애니메이션
+            isCorutineRunning = true;
             StartCoroutine(GatherTimer());
         }
         else if (currentTask == TaskType.Gather && state != State.Gather)   // 건설 종료 후

@@ -23,6 +23,8 @@ public abstract class Ant : MonoBehaviour
     protected List<Vector3> path;
     protected int pathIndex;
 
+    protected bool isCorutineRunning;
+
     protected Animator animator;
     #endregion
     #region BasicGetter
@@ -115,6 +117,7 @@ public abstract class Ant : MonoBehaviour
         animator.SetInteger("State", 0);
 
         entityData.kcal = entityData.maxKcal;
+        isCorutineRunning = false;  
     }
     private void FixedUpdate()
     {
@@ -124,6 +127,23 @@ public abstract class Ant : MonoBehaviour
             //사망
         }
         entityData.kcal -= Time.deltaTime;
+    }
+    #endregion
+    #region Coroutine
+    IEnumerator RandMove()
+    {
+        yield return new WaitForSeconds(3.0f);
+        Debug.Log("Starting Rand Move");
+        if (state == State.Idle)
+        {
+            HexaMapNode node = MapManager.Map.UnderGrid.GetNode(gameObject);
+            targetNode = MapManager.Map.UnderGrid.GetRandomWalkableNode(node);
+            RequestPath(targetNode, false);
+            pathIndex = path.Count - 1;
+            currentTargetPos = path[pathIndex];
+            ChangeState(State.Move);
+        }
+        isCorutineRunning = false;
     }
     #endregion
     #endregion
@@ -152,7 +172,11 @@ public abstract class Ant : MonoBehaviour
             //ChangeState(State.Idle);
             if (pathIndex == 0) // 경로 마지막일 때
             {
-                transform.rotation = Quaternion.Euler(new Vector3(0, 0, RotateValue(targetPos)));
+                if (currentTask == TaskType.Build)
+                {
+                    transform.rotation = Quaternion.Euler(new Vector3(0, 0, RotateValue(targetPos)));
+                }
+                ChangeState(State.Idle);
                 return BTNodeState.Success;
             }
             else
@@ -168,9 +192,17 @@ public abstract class Ant : MonoBehaviour
     }
     protected BTNodeState Idle()
     {
-        if (state != State.Idle)
+        if (!isCorutineRunning && state != State.Move)
+        {
             ChangeState(State.Idle);
-        // 유휴 애니메이션
+            isCorutineRunning = true;
+            StartCoroutine(RandMove());
+            return BTNodeState.Running;
+        }
+        else if (state == State.Move)
+        {
+            return BTNodeState.Success;
+        }
         return BTNodeState.Running;
     }
     #endregion
