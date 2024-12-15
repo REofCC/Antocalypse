@@ -75,7 +75,8 @@ public class ResearchTreeManager : MonoBehaviour
 
     void CompletedResearch(ResearchNode node)
     {
-        node.SetNodeState(NodeState.COMPLETED);        
+        node.SetNodeState(NodeState.COMPLETED);      
+        MapManager.Map.BuildingFactory.SetBuildingConstaint(node.BuildingType);
         UnlockNode(node);
         completedNodes.Add(node);
     }
