@@ -113,6 +113,17 @@ public abstract class Ant : MonoBehaviour
         state = State.Idle;
         currentTask = TaskType.None;
         animator.SetInteger("State", 0);
+
+        entityData.kcal = entityData.maxKcal;
+    }
+    private void FixedUpdate()
+    {
+        if (entityData.kcal <= 0)
+        {
+            Destroy(gameObject);
+            //사망
+        }
+        entityData.kcal -= Time.deltaTime;
     }
     #endregion
     #endregion
@@ -120,8 +131,16 @@ public abstract class Ant : MonoBehaviour
     #region BasicBTAction
     protected BTNodeState Eat()
     {
-        // 섭취 행동 대기시간 및 애니메이션
-        return BTNodeState.Success;
+        if (Managers.Resource.CheckLiquidFood(1))
+        {
+            Managers.Resource.AddLiquidFood(-1);
+            entityData.kcal = entityData.maxKcal;
+            return BTNodeState.Success;
+        }
+        else
+        {
+            return BTNodeState.Failure;
+        }
     }
     protected BTNodeState Move()
     {
@@ -158,14 +177,13 @@ public abstract class Ant : MonoBehaviour
     #region BasicBTCondition
     protected bool IsKcalLow()
     {
-        if (entityData.kcal <= 50 && currentTask == TaskType.None)    //수치 조정
+        if (entityData.kcal <= 30)    //수치 조정
         {
-            currentTask = TaskType.Eat;
+            //currentTask = TaskType.Eat;
             //path = 
             //여왕개미 or 액체 식량 보관소 까지 경로 요청
             return true;
         }
-
         else
             return false;
     }
