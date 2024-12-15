@@ -67,7 +67,7 @@ public class Worker : Ant
         BTSequence buildSequence = new BTSequence();
 
         BTAction eatAction = new BTAction(Eat);
-        BTAction moveAction = new BTAction(Move);
+        //BTAction moveAction = new BTAction(Move);
         BTAction storeAction = new BTAction(Store);
         BTAction gatherAction = new BTAction(GatherResource);
         BTAction buildAction = new BTAction(Build);
@@ -84,7 +84,7 @@ public class Worker : Ant
         root.AddChild(idleAction);
 
         eatSequence.AddChild(kcalLow);
-        eatSequence.AddChild(moveAction);
+        //eatSequence.AddChild(moveAction);
         eatSequence.AddChild(eatAction);
 
         orderSelector.AddChild(returnSequence);
@@ -92,15 +92,15 @@ public class Worker : Ant
         orderSelector.AddChild(buildSequence);
 
         returnSequence.AddChild(isHolding);
-        returnSequence.AddChild(moveAction);
+        //returnSequence.AddChild(moveAction);
         returnSequence.AddChild(storeAction);
 
         gatherSequence.AddChild(isGatherOrder);
-        gatherSequence.AddChild(moveAction);
+        //gatherSequence.AddChild(moveAction);
         gatherSequence.AddChild(gatherAction);
 
         buildSequence.AddChild(isBuildOrder);
-        buildSequence.AddChild(moveAction);
+        //buildSequence.AddChild(moveAction);
         buildSequence.AddChild(buildAction);
     }
     //void FindCargo(Resourcetype resourceType)
