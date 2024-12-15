@@ -1,4 +1,6 @@
 
+using UnityEngine;
+
 public class EvoManager
 {
     AntType buffTargetType;
@@ -9,10 +11,32 @@ public class EvoManager
     bool canResearchOutpost;   //전초기지 연구 가능
 
     float[] currentBuff;  //적용 중 버프
-
+    bool[] currentBoolBuff;    //해금?
+    EvoData worker;
+    EvoData scout;
+    EvoData soldier;
+    
+    public void Init()
+    {
+        worker = Resources.Load<EvoData>("Evo/Worker");
+        scout = Resources.Load<EvoData>("Evo/Scout");
+        soldier = Resources.Load<EvoData>("Evo/Soldier");
+        currentBuff = new float[(int)BuffType.EndOfFloatBuff - 1];
+        currentBoolBuff = new bool[(int)BuffType.EndOfBoolBuff - (int)BuffType.EndOfFloatBuff - 1];
+    }
     public void AddCurrentBuff(BuffType type, float value)  //진화 선택 완료시 적용 버프마다 호출
     {
-        currentBuff[(int)type] += value;
+        if ((int)type < (int)BuffType.EndOfFloatBuff)
+        {
+            currentBuff[(int)type] += value;
+        }
+        else
+        {
+            if (value == 1)
+                currentBoolBuff[(int)type - (int)BuffType.EndOfFloatBuff - 1] = true;
+            else if(value == -1)
+                currentBoolBuff[(int)type - (int)BuffType.EndOfFloatBuff -1] = false;
+        }
     }
     public void AddEvoCount()   //진화 선택 완료시 호출
     {
@@ -21,7 +45,17 @@ public class EvoManager
     public void SetBuffTargetType(AntType type) //특화 병종 선택 시 호출
     {
         buffTargetType = type;
-        currentBuff = new float[(int)BuffType.None - 1];
+        switch (type) {
+            case AntType.Worker:
+                currentBoolBuff[(int)BuffType.CanResearchMine - (int)BuffType.EndOfFloatBuff] = true;
+                break;
+            case AntType.Scout:
+                currentBoolBuff[(int)BuffType.CanResearchOutpost - (int)BuffType.EndOfFloatBuff] = true;
+                break;
+            case AntType.Soldier:
+                currentBoolBuff[(int)BuffType.CanGetCombatReward - (int)BuffType.EndOfFloatBuff] = true;
+                break;
+        }
     }
     public AntType GetBuffAntType()
     {
@@ -31,12 +65,12 @@ public class EvoManager
     {
         return currentBuff[(int)buffType];
     }
-    public bool GetCanBuildMine()
+    public bool GetCurrentBoolBuff(BuffType buffType)
     {
-        return canResearchMine;
+        return currentBoolBuff[(int)buffType - (int)BuffType.EndOfFloatBuff - 1];
     }
-    public bool GetCanBuildOutpost()
+    public int GetCurrentEvoCount()
     {
-        return canResearchOutpost;
+        return evoCount;
     }
 }

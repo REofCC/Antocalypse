@@ -72,5 +72,17 @@ public enum BuffType
     CombatPower,    //전투력
     CombatReward,   //전투 승리 보상
     CombatLoss, //개체 손실 감소
-    None    //마지막
+    EndOfFloatBuff,    //float 버프 마지막
+    CanResearchMine,
+    CanResearchOutpost,
+    CanGetCombatReward,
+    CanSeeGroundEvent,
+    EndOfBoolBuff    //bool 버프 마지막
+}
+
+public enum BuffPart
+{
+    Head,
+    Chest,
+    Belly
 }
