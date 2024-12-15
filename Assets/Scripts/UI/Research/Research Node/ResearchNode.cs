@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ResearchNode", menuName = "Research/Node")]
 public class ResearchNode : ScriptableObject
 {
+    [SerializeField] BuildingType buildingType;
     [SerializeField] Sprite nodeIcon;
     [SerializeField] string nodeName;
     [SerializeField] string description;
@@ -16,6 +17,7 @@ public class ResearchNode : ScriptableObject
     [SerializeField] List<ResearchNode> exclusiveNodes;
 
 
+    public BuildingType BuildingType => buildingType;
     public Sprite NodeIcon => nodeIcon;
     public string NodeName => nodeName;
     public string Description => description;
