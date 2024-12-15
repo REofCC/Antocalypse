@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ff17ad30a6ecdd4f97c4e68d2861d7f, type: 3}
+  m_Name: Soldier
+  m_EditorClassIdentifier: 
+  antType: 2
+  BasicDescript: 'Expert Bonus : Able to Get Extra Resoruces When Win The Battle'
+  headBuffType1: 9
+  headBuffValue1: 30
+  headDescript1: Increase Combat Power  +30%
+  headBuffType2: 10
+  headBuffValue2: 50
+  headDescript2: Increase Combat Reward +50%
+  chestBuffType1: 1
+  chestBuffValue1: 30
+  chestDescript1: Increase Soldier Movement Speed +30%
+  chestBuffType2: 2
+  chestBuffValue2: 50
+  chestDescript2: Increase Soldier Population Cap +50%
+  bellyBuffType1: 11
+  bellyBuffValue1: -50
+  bellyDescript1: Reduce Soldier Combat Loss -50%
+  bellyBuffType2: 3
+  bellyBuffValue2: -30
+  bellyDescript2: Reduce Soldier Spawn Cost -30%

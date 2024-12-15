@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ff17ad30a6ecdd4f97c4e68d2861d7f, type: 3}
+  m_Name: Worker
+  m_EditorClassIdentifier: 
+  antType: 0
+  BasicDescript: 'Expert Bonus : Able to Research "Deep Mine"'
+  headBuffType1: 4
+  headBuffValue1: 50
+  headDescript1: Increase Gather Speed +50%
+  headBuffType2: 5
+  headBuffValue2: 50
+  headDescript2: Increase Dig, Build, Demolish Speed +50%
+  chestBuffType1: 1
+  chestBuffValue1: 30
+  chestDescript1: Increase Worker Movement Speed +30%
+  chestBuffType2: 2
+  chestBuffValue2: 50
+  chestDescript2: Increase Worker Population Cap +50%
+  bellyBuffType1: 0
+  bellyBuffValue1: 30
+  bellyDescript1: Increase Resource Hold Value +30%
+  bellyBuffType2: 6
+  bellyBuffValue2: -30
+  bellyDescript2: Reduce Worker Food Consume -30%

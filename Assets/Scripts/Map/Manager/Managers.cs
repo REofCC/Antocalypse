@@ -31,6 +31,7 @@ public class Managers : MonoBehaviour
         yearManager.Init();
         taskManager = gameObject.AddComponent<TaskManager>();
         taskManager.Init();
+        EvoManager.Init();
     }
 
 
