@@ -74,6 +74,22 @@ public class EvoManager
                 break;
         }
     }
+    public string GetBasicDescription(AntType antType)
+    {
+        switch (antType)
+        {
+            case AntType.Worker:
+                return worker.GetBasicDescription(AntType.Worker);
+                break;
+            case AntType.Scout:
+                return scout.GetBasicDescription(AntType.Scout);
+                break;
+            case AntType.Soldier:
+                return soldier.GetBasicDescription(AntType.Soldier);
+                break;
+        }
+        return null;
+    }
     public string GetBuffDescription(AntType antType, BuffPart part, int branch)
     {
         switch (antType)
