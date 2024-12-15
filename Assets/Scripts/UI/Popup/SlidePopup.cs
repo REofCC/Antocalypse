@@ -4,6 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
 using static UIEnums;
+using System;
 
 public class SlidePopup : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class SlidePopup : MonoBehaviour
     [SerializeField] float slideDuration = 0.5f;
     bool isPopupOpen = false;
     [SerializeField] List<Button> buttons = new List<Button>();
+
+    public event Action OnButtonCheck;
 
     Vector2 hiddenPosition;
     Vector2 shownPosition;
@@ -65,6 +68,7 @@ public class SlidePopup : MonoBehaviour
         popupPanel.DOAnchorPos(shownPosition, slideDuration).SetEase(easeType).OnComplete(() =>
         {
             SetButtonsInteractable(true);
+            OnButtonCheck.Invoke();
         }).SetUpdate(true);
 
         isPopupOpen = true;
