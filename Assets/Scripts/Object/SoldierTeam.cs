@@ -49,10 +49,17 @@ public class SoldierTeam : MonoBehaviour
     {
         if (win)
         {
+            int loss;
             if (buffValue != 0)
-                soldierCount = (int)(totalCombatPower / (buffValue * 50f + 50f));
+                loss = (int)(totalCombatPower / (buffValue * 50f + 50f));
             else
-                soldierCount = (int)(totalCombatPower / 50);
+                loss = (int)(totalCombatPower / 50);
+            float lossReduce = Managers.EvoManager.GetCurrentBuff(BuffType.CombatLoss);
+            if (lossReduce!=0)   //병정개미 소모 감소 있을 시
+            {
+                loss -= (int)(loss * lossReduce);
+            }
+            soldierCount -= loss;
         }
         else
         {
