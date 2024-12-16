@@ -9,11 +9,13 @@ public class GatherTeam : MonoBehaviour
     ResourceType resourceType;
     int resourceValue;
     int maxHoldValue;
+    float moveSpeed;
 
     public void Init(int _scoutCount) // 인원수만큼 초기화
     {
         scoutCount = _scoutCount;
         maxHoldValue = _scoutCount * 20; //기본 자원 운반량
+        moveSpeed = 1;
     }
     public void Gather()
     {
