@@ -1,5 +1,7 @@
 using System.Collections;
+using System;
 using UnityEngine;
+using System.Linq;
 
 public class Worker : Ant
 {
@@ -13,8 +15,8 @@ public class Worker : Ant
 
     BuildingType buildingType;
 
-    public float wallBreakTime = 2f;    //임시 벽 파괴 시간
-    public float gatherTime = 2f;    //임시 채집시간
+    public float wallBreakTime = 4f;    //임시 벽 파괴 시간
+    public float gatherTime = 4f;    //임시 채집시간
     #endregion
     #region Function
     #region Public
@@ -105,46 +107,46 @@ public class Worker : Ant
         idleSequence.AddChild(idleAction);
         idleSequence.AddChild(moveAction);
     }
-    //void FindCargo(Resourcetype resourceType)
-    //{
-    //    LayerMask resourceLayer;    //해당 자원 레이어
-    //    switch (resourceType)
-    //    {
-    //        case Resourcetype.Leaf:
-    //            //resourceLayer = 
-    //            break;
-    //        case Resourcetype.Wood:
-    //            //resourceLayer = 
-    //            break;
-    //        case Resourcetype.Liquid:
-    //            //resourceLayer = 
-    //            break;
-    //        case Resourcetype.Solid:
-    //            //resourceLayer = 
-    //            break;
-    //    }    
+    void FindCargo(ResourceType resourceType)
+    {
+        LayerMask resourceLayer;    //해당 자원 레이어
+        switch (resourceType)
+        {
+            case ResourceType.LEAF:
+                resourceLayer = LayerMask.NameToLayer("LeafSaver");
+                break;
+            case ResourceType.WOOD:
+                resourceLayer = LayerMask.NameToLayer("WoodSaver");
+                break;
+            case ResourceType.LIQUID_FOOD:
+                resourceLayer = LayerMask.NameToLayer("LiquidSaver");
+                break;
+            case ResourceType.SOLID_FOOD:
+                resourceLayer = LayerMask.NameToLayer("SolidSaver");
+                break;
+            default:
+                resourceLayer = 0;
+                break;
+        }
 
-    //    GameObject obj = null;
+        GameObject obj = null;
 
-    //    var hits = Physics2D.CircleCastAll(nodePos, Mathf.Infinity, Vector2.zero, Mathf.Infinity, resourceLayer);
+        var hits = Physics2D.CircleCastAll(nodePos, Mathf.Infinity, Vector2.zero, Mathf.Infinity, resourceLayer);
 
-    //    foreach (var hit in hits.OrderBy(distance => Vector2.Distance(nodePos, distance.point)))
-    //    {
-    //        if ((hit.collider.GetComponent<건물>().현재저장가능?()))
-    //        {
-    //            obj = hit.collider.gameObject;
-    //            Debug.Log("Found");
-    //            break;
-    //        }
-    //    }
+        foreach (var hit in hits.OrderBy(distance => Vector2.Distance(nodePos, distance.point)))
+        {
+            obj = hit.collider.gameObject;
+            Debug.Log("Found");
+            break;
+        }
 
-    //    if (obj == null)
-    //    {
-    //        Debug.Log("Can't Find");
-    //    }
+        if (obj == null)
+        {
+            Debug.Log("Can't Find");
+        }
 
-    //    cargo = obj;
-    //}
+        cargo = obj;
+    }
     void OnBuildFinish(bool finished)
     {
         Debug.Log(finished);
@@ -232,29 +234,14 @@ public class Worker : Ant
     }
     BTNodeState GatherResource()
     {
-        if (currentTask == TaskType.Gather && state != State.Gather && !isCorutineRunning)   // 최초 진입 시
+        if (currentTask == TaskType.Gather && state != State.Gather)   // 최초 진입 시
         {
             currentTimer = 0;
             ChangeState(State.Gather);
-            // 채집 대기시간, 애니메이션
-            isCorutineRunning = true;
-            //StartCoroutine(GatherTimer());
-        }
-        else if (currentTask == TaskType.Gather && state != State.Gather)   // 건설 종료 후
-        {
-            return BTNodeState.Success;
-        }
-        return BTNodeState.Running;
-    }
-    BTNodeState Build()
-    {
-        if (currentTask == TaskType.Build && state != State.Build)   // 최초 진입 시
-        {
-            ChangeState(State.Build);
+
 
             if (buildingType == BuildingType.None)  //벽 파괴 시
             {
-                Debug.Log("Start Breaking Wall");
                 if (currentTimer < wallBreakTime)
                 {
                     currentTimer += Time.deltaTime;
@@ -266,9 +253,39 @@ public class Worker : Ant
                     BreakWall();
                     return BTNodeState.Success;
                 }
-                //StartCoroutine(WallBreakTimer());
             }
-            else    // 건물 건설 시
+        }
+        else if (currentTask == TaskType.Gather && state != State.Gather)
+        {
+            return BTNodeState.Success;
+        }
+        return BTNodeState.Running;
+    }
+    BTNodeState Build()
+    {
+        if (currentTask == TaskType.Build && state != State.Build)   // 최초 진입 시
+        {
+            ChangeState(State.Build);
+            currentTimer = 0;
+        }
+        if (currentTask == TaskType.Build)
+        {
+            if (buildingType == BuildingType.None)  //벽 파괴 시
+            {
+                if (currentTimer < wallBreakTime)
+                {
+                    currentTimer += Time.deltaTime;
+                    return BTNodeState.Running;
+                }
+                else
+                {
+                    currentTimer = 0;
+                    Debug.Log("Start Breaking Wall");
+                    BreakWall();
+                    return BTNodeState.Success;
+                }
+            }
+            else  // 건물 건설 시
             {
                 Debug.Log("Start Building");
                 MapManager.Map.BuildingFactory.Build((Path)targetNode, buildingType, OnBuildFinish);

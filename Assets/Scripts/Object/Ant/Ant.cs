@@ -178,8 +178,6 @@ public abstract class Ant : MonoBehaviour
     }
     protected BTNodeState Move()
     {
-        if (state != State.Move)
-            ChangeState(State.Move);
         if (transform.position.x == currentTargetPos.x && transform.position.y == currentTargetPos.y)
         {
             //Debug.Log("Move Finish");
@@ -190,7 +188,8 @@ public abstract class Ant : MonoBehaviour
                 {
                     transform.rotation = Quaternion.Euler(new Vector3(0, 0, RotateValue(targetPos)));
                 }
-                ChangeState(State.Idle);
+                if (currentTask ==TaskType.None)
+                    ChangeState(State.Idle);
                 return BTNodeState.Success;
             }
             else
@@ -200,6 +199,11 @@ public abstract class Ant : MonoBehaviour
                 transform.rotation = Quaternion.Euler(new Vector3(0, 0, RotateValue(currentTargetPos)));
                 return BTNodeState.Running;
             }
+        }
+        else
+        {
+            if (state != State.Move)
+                ChangeState(State.Move);
         }
         transform.position = Vector2.MoveTowards(transform.position, currentTargetPos, entityData.speed * Time.deltaTime);
         return BTNodeState.Running;
