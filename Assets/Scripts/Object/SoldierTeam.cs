@@ -7,6 +7,7 @@ public class SoldierTeam : MonoBehaviour
     int soldierCount;
     float totalCombatPower;
     float buffValue;
+    float moveSpeed;
     ResourceType resourceType;
     int resourceValue;
     float enemyCP;
@@ -15,6 +16,7 @@ public class SoldierTeam : MonoBehaviour
     {
         soldierCount = _soldierCount;
         totalCombatPower = _soldierCount * 50; //기본 CP
+        moveSpeed = 1;
     }
     public void Combat (float _enemyCP)
     {
@@ -72,7 +74,7 @@ public class SoldierTeam : MonoBehaviour
         Managers.Population.CalcCurrentPopulation(AntType.Soldier, soldierCount);
         if (win)
         {
-            if (Managers.EvoManager.GetCurrentBuff(BuffType.CanGetCombatReward) == 1)   //병정개미 특화 시
+            if (Managers.EvoManager.GetCurrentBoolBuff(BuffType.CanGetCombatReward))   //병정개미 특화 시
             {
                 resourceType = GetEnemyResourceData();
                 resourceValue = GetEnemyResourceValue();
