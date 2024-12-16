@@ -11,10 +11,8 @@ public class Worker : Ant
 
     Vector2 cargoPos;
 
-    //State nextState;
-
     BuildingType buildingType;
-
+    BaseResource resourceNode;
     public float wallBreakTime = 4f;    //임시 벽 파괴 시간
     public float gatherTime = 4f;    //임시 채집시간
     #endregion
@@ -29,6 +27,12 @@ public class Worker : Ant
         {
             RequestPath(_targetNode, true);
             buildingType = BuildingType.None;
+        }
+        else if (type == TaskType.Gather)
+        {
+            resourceNode = _targetNode.GetResource();
+            entityData.resourceType = resourceNode.GetResourceType();
+            RequestPath(_targetNode, false);
         }
         else
         {
@@ -109,25 +113,26 @@ public class Worker : Ant
     }
     void FindCargo(ResourceType resourceType)
     {
-        LayerMask resourceLayer;    //해당 자원 레이어
+        int resourceLayer;    //해당 자원 레이어
         switch (resourceType)
         {
             case ResourceType.LEAF:
-                resourceLayer = LayerMask.NameToLayer("LeafSaver");
+                resourceLayer = 1 << LayerMask.NameToLayer("LeafSaver");
                 break;
             case ResourceType.WOOD:
-                resourceLayer = LayerMask.NameToLayer("WoodSaver");
+                resourceLayer = 1 << LayerMask.NameToLayer("WoodSaver");
                 break;
             case ResourceType.LIQUID_FOOD:
-                resourceLayer = LayerMask.NameToLayer("LiquidSaver");
+                resourceLayer = 1 << LayerMask.NameToLayer("LiquidSaver");
                 break;
             case ResourceType.SOLID_FOOD:
-                resourceLayer = LayerMask.NameToLayer("SolidSaver");
+                resourceLayer = 1 << LayerMask.NameToLayer("SolidSaver");
                 break;
             default:
                 resourceLayer = 0;
                 break;
         }
+        resourceLayer += 1 << LayerMask.NameToLayer("CombineSaver");
 
         GameObject obj = null;
 
@@ -146,6 +151,27 @@ public class Worker : Ant
         }
 
         cargo = obj;
+        cargoPos = cargo.transform.position;
+    }
+    void Gather()
+    {
+        Debug.Log("Finsh Gathering");
+        int remain = resourceNode.GetCurrentAmount();
+        if (remain <= entityData.gatherValue)   //자원 노드 고갈
+        {
+            // 노드 고갈
+            entityData.holdValue = remain;
+        }
+        else
+        {
+            resourceNode.Extraction(entityData.gatherValue);
+        }
+        entityData.isHolding = true;
+
+        FindCargo(entityData.resourceType);
+        targetNode = MapManager.Map.UnderGrid.GetNode(cargoPos);
+        RequestPath(targetNode, false);
+        ChangeState(State.Idle);
     }
     void OnBuildFinish(bool finished)
     {
@@ -227,32 +253,44 @@ public class Worker : Ant
     #region BTAction
     BTNodeState Store()
     {
-        entityData.isHolding = false;
         Debug.Log("Stored");
-        // 자원 보관 추가
+        switch(entityData.resourceType)
+        {
+            case ResourceType.LEAF:
+                Managers.Resource.AddLeaf(entityData.holdValue);
+                break;
+            case ResourceType.WOOD:
+                Managers.Resource.AddWood(entityData.holdValue);
+                break;
+            case ResourceType.LIQUID_FOOD:
+                Managers.Resource.AddLiquidFood(entityData.holdValue);
+                break;
+            case ResourceType.SOLID_FOOD:
+                Managers.Resource.AddSolidFood(entityData.holdValue);
+                break;
+        }
+        entityData.isHolding = false;
+        entityData.holdValue = 0;
         return BTNodeState.Success;
     }
     BTNodeState GatherResource()
     {
         if (currentTask == TaskType.Gather && state != State.Gather)   // 최초 진입 시
         {
-            currentTimer = 0;
             ChangeState(State.Gather);
-
-
-            if (buildingType == BuildingType.None)  //벽 파괴 시
+        }
+        if (currentTask == TaskType.Gather)
+        { 
+            if (currentTimer < gatherTime)
             {
-                if (currentTimer < wallBreakTime)
-                {
-                    currentTimer += Time.deltaTime;
-                    return BTNodeState.Running;
-                }
-                else
-                {
-                    currentTimer = 0;
-                    BreakWall();
-                    return BTNodeState.Success;
-                }
+                currentTimer += Time.deltaTime;
+                return BTNodeState.Running;
+            }
+            else
+            {
+                currentTimer = 0;
+                Gather();
+                return BTNodeState.Success;
             }
         }
         else if (currentTask == TaskType.Gather && state != State.Gather)
@@ -304,8 +342,6 @@ public class Worker : Ant
     {
         if (entityData.isHolding)
         {
-            targetPos = cargoPos;
-            ChangeState(State.Return);
             return true;
         }
         return false;
