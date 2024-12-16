@@ -180,8 +180,6 @@ public class Worker : Ant
     #region Unity
     private void Start()
     {
-        cargoPos = cargo.transform.position;
-
         SetBT();
     }
     private void FixedUpdate()

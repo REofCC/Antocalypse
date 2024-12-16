@@ -55,6 +55,9 @@ TagManager:
   - name: Mask
     uniqueID: 4101568235
     locked: 0
+  - name: Building
+    uniqueID: 332368533
+    locked: 0
   - name: Ant
     uniqueID: 2053558611
     locked: 0
