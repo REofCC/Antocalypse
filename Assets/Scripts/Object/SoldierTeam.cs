@@ -1,0 +1,106 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class SoldierTeam : MonoBehaviour
+{
+    int soldierCount;
+    float totalCombatPower;
+    float buffValue;
+    ResourceType resourceType;
+    float resourceValue;
+    float enemyCP;
+
+    public void Init(int _soldierCount) // 인원수만큼 초기화
+    {
+        soldierCount = _soldierCount;
+        totalCombatPower = _soldierCount * 50; //기본 CP
+    }
+    public bool Combat (float _enemyCP)
+    {
+        enemyCP = _enemyCP;
+        ApplyBuff();
+        while (true)
+        {
+            enemyCP -= totalCombatPower / 2;
+            if (enemyCP <= 0)
+            {
+                CombatResult(true);
+                break;
+            }
+            totalCombatPower -= enemyCP / 2;
+            if (totalCombatPower <= 0)
+            {
+                CombatResult(false);
+                break;
+            }
+        }
+    }
+    void ApplyBuff()
+    {
+        buffValue = Managers.EvoManager.GetCurrentBuff(BuffType.CombatPower);
+
+        if (buffValue != 0)
+        {
+            totalCombatPower += totalCombatPower * value;
+        }
+    }
+    void CalcRemain(bool win)
+    {
+        if (win)
+        {
+            soldierCount = totalCombatPower / (buffValue * 50 + 50);
+        }
+        else
+        {
+            soldierCount = 0;
+        }
+    }
+    public void CombatResult(bool win)
+    {
+        CalcRemain(win);
+        Managers.Population.CalcCurrentPopulation(AntType.Soldier, soldierCount);
+        if (win)
+        {
+            if (Managers.EvoManager.GetCurrentBuff(BuffType.CanGetCombatReward))
+            {
+                resourceType = GetEnemyResourceData();
+                resourceValue = GetEnemyResourceValue();
+            }
+            OnBattleWin();
+        }
+        else
+        {
+            SetEnemyCp(enemyCP); 
+            Destroy(gameObject);
+        }
+    }
+    public void OnBattleWin()   //전투 승리 후 노드 교체 및 귀환
+    {
+    }
+    public void SetEnemyCp(float value)  //해당 적 전투 후 CP로 설정
+    {
+    }
+    public void OnReturn()
+    {
+        switch(resourceType)
+        {
+            case ResourceType.LEAF:
+                Managers.Resource.AddLeaf(resourceValue); 
+                break;
+            case ResourceType.WOOD:
+                Managers.Resource.AddLeaf(resourceValue);
+                break;
+            case ResourceType.LIQUID_FOOD:
+                Managers.Resource.AddLeaf(resourceValue);
+                break;
+            case ResourceType.SOLID_FOOD:
+                Managers.Resource.AddLeaf(resourceValue);
+                break;
+        }
+        // 입구 위치에 soldierCount 만큼 Soldier 인스턴스화
+
+        Destroy(gameObject);
+    }
+
+}

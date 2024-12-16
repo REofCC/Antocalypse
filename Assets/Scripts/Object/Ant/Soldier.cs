@@ -5,8 +5,6 @@ using UnityEngine;
 public class Soldier : Ant
 {
     #region Attribute
-    float hp;
-    float atk;
     #endregion
     #region Function
     #region Public
