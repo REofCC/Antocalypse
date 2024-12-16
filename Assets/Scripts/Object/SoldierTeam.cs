@@ -8,7 +8,7 @@ public class SoldierTeam : MonoBehaviour
     float totalCombatPower;
     float buffValue;
     ResourceType resourceType;
-    float resourceValue;
+    int resourceValue;
     float enemyCP;
 
     public void Init(int _soldierCount) // 인원수만큼 초기화
@@ -16,7 +16,7 @@ public class SoldierTeam : MonoBehaviour
         soldierCount = _soldierCount;
         totalCombatPower = _soldierCount * 50; //기본 CP
     }
-    public bool Combat (float _enemyCP)
+    public void Combat (float _enemyCP)
     {
         enemyCP = _enemyCP;
         ApplyBuff();
@@ -42,14 +42,17 @@ public class SoldierTeam : MonoBehaviour
 
         if (buffValue != 0)
         {
-            totalCombatPower += totalCombatPower * value;
+            totalCombatPower += totalCombatPower * buffValue;
         }
     }
     void CalcRemain(bool win)
     {
         if (win)
         {
-            soldierCount = totalCombatPower / (buffValue * 50 + 50);
+            if (buffValue != 0)
+                soldierCount = (int)(totalCombatPower / (buffValue * 50f + 50f));
+            else
+                soldierCount = (int)(totalCombatPower / 50);
         }
         else
         {
@@ -62,7 +65,7 @@ public class SoldierTeam : MonoBehaviour
         Managers.Population.CalcCurrentPopulation(AntType.Soldier, soldierCount);
         if (win)
         {
-            if (Managers.EvoManager.GetCurrentBuff(BuffType.CanGetCombatReward))
+            if (Managers.EvoManager.GetCurrentBuff(BuffType.CanGetCombatReward) == 1)   //병정개미 특화 시
             {
                 resourceType = GetEnemyResourceData();
                 resourceValue = GetEnemyResourceValue();
@@ -102,5 +105,12 @@ public class SoldierTeam : MonoBehaviour
 
         Destroy(gameObject);
     }
-
+    ResourceType GetEnemyResourceData()
+    {
+        return ResourceType.LEAF;   //임시 코드, 변경 필요
+    }
+    int GetEnemyResourceValue()
+    {
+        return 1;   //임시 코드, 변경 필요
+    }
 }

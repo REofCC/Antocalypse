@@ -11,7 +11,7 @@ public class EnemyData : EventData
     [SerializeField]
     ResourceType resourceType;
     [SerializeField]
-    float resoruceValue;
+    int resoruceValue;
     #endregion
 
     #region Getter & Setter
