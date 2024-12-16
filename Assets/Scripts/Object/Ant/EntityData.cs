@@ -21,6 +21,8 @@ public class EntityData:MonoBehaviour
     bool _isHolding;  //자원 운반중
     [SerializeField]
     int _holdValue;  //자원 소지량
+    [SerializeField]
+    ResourceType _resourceType;  //자원 종류
 
     public AntType entityType { get { return _entityType; } set { _entityType = value; } }
     public int maxHp { get { return _maxHp; } set { _maxHp = value; } }
@@ -33,4 +35,5 @@ public class EntityData:MonoBehaviour
 
     public bool isHolding { get { return _isHolding; } set { _isHolding = value; } }
     public int holdValue { get { return _holdValue; } set { _holdValue = value; } }
+    public ResourceType resourceType { get { return _resourceType; } set { _resourceType = value; } }
 }
