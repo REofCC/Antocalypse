@@ -14,6 +14,7 @@ public class YearPanel : MonoBehaviour
 
     private void Start()
     {
+        UpdateYear();   // 권희준 - 초기 연도 설정
         Managers.YearManager.OnWinterEvent += UpdateYear;
         Managers.YearManager.OnTimeEvent += UpdateProgressBar;
     }

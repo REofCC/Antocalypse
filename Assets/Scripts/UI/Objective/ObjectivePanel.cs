@@ -12,7 +12,7 @@ public class ObjectivePanel : MonoBehaviour
 
     private void Start()
     {
-        UpdateTitle();        
+        UpdateTitle();          
     }
     private void OnEnable()
     {
@@ -34,7 +34,6 @@ public class ObjectivePanel : MonoBehaviour
         UpdateObjective(ResourceType.WOOD);
         UpdateObjective(ResourceType.LIQUID_FOOD);
     }
-
     private void UpdateObjective(ResourceType resourceType)
     {               
         switch (resourceType)
@@ -47,6 +46,8 @@ public class ObjectivePanel : MonoBehaviour
                 break;
             case ResourceType.LIQUID_FOOD:
                 leafText.text = "액체 식량: " + $"{Managers.Resource.GetLeaf()} / {Managers.YearManager.GetRequireResource(ResourceType.LIQUID_FOOD)}";
+                break;
+            case ResourceType.SOLID_FOOD:   //권희준 - 고체 식량 호출 에러
                 break;
             default:
                 Debug.LogError("Invalid resource type");

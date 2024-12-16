@@ -52,7 +52,14 @@ public class YearManager : MonoBehaviour
     }
     void RequirementEvent() //정산 이벤트
     {
+        if (!Managers.Resource.CheckLeaf(requireLeaf) && !Managers.Resource.CheckWood(requireWood) && !Managers.Resource.CheckLiquidFood(requireWood))
+        {
+            //GameOver;
+        }
+        currentYear++;
+        SetRequirement();
         OnWinterEvent?.Invoke();
+        StartNextYear();
         return;
     }
     void SetRequirement()
@@ -64,8 +71,6 @@ public class YearManager : MonoBehaviour
     public void StartNextYear() //다음 연차 실행
     {
         currentTime = 0;
-        currentYear++;        
-        SetRequirement();
         StartCoroutine(Timer());
     }
     IEnumerator Timer()

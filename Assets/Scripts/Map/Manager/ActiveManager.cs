@@ -121,6 +121,10 @@ public class ActiveManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+    // State 호출 순서 error
+    void Start()
+    {
         state = MapManager.Map.State;
     }
 }
