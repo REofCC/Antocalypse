@@ -16,7 +16,7 @@ public class Managers : MonoBehaviour
     static SpawnManager spawnManager = new();
     public static SpawnManager SpawnManager { get { return spawnManager; } }
 
-    static YearManager yearManager;
+    static YearManager yearManager = new();
     public static YearManager YearManager { get { return yearManager; } }
 
     static TaskManager taskManager = new();
