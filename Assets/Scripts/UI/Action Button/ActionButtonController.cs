@@ -7,7 +7,7 @@ public abstract class ActionButtonController : MonoBehaviour
 {
     [SerializeField] List<Button> buttons = new List<Button>();
 
-    private void Start()
+    private void Awake()
     {
         foreach (Button button in buttons)
         {
