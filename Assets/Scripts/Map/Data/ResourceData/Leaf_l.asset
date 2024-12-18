@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Leaf_l
   m_EditorClassIdentifier: 
   resourceName: Leaf_l
-  type: 2
+  type: 0
   buildable: 1
   amount: 1000
   maxWorker: 0
-  size: 0
+  extractable: 0
+  is_ground: 0

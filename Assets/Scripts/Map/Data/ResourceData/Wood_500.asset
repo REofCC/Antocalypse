@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82c3249f6a50485459c13ae29bdeccee, type: 3}
   m_Name: Wood_500
   m_EditorClassIdentifier: 
-  resourceName: Leaf_500
+  resourceName: Wood_500
   type: 1
   buildable: 0
   amount: 500
