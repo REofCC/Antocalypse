@@ -100,16 +100,16 @@ public class StateManager : MonoBehaviour
     }
     public void ChangeMod()
     {
-        Vector3 Pos = new Vector3(100, 0, 0);
+        Vector3 Pos = new Vector3(100, 0, -1);
         if (isGround)
         {
             isGround = false;
-            Camera.main.transform.position -= Pos;
+            Camera.main.transform.position = MapManager.Map.MapMaker.GetStartPos().GetWorldPos() + new Vector3(0, 0, -1);
         }
         else
         {
             isGround = true;
-            Camera.main.transform.position += Pos;
+            Camera.main.transform.position = MapManager.Map.MapMaker.GetStartPos().GetWorldPos() + Pos;
         }
     }
     #endregion
