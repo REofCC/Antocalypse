@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
@@ -17,6 +15,7 @@ public class CameraController : MonoBehaviour
     {
         cam = Camera.main;
         targetZoom = cam.orthographicSize;
+        gameObject.transform.position = MapManager.Map.MapMaker.GetStartPos().GetWorldPos() + new Vector3(0, 0, -1);
     }
 
     void Update()
