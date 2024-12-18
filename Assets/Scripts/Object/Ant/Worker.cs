@@ -15,6 +15,8 @@ public class Worker : Ant
     public BaseResource resourceNode;
     public float wallBreakTime = 4f;    //임시 벽 파괴 시간
     public float gatherTime = 4f;    //임시 채집시간
+
+    public bool isWaitingforBuildEnd; //임시 건설대기 플래그
     #endregion
     #region Function
     #region Public
@@ -42,6 +44,7 @@ public class Worker : Ant
         targetPos = targetNode.GetWorldPos();
         currentTargetPos = path[pathIndex];
         targetGridPos = targetNode.GetGridPos();
+        currentTimer = 0;
     }
     public void GetTask(HexaMapNode _targetNode, TaskType type, BuildingType _buildingType)
     {
@@ -57,6 +60,7 @@ public class Worker : Ant
         targetPos = targetNode.GetWorldPos();
         currentTargetPos = path[pathIndex];
         targetGridPos = targetNode.GetGridPos();
+        currentTimer = 0;
     }
     #endregion
     #region Private
@@ -171,6 +175,7 @@ public class Worker : Ant
         FindCargo(entityData.resourceType);
         targetNode = MapManager.Map.UnderGrid.GetNode(cargoPos);
         RequestPath(targetNode, false);
+        pathIndex = path.Count - 1;
         ChangeState(State.Idle);
     }
     void OnBuildFinish(bool finished)
@@ -271,6 +276,9 @@ public class Worker : Ant
         }
         entityData.isHolding = false;
         entityData.holdValue = 0;
+        RequestPath(resourceNode.GetNode(), false);
+        pathIndex = path.Count - 1;
+        currentTargetPos = path[pathIndex];
         return BTNodeState.Success;
     }
     BTNodeState GatherResource()
@@ -325,9 +333,13 @@ public class Worker : Ant
             }
             else  // 건물 건설 시
             {
-                Debug.Log("Start Building");
-                MapManager.Map.BuildingFactory.Build((Path)targetNode, buildingType, OnBuildFinish);
-                return BTNodeState.Running;
+                if (!isWaitingforBuildEnd)
+                {
+                    Debug.Log("Start Building");
+                    isWaitingforBuildEnd = true;
+                    MapManager.Map.BuildingFactory.Build((Path)targetNode, buildingType, OnBuildFinish);
+                    return BTNodeState.Running;
+                }
             }
         }
         else if (currentTask == TaskType.Build && state != State.Build)   // 건설 종료 후
@@ -342,7 +354,6 @@ public class Worker : Ant
     {
         if (entityData.isHolding)
         {
-            Debug.Log(true);
             return true;
         }        
         return false;

@@ -35,14 +35,14 @@ public class ObjectivePanel : MonoBehaviour
     {               
         switch (resourceType)
         {            
+            case ResourceType.LIQUID_FOOD:
+                liquidText.text = "액체 식량: " + $"{Managers.Resource.GetLiquidFood()}/{Managers.YearManager.GetRequireResource(ResourceType.LIQUID_FOOD)}";
+                break;
             case ResourceType.LEAF:
-                liquidText.text = "잎: " + $"{Managers.Resource.GetLiquidFood()}/{Managers.YearManager.GetRequireResource(ResourceType.LEAF)}";
+                leafText.text = "잎: " + $"{Managers.Resource.GetLeaf()}/{Managers.YearManager.GetRequireResource(ResourceType.LEAF)}";
                 break;
             case ResourceType.WOOD:
-                woodText.text = "목재: " + $"{Managers.Resource.GetWood()}/{Managers.YearManager.GetRequireResource(ResourceType.WOOD)}";
-                break;
-            case ResourceType.LIQUID_FOOD:
-                leafText.text = "액체 식량: " + $"{Managers.Resource.GetLeaf()} / {Managers.YearManager.GetRequireResource(ResourceType.LIQUID_FOOD)}";
+                woodText.text = "목재: " + $"{Managers.Resource.GetWood()} / {Managers.YearManager.GetRequireResource(ResourceType.WOOD)}";
                 break;
             case ResourceType.SOLID_FOOD:   //권희준 - 고체 식량 호출 에러
                 break;

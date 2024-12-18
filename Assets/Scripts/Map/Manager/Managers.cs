@@ -34,5 +34,8 @@ public class Managers : MonoBehaviour
         taskManager = gameObject.AddComponent<TaskManager>();
         taskManager.Init();
         EvoManager.Init();
+        // 권희준 - 초기 자원
+        Resource.Init();
+        Population.Init();
     }
 }

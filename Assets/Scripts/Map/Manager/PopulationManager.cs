@@ -120,4 +120,10 @@ public class PopulationManager
         }
     }
     #endregion
+    // ±«»Ò¡ÿ - Init
+    public void Init()
+    {
+        currentWorker = 1;
+        maxWorker = 3;
+    }
 }

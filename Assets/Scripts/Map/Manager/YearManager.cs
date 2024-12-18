@@ -24,7 +24,7 @@ public class YearManager : MonoBehaviour
     public void Init()
     {
         currentYear = 0;
-        timeLimit = 10;
+        timeLimit = 600;
         SetRequirement();
         OnWinterEvent?.Invoke();
         StartNextYear();        

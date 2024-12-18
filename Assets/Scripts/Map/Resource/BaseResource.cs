@@ -107,53 +107,56 @@ public class BaseResource : MonoBehaviour
     public void AddWorker(int entities)
     {
         int entityNum;
-        if(currentWorker + entities > info.MaxWorker)
-        {
-            return;
-        }
-        for (entityNum = 0; entityNum < entities; entityNum++)
-        {
-            GameObject worker = null;
-            //GameObject worker = GameManager.Task.AssignTask(TaskType.Gather, this.gameObject);
-            if (worker == null)
-            {
-                break;
-            }
-            workers.Add(worker.GetComponent<Worker>());
-        }
-        currentWorker += entityNum;
+        //권희준 - 일반 자원노드에는 최대 일꾼수 없음, TaskManger와 명령 직접 연동
+        //if(currentWorker + entities > info.MaxWorker)
+        //{
+        //    return;
+        //}
+        //for (entityNum = 0; entityNum < entities; entityNum++)
+        //{
+        //    GameObject worker = null;
+        //    //GameObject worker = GameManager.Task.AssignTask(TaskType.Gather, this.gameObject);
+        //    if (worker == null)
+        //    {
+        //        break;
+        //    }
+        //    workers.Add(worker.GetComponent<Worker>());
+        //}
+        //currentWorker += entityNum;
+        currentWorker += entities;
     }
     public void RemoveWorker(int entities)
     {
-        if (entities > currentWorker)
-            return;
-        List<Worker> delworkers = new();
-        for (int i = 0; i < entities; i++) 
-        {
-            workers[i].GetTask(TaskType.None);
-            delworkers.Add(workers[i]);
-        }
-        for (int i = 0; i < entities; i++)
-        {
-            workers.Remove(delworkers[i]);
-        }
+        //if (entities > currentWorker)
+        //    return;
+        //List<Worker> delworkers = new();
+        //for (int i = 0; i < entities; i++) 
+        //{
+        //    workers[i].GetTask(TaskType.None);
+        //    delworkers.Add(workers[i]);
+        //}
+        //for (int i = 0; i < entities; i++)
+        //{
+        //    workers.Remove(delworkers[i]);
+        //}
         currentWorker -= entities;
     }
     #endregion
 
     #region Unity Function
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        Worker worker = collision.GetComponent<Worker>();
-        if (worker == null)
-        {
-            return;
-        }
+    // 권희준 - Worker.cs에서 자원 감소 호출
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    Worker worker = collision.GetComponent<Worker>();
+    //    if (worker == null)
+    //    {
+    //        return;
+    //    }
 
-        if (workers.Contains(worker))
-        {
-            Extraction(worker.GetGatherValue());
-        }
-    }
+    //    if (workers.Contains(worker))
+    //    {
+    //        Extraction(worker.GetGatherValue());
+    //    }
+    //}
     #endregion
 }

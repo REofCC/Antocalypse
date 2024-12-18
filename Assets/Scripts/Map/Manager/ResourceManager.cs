@@ -237,4 +237,10 @@ public class ResourceManager
         yield break;
     }
     #endregion
+    //권희준 - 자원 초기
+    public void Init()
+    {
+        maxLeaf = 50;
+        maxLiquidFood = 50;
+    }
 }
