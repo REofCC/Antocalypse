@@ -79,7 +79,7 @@ public class NodeOrderPanelUI : MonoBehaviour
 
     void OnLeftButtonClick()
     {
-        if (number > 0)
+        if (baseResource.GetCurrentWorker() + number > 0)
         {
             number--;
             UpdateNumberText();

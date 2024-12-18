@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildingName: "\uC78E \uC800\uC7A5\uC18C"
   leaf: 14000000
-  wood: 
+  wood: 00000000
   tiles: 01000000
   time: 20
   type: 0
