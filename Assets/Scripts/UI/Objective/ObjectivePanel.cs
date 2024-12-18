@@ -12,10 +12,7 @@ public class ObjectivePanel : MonoBehaviour
 
     private void Start()
     {
-        UpdateTitle();          
-    }
-    private void OnEnable()
-    {
+        UpdateTitle();
         Managers.YearManager.OnWinterEvent += UpdateTitle;
         Managers.Resource.OnResourceChange += UpdateObjective;
     }

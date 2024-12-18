@@ -8,6 +8,7 @@ public class PopupEventTriggerWorldSpace : MonoBehaviour
     [SerializeField] private MouseAction mouseAction;
     [SerializeField] private SlidePopup slidePopup;
     [SerializeField] private Camera mainCamera;
+    LayerMask layer;
 
     private void Start()
     {
@@ -15,6 +16,7 @@ public class PopupEventTriggerWorldSpace : MonoBehaviour
         {
             mainCamera = Camera.main;
         }
+        layer = LayerMask.GetMask("CombineSaver");
     }
 
     private void Update()
@@ -28,8 +30,12 @@ public class PopupEventTriggerWorldSpace : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
-            if (hit.collider != null && hit.collider.gameObject == gameObject)
+            RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero,Mathf.Infinity, layer);
+            if (hit.collider.gameObject == null)
+            {
+                return;
+            }
+            if (hit.collider.gameObject == gameObject)
             {
                 if (mouseAction == MouseAction.CLICK || mouseAction == MouseAction.PRESS)
                 {

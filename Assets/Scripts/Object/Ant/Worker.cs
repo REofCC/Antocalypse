@@ -12,7 +12,7 @@ public class Worker : Ant
     Vector2 cargoPos;
 
     BuildingType buildingType;
-    BaseResource resourceNode;
+    public BaseResource resourceNode;
     public float wallBreakTime = 4f;    //임시 벽 파괴 시간
     public float gatherTime = 4f;    //임시 채집시간
     #endregion

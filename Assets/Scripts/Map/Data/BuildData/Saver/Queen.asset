@@ -16,5 +16,5 @@ MonoBehaviour:
   leaf: 00000000
   wood: 00000000
   tiles: 01000000
-  time: 10
+  time: 0
   type: 14

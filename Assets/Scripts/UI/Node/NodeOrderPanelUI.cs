@@ -16,7 +16,6 @@ public class NodeOrderPanelUI : MonoBehaviour
     [SerializeField] Button middleButton;
     [SerializeField] Button rightArrowButton;    
     [SerializeField] TMP_Text middleText;
-    OrderType orderType;
     LayerType layerType;
 
     int number = 1;

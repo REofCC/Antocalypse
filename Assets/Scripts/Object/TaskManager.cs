@@ -119,7 +119,7 @@ public class TaskManager : MonoBehaviour
 
         return true;
     }
-    public GameObject FindEntity(TaskType task, Vector2 nodePos)
+    public GameObject FindEntity(TaskType task, BaseResource resourceNode)
     {
         GameObject entity = null;
 
@@ -128,7 +128,7 @@ public class TaskManager : MonoBehaviour
             if ((hit.collider.GetComponent<Worker>().GetCurrentTask() == task))
             {
                 entity = hit.collider.gameObject;
-                if (entity.GetComponent<Worker>().GetTargetNodePos() == nodePos)
+                if (entity.GetComponent<Worker>().resourceNode == resourceNode)
                 {
                     Debug.Log("Found");
                     break;
@@ -193,9 +193,9 @@ public class TaskManager : MonoBehaviour
     //            break;
     //    }
     //}
-    public void DismissTask(TaskType task, GameObject node)
+    public void DismissTask(TaskType task, HexaMapNode node)
     {
-        entity = FindEntity(task, node.transform.position);
+        entity = FindEntity(task, node.GetResource());
 
         if (!entity)
         {
@@ -206,7 +206,7 @@ public class TaskManager : MonoBehaviour
         switch (task)
         {
             case TaskType.Gather:
-                node.GetComponent<ResourceNode>().ChangeCurrentWorker(-1);
+                node.GetResource().RemoveWorker(1);
                 entity.GetComponent<Worker>().GetTask(TaskType.None);
                 break;
             case TaskType.Build:
