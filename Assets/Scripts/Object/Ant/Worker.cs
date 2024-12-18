@@ -164,7 +164,7 @@ public class Worker : Ant
         }
         else
         {
-            resourceNode.Extraction(entityData.gatherValue);
+            entityData.holdValue = resourceNode.Extraction(entityData.gatherValue);
         }
         entityData.isHolding = true;
 
@@ -342,8 +342,9 @@ public class Worker : Ant
     {
         if (entityData.isHolding)
         {
+            Debug.Log(true);
             return true;
-        }
+        }        
         return false;
     }
     bool IsGatherOrder()

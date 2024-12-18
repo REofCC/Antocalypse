@@ -1,10 +1,12 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class NodePositionUIManager : MonoBehaviour
+public class NodePositionUIManager :  MonoBehaviour
 {
     [SerializeField] NodeOutlineHighlighter nodeOutlineHighlighter;
     [SerializeField] NodeOrderPanelUI nodeOrderPanelUI;
+    HexaMapNode node;
+    BaseResource baseResource;
 
     private void Update()
     {
@@ -12,7 +14,8 @@ public class NodePositionUIManager : MonoBehaviour
         {
             if (!EventSystem.current.IsPointerOverGameObject())
             {
-                HexaMapNode node = ClickTile(Input.mousePosition);
+                node = ClickTile(Input.mousePosition);
+                baseResource = node.GetResource();
                 HighlightNode(node);
             }
         }
@@ -45,7 +48,7 @@ public class NodePositionUIManager : MonoBehaviour
 
         nodeOutlineHighlighter.HighlightNode(node);
         Vector3 highlightedNodePosition = node.GetWorldPos();
-        nodeOrderPanelUI.SetUIPosition(highlightedNodePosition);
+        nodeOrderPanelUI.SetUIPosition(highlightedNodePosition, node, baseResource);
     }
 
     public void ClearHighlight()
