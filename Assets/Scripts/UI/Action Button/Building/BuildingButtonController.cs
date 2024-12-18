@@ -12,7 +12,9 @@ public class BuildingButtonController : ActionButtonController
     protected override void OnClickedButton(Button button)
     {
         BuildingType buildingType = button.GetComponent<BuildingButttonData>().GetBuildingName();
-        ActiveManager.Active.BuildBuilding(buildingType);
+        // 권희준 - 수정 액티브 매니저는 나가라ㅋㅋ
+        Managers.Task.RequestTask(MapManager.Map.State.GetCurrentNode(), TaskType.Build, buildingType);
+        //ActiveManager.Active.BuildBuilding(buildingType);
     }
 
     protected void BuildingButtonUnlock(BuildingType buildingType)

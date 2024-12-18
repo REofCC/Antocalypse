@@ -47,9 +47,9 @@ public class TaskManager : MonoBehaviour
     IEnumerator TryProcessNextRequest()
     {
         isCoroutineRunning = true;
-
         while (true)
         {
+            yield return new WaitForSeconds(0.1f);
             if ( requestQueue.Count > 0)
             {
                 currentRequest = requestQueue.Dequeue();
@@ -72,6 +72,7 @@ public class TaskManager : MonoBehaviour
                         {
                             case TaskType.Gather:
                                 entity.GetComponent<Worker>().GetTask(currentRequest.targetNode, currentRequest.taskType);
+                                currentRequest.targetNode.GetResource().AddWorker(1);
                                 break;
                             case TaskType.Build:
                                 if (currentRequest.buildingType == BuildingType.None)  //º® ÆÄ±«
@@ -106,31 +107,28 @@ public class TaskManager : MonoBehaviour
             if ((hit.collider.transform.parent.GetComponent<Worker>().GetCurrentTask() == task))
             {
                 entity = hit.collider.transform.parent.gameObject;
-                Debug.Log("Found");
                 break;
             }
         }
 
         if (entity == null)
         {
-            Debug.Log("Can't Find");
             return false;
         }
 
         return true;
     }
-    public GameObject FindEntity(TaskType task, BaseResource resourceNode)
+    public GameObject FindEntity(TaskType task, HexaMapNode node)
     {
         GameObject entity = null;
-
+        Vector2 nodePos = node.GetWorldPos();
         foreach (var hit in Physics2D.CircleCastAll(nodePos, Mathf.Infinity, Vector2.zero, Mathf.Infinity, antLayer))
         {
-            if ((hit.collider.GetComponent<Worker>().GetCurrentTask() == task))
+            if ((hit.collider.transform.parent.GetComponent<Worker>().GetCurrentTask() == task))
             {
-                entity = hit.collider.gameObject;
-                if (entity.GetComponent<Worker>().resourceNode == resourceNode)
+                entity = hit.collider.transform.parent.gameObject;
+                if (entity.GetComponent<Worker>().resourceNode == node.GetResource())
                 {
-                    Debug.Log("Found");
                     break;
                 }
             }
@@ -138,7 +136,6 @@ public class TaskManager : MonoBehaviour
 
         if (entity == null)
         {
-            Debug.Log("Can't Find");
             return null;
         }
 
@@ -195,11 +192,10 @@ public class TaskManager : MonoBehaviour
     //}
     public void DismissTask(TaskType task, HexaMapNode node)
     {
-        entity = FindEntity(task, node.GetResource());
+        entity = FindEntity(task, node);
 
         if (!entity)
         {
-            Debug.Log("There's No Working Entity");
             return;
         }
 
