@@ -35,7 +35,12 @@ public class TaskManager : MonoBehaviour
     }
 
     public void RequestTask(HexaMapNode _targetNode, TaskType _taskType)
-    {
+    {   
+        //자원채집 노드 즉시 작업 인원 반영
+        if (_taskType == TaskType.Gather)
+        {
+            _targetNode.GetResource().AddWorker(1);
+        }
         TaskRequest newTaskRequest = new TaskRequest(_targetNode, _taskType);
         requestQueue.Enqueue(newTaskRequest);
     }
@@ -72,7 +77,7 @@ public class TaskManager : MonoBehaviour
                         {
                             case TaskType.Gather:
                                 entity.GetComponent<Worker>().GetTask(currentRequest.targetNode, currentRequest.taskType);
-                                currentRequest.targetNode.GetResource().AddWorker(1);
+                                //currentRequest.targetNode.GetResource().AddWorker(1);
                                 break;
                             case TaskType.Build:
                                 if (currentRequest.buildingType == BuildingType.None)  //벽 파괴

@@ -79,16 +79,14 @@ public class NodeOrderPanelUI : MonoBehaviour
 
     void OnLeftButtonClick()
     {
-        if (baseResource.GetCurrentWorker() + number > 0)
+        if (baseResource.GetCurrentWorker() > 0)
         {
-            number--;
-            UpdateNumberText();
-
             if (!isGround)
             {
                 if (tileType == TileType.ResourceNode)
                 {
                     Managers.Task.DismissTask(TaskType.Gather, node);
+                    UpdateNumberText();
                 }
             }
         }
@@ -96,13 +94,12 @@ public class NodeOrderPanelUI : MonoBehaviour
 
     void OnRightButtonClick()
     {
-        number++;
-        UpdateNumberText();
         if (!isGround)
         {
             if (tileType == TileType.ResourceNode)
             {
                 Managers.Task.RequestTask(node, TaskType.Gather);
+                UpdateNumberText();
             }
         }
     }
@@ -129,7 +126,7 @@ public class NodeOrderPanelUI : MonoBehaviour
     {
         if (!MapManager.Map.State.IsGround() && tileType == TileType.ResourceNode)
         {
-            middleText.text = (baseResource.GetCurrentWorker() + number).ToString();
+            middleText.text = (baseResource.GetCurrentWorker()).ToString();
         }
         else
         {
@@ -164,7 +161,7 @@ public class NodeOrderPanelUI : MonoBehaviour
         baseResource = _baseResource;
         uiElement.gameObject.SetActive(true);
         uiElement.position = nodePosition - new Vector3(0, 0.75f, 0);
-        number = 0;
+        number= 0;
         SetOrderType(node.GetTileType(), baseResource);
         UpdateNumberText();
     }
