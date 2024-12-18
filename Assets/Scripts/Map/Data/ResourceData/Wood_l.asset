@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Wood_l
   m_EditorClassIdentifier: 
   resourceName: Wood_l
-  type: 3
+  type: 1
   buildable: 1
   amount: 1000
   maxWorker: 0
-  size: 0
+  extractable: 0
+  is_ground: 0
