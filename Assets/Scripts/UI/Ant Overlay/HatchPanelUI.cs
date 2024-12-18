@@ -23,6 +23,7 @@ public class HatchPanelUI : MonoBehaviour
 
     void OnAntHatchButtonClicked(AntType antType)
     {        
+        Debug.Log(antType.ToString());
         ActiveManager.Active.SpwanEgg(antType);
     }
 }
